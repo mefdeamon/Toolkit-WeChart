@@ -1,0 +1,38 @@
+﻿<Page x:Class="WindChart.ApplyDemo.Pages.LinegramPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WindChart.ApplyDemo.Pages"
+      xmlns:windchart="clr-namespace:WindChart;assembly=WindChart"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="LinegramPage">
+
+    <Grid>
+       
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="349*"/>
+        </Grid.RowDefinitions>
+        <ToggleButton Content="开始模拟" Margin="5,5,5,5"
+                      Click="Simulate_Click"  />
+
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <!--<wantcola:Linegram x:Name="line" AxisYScaleLocation="-80" Margin="10"/>-->
+            <!--<wantcolakk:Gram  Margin="20" XAxisBrush="DarkGray" YAxisBrush="Gray"/>-->
+            <windchart:Linegram x:Name="line" Margin="20,20,20,20" XAxisBrush="Gray" YAxisScaleInterval="50" Grid.Row="0"/>
+            <windchart:Linegram x:Name="line2" Margin="20,20,20,20" XAxisBrush="Gray" YAxisBrush="Blue" YAxisScaleInterval="50" Grid.Row="1"/>
+            <windchart:Linegram x:Name="line3" Margin="20,20,20,20" XAxisBrush="Gray" YAxisBrush="SeaGreen" YAxisScaleInterval="50" Grid.Row="2"/>
+            <windchart:Linegram x:Name="line4" Margin="20,20,20,20" XAxisBrush="Gray" YAxisBrush="OrangeRed" YAxisScaleInterval="50" Grid.Row="3"/>
+        </Grid>
+
+    </Grid>
+</Page>

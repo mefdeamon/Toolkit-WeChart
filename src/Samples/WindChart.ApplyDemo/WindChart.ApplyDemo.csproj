@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>wantcola2.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="wantcola.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="wantcola2.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\WindChart\WindChart.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="wantcola.ico" />
+  </ItemGroup>
+
+</Project>

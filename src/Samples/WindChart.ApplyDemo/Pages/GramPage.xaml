@@ -1,0 +1,169 @@
+﻿<Page x:Class="WindChart.ApplyDemo.Pages.GramPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WindChart.ApplyDemo.Pages"
+      mc:Ignorable="d" 
+      xmlns:windchart="clr-namespace:WindChart;assembly=WindChart"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="GramPage">
+    <Page.Resources>
+        <ObjectDataProvider x:Key="AxisLineModes" MethodName="GetValues" 
+                            ObjectType="{x:Type windchart:AxisLineMode}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="windchart:AxisLineMode"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider   ObjectInstance="{x:Type Brushes}"  MethodName="GetProperties"  x:Key="ColorPropertiesOdp" />
+
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="349*"/>
+        </Grid.RowDefinitions>
+        <WrapPanel>
+            <Border BorderBrush="Gray" BorderThickness="1" Padding="5">
+                <WrapPanel DataContext="{Binding ElementName=gram}">
+                    <TextBlock Text="X轴："/>
+                    <StackPanel>
+                        <WrapPanel VerticalAlignment="Center">
+                            <TextBlock Text="（"/>
+                            <TextBox  x:Name="XMinTB" Text="{Binding XMin}"  Background="Transparent" BorderThickness="0"/>
+                            <TextBlock Text="，"/>
+                            <TextBox  x:Name="XMaxTB" Text="{Binding XMax}" Background="Transparent" BorderThickness="0"/>
+                            <TextBlock Text="）"/>
+                        </WrapPanel>
+
+                        <CheckBox x:Name="XAxisTextCheckBox" Content="显示文本" IsChecked="{Binding NeedXAxisText}"/>
+                        <CheckBox x:Name="XAxisLineCheckBox" Content="显示刻度线" IsChecked="{Binding NeedXAxisLine}"/>
+                        <WrapPanel>
+                            <TextBlock Text="间隔："/>
+                            <TextBox Width="40" x:Name="XAxisScaleInterval" Text="{Binding XAxisScaleInterval}"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <TextBlock Text="刻度模式："/>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource AxisLineModes} }" 
+                                  SelectedItem="{Binding XAxisLineMode}"
+                                  x:Name="XAxisLineModeComboBox"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <TextBlock Text="Location时位置：)"/>
+                            <TextBox Width="40" x:Name="XAxisLocationTB" Text="{Binding XAxisLocation}"/>
+                            <Slider Width="100" Value="{Binding ElementName=XAxisLocationTB,Path=Text}"
+                                Minimum="{Binding YMin}"
+                                Maximum="{Binding YMax}"/>
+                        </WrapPanel>
+
+                        <WrapPanel>
+                            <TextBlock Text="颜色：" VerticalAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource ColorPropertiesOdp}}" 
+                                      x:Name="XAxisBrushComboBox"
+                                      SelectedIndex="15"
+                                          SelectedValuePath="Name"
+                                          >
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Rectangle Fill="{Binding Name}" Margin="1 3" Height="10" Width="50"></Rectangle>
+                                            <TextBlock Text="{Binding Name}" Margin="2 0"></TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                        </WrapPanel>
+
+                    </StackPanel>
+                </WrapPanel>
+            </Border>
+
+            <Border BorderBrush="Gray" BorderThickness="1" Padding="5" Margin="5 0 0 0">
+                <WrapPanel DataContext="{Binding ElementName=gram}">
+                    <TextBlock Text="Y轴："/>
+                    <StackPanel>
+
+                        <WrapPanel VerticalAlignment="Center">
+                            <TextBlock Text="（"/>
+                            <TextBox  x:Name="YMinTB" Text="{Binding YMin}"  Background="Transparent" BorderThickness="0"/>
+                            <TextBlock Text="，"/>
+                            <TextBox  x:Name="YMaxTB" Text="{Binding YMax}" Background="Transparent" BorderThickness="0"/>
+                            <TextBlock Text="）"/>
+                        </WrapPanel>
+
+
+
+                        <CheckBox x:Name="YAxisTextCheckBox" Content="显示文本" IsChecked="{Binding NeedYAxisText}"/>
+                        <CheckBox x:Name="YAxisLineCheckBox" Content="显示刻度线" IsChecked="{Binding NeedYAxisLine}"/>
+                        <WrapPanel>
+                            <TextBlock Text="间隔："/>
+                            <TextBox Width="40" x:Name="YAxisScaleInterval" Text="{Binding YAxisScaleInterval}"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <TextBlock Text="刻度模式：" VerticalAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource AxisLineModes} }" 
+                                  SelectedItem="{Binding YAxisLineMode}"
+                                  x:Name="YAxisLineModeComboBox"/>
+
+                        </WrapPanel>
+                        <WrapPanel>
+                            <TextBlock Text="Location时位置：)"/>
+                            <TextBox Width="40" x:Name="YAxisLocationTB" Text="{Binding YAxisLocation}"/>
+                            <Slider Width="100" Value="{Binding ElementName=YAxisLocationTB,Path=Text}"
+                                Minimum="{Binding XMin}"
+                                Maximum="{Binding XMax}"/>
+                        </WrapPanel>
+
+                        <WrapPanel>
+                            <TextBlock Text="颜色：" VerticalAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource ColorPropertiesOdp}}" 
+                                      x:Name="YAxisBrushComboBox"
+                                      SelectedIndex="11"
+                                          SelectedValuePath="Name"
+                                          >
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Rectangle Fill="{Binding Name}" Margin="1 3" Height="10" Width="50"></Rectangle>
+                                            <TextBlock Text="{Binding Name}" Margin="2 0"></TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                        </WrapPanel>
+
+                    </StackPanel>
+                </WrapPanel>
+            </Border>
+        </WrapPanel>
+
+
+        <Grid Grid.Row="1">
+            <windchart:Gram Margin="20,20,20,20" Name="gram"
+                           XMax="{Binding ElementName=XMaxTB,Path=Text}"
+                           XMin="{Binding ElementName=XMinTB,Path=Text}"
+                           NeedXAxisLine="{Binding ElementName=XAxisLineCheckBox, Path=IsChecked}"
+                           NeedXAxisText="{Binding ElementName=XAxisTextCheckBox, Path=IsChecked}"
+                           XAxisScaleInterval="{Binding ElementName=XAxisScaleInterval,Path=Text}"
+                           XAxisLineMode="{Binding ElementName=XAxisLineModeComboBox,Path=SelectedItem}"
+                           XAxisLocation="{Binding ElementName=XAxisLocationTB,Path=Text}"
+                           XAxisBrush="{Binding ElementName=XAxisBrushComboBox, Path=SelectedValue}"
+                           
+                           YMax="{Binding ElementName=YMaxTB,Path=Text}"
+                           YMin="{Binding ElementName=YMinTB,Path=Text}"
+                           NeedYAxisLine="{Binding ElementName=YAxisLineCheckBox, Path=IsChecked}"
+                           NeedYAxisText="{Binding ElementName=YAxisTextCheckBox, Path=IsChecked}"
+                           YAxisScaleInterval="{Binding ElementName=YAxisScaleInterval,Path=Text}"
+                           YAxisLineMode="{Binding ElementName=YAxisLineModeComboBox,Path=SelectedItem}"
+                           YAxisLocation="{Binding ElementName=YAxisLocationTB,Path=Text}"
+                           YAxisBrush="{Binding ElementName=YAxisBrushComboBox, Path=SelectedValue}"
+                           
+                           Grid.Row="3"/>
+        </Grid>
+
+    </Grid>
+</Page>
