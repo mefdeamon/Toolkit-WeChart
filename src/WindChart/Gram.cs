@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
@@ -18,7 +18,7 @@ namespace WindChart
         /// <summary>
         /// 图像
         /// </summary>
-        protected List<Visual> Visuals = new List<Visual>();
+        protected VisualCollection Visuals;
 
         DrawingVisual xAxisVisual;
 
@@ -30,9 +30,9 @@ namespace WindChart
         {
             Background = Brushes.WhiteSmoke;
 
+            Visuals = new VisualCollection(this);
             xAxisVisual = new DrawingVisual();
             Visuals.Add(xAxisVisual);
-
             yAxisVisual = new DrawingVisual();
             Visuals.Add(yAxisVisual);
 

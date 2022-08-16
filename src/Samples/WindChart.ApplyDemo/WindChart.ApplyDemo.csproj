@@ -5,23 +5,15 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>wantcola2.ico</ApplicationIcon>
+    <ApplicationIcon>windchart.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="wantcola.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="wantcola2.ico" />
+    <PackageReference Include="WeDraft.Toolkit.FirstDraft" Version="1.0.1-beta" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\WindChart\WindChart.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="wantcola.ico" />
   </ItemGroup>
 
 </Project>
