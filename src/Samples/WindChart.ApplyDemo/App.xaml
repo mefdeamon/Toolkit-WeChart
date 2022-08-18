@@ -8,6 +8,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/FirstDraft;component/Themes/Ui.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <Color x:Key="AccentColor">#362486</Color>
+            <Color x:Key="ExAccentColor">#F35A5A</Color>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

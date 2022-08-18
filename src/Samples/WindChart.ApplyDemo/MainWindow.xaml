@@ -14,22 +14,27 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-       
+
         <DockPanel Margin="10">
 
             <TextBlock Text="Wind Chart" HorizontalAlignment="Center" DockPanel.Dock="Bottom"/>
             <Border BorderThickness="0" 
-                    Background="{DynamicResource Button.Disabled.Background}"
-                    CornerRadius="30"
+                  Width="128" Height="128"
+                    CornerRadius="30" Padding="8 5 5 8"
                   DockPanel.Dock="Bottom">
+                <Border.Background>
+                    <LinearGradientBrush>
+                        <GradientStop Color="#F35A5A" Offset="1"/>
+                        <GradientStop Color="#362486" Offset="0"/>
+                    </LinearGradientBrush>
+                </Border.Background>
                 <Path Grid.Column="0" 
-                  Fill="{DynamicResource Accent}" 
+                  Fill="White" 
                   Opacity="1" 
                   Margin="10"
                   Stroke="Red" 
                   StrokeThickness="0" 
                   Stretch="Uniform"
-                  Width="128" Height="128"
                   VerticalAlignment="Bottom"
                   Data="M200,200 L300,400 400,200 500,400 600,200 500,560 400,300 300,560Z M100 650 L650,570 180,570 180,100 Z"
                   />
@@ -46,7 +51,6 @@
                                     Click="NaviClick"/>
 
                 <fd:IconRadioButton Style="{StaticResource LeftNaviIconRaioButton}"
-                                    IsChecked="True"
                                     Icon="M981.344 938.656H60.688V128h85.344v725.344h853.344z M215.2 355.2z l-59.744 59.744 200.856 280.856 70.456 -70.456z M415.2 755.2 l-59.744-59.744 285.856-285.856 213.344 213.344 311.456-311.456 59.744 59.744-371.2 371.2 -213.344-213.344z"
                                     Tag="/Pages/LinegramPage.xaml" Content="单线图" Margin="0 5 5 0" 
                                     Click="NaviClick"/>
