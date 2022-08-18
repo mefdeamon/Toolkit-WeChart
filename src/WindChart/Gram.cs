@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
@@ -20,10 +19,19 @@ namespace WindChart
         /// </summary>
         protected VisualCollection Visuals;
 
+        /// <summary>
+        /// 用于画X轴信息
+        /// </summary>
         DrawingVisual xAxisVisual;
 
+        /// <summary>
+        /// 用于画Y轴信息
+        /// </summary>
         DrawingVisual yAxisVisual;
 
+        /// <summary>
+        /// 背景色
+        /// </summary>
         public Brush Background { get; set; }
 
         public Gram()
@@ -37,21 +45,24 @@ namespace WindChart
             Visuals.Add(yAxisVisual);
 
 
-            primarygrid_pen.Freeze();
 
             xAxisPen = new Pen(XAxisBrush, 1);
             yAxisPen = new Pen(YAxisBrush, 1);
             xAxisPen.Freeze();
             yAxisPen.Freeze();
         }
-
+        #region 画笔资源
+        
         /// <summary>
-        /// 主要的背景线条
+        /// 用于画X轴/刻度
         /// </summary>
-        Pen primarygrid_pen = new Pen(Brushes.Black, 1);
         Pen xAxisPen;
+        /// <summary>
+        /// 用于画Y轴/刻度
+        /// </summary>
         Pen yAxisPen;
 
+        #endregion
 
         #region 实际-像素比转换方法
 
@@ -430,7 +441,7 @@ namespace WindChart
         // Using a DependencyProperty as the backing store for YAxisBrush.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty YAxisBrushProperty =
             DependencyProperty.Register("YAxisBrush", typeof(Brush), typeof(Gram),
-                new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromArgb(0xFF,29,14,17)), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, YAxisBrushChanged));
+                new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromArgb(0xFF, 29, 14, 17)), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, YAxisBrushChanged));
 
 
 
@@ -559,7 +570,6 @@ namespace WindChart
             }
 
             dc.Close();
-
             // 显示图形
             InvalidateVisual();
         }
@@ -698,21 +708,12 @@ namespace WindChart
         #region override
 
         protected override int VisualChildrenCount => Visuals.Count;
-
-        /// <summary>
-        /// 获取目标
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+       
         protected override Visual GetVisualChild(int index)
         {
             return Visuals[index];
         }
 
-        /// <summary>
-        /// 当界面大小变化
-        /// </summary>
-        /// <param name="sizeInfo"></param>
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
             DrawXAxisScale();
@@ -720,11 +721,6 @@ namespace WindChart
             base.OnRenderSizeChanged(sizeInfo);
         }
 
-
-        /// <summary>
-        /// 当渲染的时候
-        /// </summary>
-        /// <param name="drawingContext"></param>
         protected override void OnRender(DrawingContext drawingContext)
         {
             drawingContext.DrawRectangle(Background, null, new Rect(0, 0, RenderSize.Width, RenderSize.Height));

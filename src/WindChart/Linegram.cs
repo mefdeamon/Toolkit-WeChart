@@ -7,11 +7,18 @@ using System.Windows.Media;
 namespace WindChart
 {
     /// <summary>
-    /// µ¥ÌõÏßĞÍÍ¼
+    /// å•æ¡çº¿å‹å›¾
     /// </summary>
     public class Linegram : Gram
     {
+        /// <summary>
+        /// æŠ˜çº¿ç”»æ¿
+        /// </summary>
         private DrawingVisual lineVisual;
+        /// <summary>
+        /// çº¿æ¡é¢œè‰²å’Œç²—ç»†
+        /// </summary>
+        Pen linePen;
 
         public Linegram()
         {
@@ -21,6 +28,7 @@ namespace WindChart
             linePen = new Pen(YAxisBrush, LineThickness);
             linePen.Freeze();
 
+            // åˆå§‹åŒ–ç”»æ¿åˆ»åº¦ä¿¡æ¯
             YAxisLineMode = AxisLineMode.TopLeft;
             XAxisLineMode = AxisLineMode.BottmRight;
             XMin = 0;
@@ -28,7 +36,7 @@ namespace WindChart
         }
 
         /// <summary>
-        /// ÏßÌõ¿í¶È
+        /// çº¿æ¡å®½åº¦
         /// </summary>
         public double LineThickness { get; set; } = 1;
 
@@ -48,32 +56,18 @@ namespace WindChart
             maxY = YMax;
             minY = YMin;
 
-            ClearLine();
+            Draw();
         }
 
-        public void ClearLine()
-        {
-            // Çå¿Õ
-            var dc = lineVisual.RenderOpen();
 
-            dc.Close();
-
-            // ÏÔÊ¾Í¼ĞÎ
-            InvalidateVisual();
-        }
-
-        /// <summary>
-        /// ÏßÌõÑÕÉ«ºÍ´ÖÏ¸
-        /// </summary>
-        Pen linePen;
 
         List<Point> points = new List<Point>();
         /// <summary>
-        /// ½çÃæÏÔÊ¾µÄµãÊı
+        /// ç•Œé¢æ˜¾ç¤ºçš„ç‚¹æ•°
         /// </summary>
         private int xMaxPoint = 200;
         /// <summary>
-        /// XÌøÔ¾¾àÀë
+        /// Xè·³è·ƒè·ç¦»
         /// </summary>
         int xgap = 20;
 
@@ -83,12 +77,12 @@ namespace WindChart
 
 
         /// <summary>
-        /// µ±XÖáÂúÁËµÄÊ±ºò£¬Íù×ó±ßÒÆ¶¯Ò»¶Î¾àÀë£¬È»ºóµÈÂúÁËÔÙÒÆ¶¯
+        /// å½“Xè½´æ»¡äº†çš„æ—¶å€™ï¼Œå¾€å·¦è¾¹ç§»åŠ¨ä¸€æ®µè·ç¦»ï¼Œç„¶åç­‰æ»¡äº†å†ç§»åŠ¨
         /// </summary>
         /// <param name="p"></param>
         public void DrawLine2(Point p)
         {
-            // È·¶¨XÖáµÄ·¶Î§
+            // ç¡®å®šXè½´çš„èŒƒå›´
             if (points.Count > xMaxPoint)
             {
                 points.RemoveAt(0);
@@ -105,7 +99,7 @@ namespace WindChart
                 XMax = XMin + xMaxPoint + xgap + xgap;
             }
 
-            // È·¶¨YÖá·¶Î§
+            // ç¡®å®šYè½´èŒƒå›´
             if (p.Y > maxY)
             {
                 maxY = p.Y + xgap;
@@ -123,12 +117,12 @@ namespace WindChart
         }
 
         /// <summary>
-        /// µ±XÖáÊı¾İÂúÁË£¬²»±ä»¯XMIN
+        /// å½“Xè½´æ•°æ®æ»¡äº†ï¼Œä¸å˜åŒ–XMIN
         /// </summary>
         /// <param name="p"></param>
         public void DrawLine3(Point p)
         {
-            // È·¶¨XÖáµÄ·¶Î§
+            // ç¡®å®šXè½´çš„èŒƒå›´
             if (p.X > XMax)
             {
                 XMax = p.X + xMaxPoint + xgap;
@@ -139,7 +133,7 @@ namespace WindChart
                 XMax = XMin + xMaxPoint + xgap + xgap;
             }
 
-            // È·¶¨YÖá·¶Î§
+            // ç¡®å®šYè½´èŒƒå›´
             if (p.Y > maxY)
             {
                 maxY = p.Y + xgap;
@@ -157,7 +151,7 @@ namespace WindChart
         }
 
         /// <summary>
-        /// Ö±½ÓÒ»ÏÂ°ÑÊı¾İ»­Íê
+        /// ç›´æ¥ä¸€ä¸‹æŠŠæ•°æ®ç”»å®Œ
         /// </summary>
         /// <param name="newPoints"></param>
         public void DrawLine(List<Point> newPoints)
@@ -184,12 +178,12 @@ namespace WindChart
         }
 
         /// <summary>
-        /// µ±XÖáÂúÁËµÄÊ±ºò£¬Íù×ó±ßÒÆ¶¯Ò»²½
+        /// å½“Xè½´æ»¡äº†çš„æ—¶å€™ï¼Œå¾€å·¦è¾¹ç§»åŠ¨ä¸€æ­¥
         /// </summary>
         /// <param name="p"></param>
         public void DrawLine(Point p)
         {
-            // È·¶¨XÖáµÄ·¶Î§
+            // ç¡®å®šXè½´çš„èŒƒå›´
             if (points.Count > xMaxPoint)
             {
                 points.RemoveRange(0, xgap);
@@ -206,7 +200,7 @@ namespace WindChart
                 XMax = XMin + xMaxPoint + xgap + xgap;
             }
 
-            // È·¶¨YÖá·¶Î§
+            // ç¡®å®šYè½´èŒƒå›´
             if (p.Y > maxY)
             {
                 maxY = p.Y + xgap;
@@ -224,7 +218,7 @@ namespace WindChart
         }
 
         /// <summary>
-        /// »æÍ¼
+        /// ç»˜å›¾
         /// </summary>
         private void Draw()
         {
@@ -243,11 +237,12 @@ namespace WindChart
 
             dc.Close();
 
-            // ÏÔÊ¾Í¼ĞÎ
+            // æ˜¾ç¤ºå›¾å½¢
             InvalidateVisual();
         }
 
         #region override
+
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
             Draw();
