@@ -78,9 +78,7 @@
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
-
                         </WrapPanel>
-
                     </StackPanel>
                 </WrapPanel>
             </Border>
@@ -143,6 +141,27 @@
                     </StackPanel>
                 </WrapPanel>
             </Border>
+            <Border BorderBrush="Gray" BorderThickness="1" Padding="5" Margin="5 0 0 0">
+                <WrapPanel DataContext="{Binding ElementName=gram}">
+                    <WrapPanel>
+                        <TextBlock Text="刻度线颜色：" VerticalAlignment="Center"/>
+                        <ComboBox ItemsSource="{Binding Source={StaticResource ColorPropertiesOdp}}" 
+                                      x:Name="AxisLineBrushComboBox"
+                                      SelectedIndex="17"
+                                          SelectedValuePath="Name"
+                                          >
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Rectangle Fill="{Binding Name}" Margin="1 3" Height="10" Width="50"></Rectangle>
+                                        <TextBlock Text="{Binding Name}" Margin="2 0"></TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </WrapPanel>
+                </WrapPanel>
+            </Border>
         </WrapPanel>
 
 
@@ -166,6 +185,8 @@
                            YAxisLineMode="{Binding ElementName=YAxisLineModeComboBox,Path=SelectedItem}"
                            YAxisLocation="{Binding ElementName=YAxisLocationTB,Path=Text}"
                            YAxisBrush="{Binding ElementName=YAxisBrushComboBox, Path=SelectedValue}"
+                                 
+                                 AxisLineBrush="{Binding ElementName=AxisLineBrushComboBox,Path=SelectedValue}"
                            Grid.Row="3"/>
             </Border>
            

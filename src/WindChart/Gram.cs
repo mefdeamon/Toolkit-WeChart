@@ -50,17 +50,25 @@ namespace WindChart
             yAxisPen = new Pen(YAxisBrush, 1);
             xAxisPen.Freeze();
             yAxisPen.Freeze();
+            axisLinePen = new Pen(AxisLineBrush, 1);
+            axisLinePen.Freeze();
         }
+
         #region 画笔资源
         
         /// <summary>
-        /// 用于画X轴/刻度
+        /// 用于画X轴/刻度文本
         /// </summary>
         Pen xAxisPen;
         /// <summary>
-        /// 用于画Y轴/刻度
+        /// 用于画Y轴/刻度文本
         /// </summary>
         Pen yAxisPen;
+
+        /// <summary>
+        /// 用于绘制刻度线
+        /// </summary>
+        Pen axisLinePen;
 
         #endregion
 
@@ -177,6 +185,15 @@ namespace WindChart
             ((Gram)d).UpdatePixelRatio();
             ((Gram)d).DrawYAxisScale();
         }
+        private static void AxisLineBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((Gram)d).axisLinePen = new Pen((Brush)e.NewValue, 1);
+            ((Gram)d).axisLinePen.Freeze();
+            ((Gram)d).UpdatePixelRatio();
+            ((Gram)d).DrawYAxisScale();
+            ((Gram)d).DrawXAxisScale();
+        }
+
 
         #region X/Y Max/Min
 
@@ -445,6 +462,21 @@ namespace WindChart
 
 
 
+
+
+        public Brush AxisLineBrush
+        {
+            get { return (Brush)GetValue(AxisLineBrushProperty); }
+            set { SetValue(AxisLineBrushProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for AxisLineBrush.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty AxisLineBrushProperty =
+            DependencyProperty.Register("AxisLineBrush", typeof(Brush), typeof(Gram),
+                new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromArgb(0xFF, 0x33, 0x33, 0x33)), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, AxisLineBrushChanged));
+
+
+
         #endregion
 
         #endregion
@@ -512,10 +544,10 @@ namespace WindChart
                             case AxisLineMode.TopLeft:
                             case AxisLineMode.BottmRight:
                             case AxisLineMode.Location:
-                                dc.DrawLine(xAxisPen, new Point(x, y1), new Point(x, y2));
+                                dc.DrawLine(axisLinePen, new Point(x, y1), new Point(x, y2));
                                 break;
                             case AxisLineMode.Center:
-                                dc.DrawLine(xAxisPen, new Point(x, y1 - scalelinePixel), new Point(x, y1 + scalelinePixel));
+                                dc.DrawLine(axisLinePen, new Point(x, y1 - scalelinePixel), new Point(x, y1 + scalelinePixel));
                                 break;
                             default:
                                 break;
@@ -526,9 +558,9 @@ namespace WindChart
                     var x2 = XAxisConvertXToPixel(XMax);
                     if (XAxisLineMode == AxisLineMode.Grid)
                     {
-                        dc.DrawLine(xAxisPen, new Point(x1, y2), new Point(x2, y2));
+                        dc.DrawLine(axisLinePen, new Point(x1, y2), new Point(x2, y2));
                     }
-                    dc.DrawLine(xAxisPen, new Point(x1, y1), new Point(x2, y1));
+                    dc.DrawLine(axisLinePen, new Point(x1, y1), new Point(x2, y1));
                 }
 
                 // 是否需要绘制文本
@@ -636,10 +668,10 @@ namespace WindChart
                             case AxisLineMode.TopLeft:
                             case AxisLineMode.BottmRight:
                             case AxisLineMode.Location:
-                                dc.DrawLine(yAxisPen, new Point(x1, y), new Point(x2, y));
+                                dc.DrawLine(axisLinePen, new Point(x1, y), new Point(x2, y));
                                 break;
                             case AxisLineMode.Center:
-                                dc.DrawLine(yAxisPen, new Point(x1 - scalelinePixel, y), new Point(x1 + scalelinePixel, y));
+                                dc.DrawLine(axisLinePen, new Point(x1 - scalelinePixel, y), new Point(x1 + scalelinePixel, y));
                                 break;
                             default:
                                 break;
@@ -651,9 +683,9 @@ namespace WindChart
                     var y2 = YAxisConvertYToPixel(YMax);
                     if (YAxisLineMode == AxisLineMode.Grid)
                     {
-                        dc.DrawLine(yAxisPen, new Point(x2, y1), new Point(x2, y2));
+                        dc.DrawLine(axisLinePen, new Point(x2, y1), new Point(x2, y2));
                     }
-                    dc.DrawLine(yAxisPen, new Point(x1, y1), new Point(x1, y2));
+                    dc.DrawLine(axisLinePen, new Point(x1, y1), new Point(x1, y2));
                 }
 
                 // 是否需要绘制文本
