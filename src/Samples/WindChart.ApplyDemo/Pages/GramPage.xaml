@@ -21,7 +21,7 @@
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="Padding" Value="0"/>
         </Style>
-        
+
     </Page.Resources>
 
     <Grid>
@@ -45,8 +45,8 @@
                         <CheckBox x:Name="XAxisTextCheckBox" Content="显示文本" IsChecked="{Binding NeedXAxisText}"/>
                         <CheckBox x:Name="XAxisLineCheckBox" Content="显示刻度线" IsChecked="{Binding NeedXAxisLine}"/>
                         <WrapPanel>
-                            <TextBlock Text="间隔："/>
-                            <TextBox Width="40" x:Name="XAxisScaleInterval" Text="{Binding XAxisScaleInterval}"/>
+                            <TextBlock Text="数量："/>
+                            <TextBox Width="40" x:Name="XAxisScaleCount" Text="{Binding XAxisScaleCount}"/>
                         </WrapPanel>
                         <WrapPanel>
                             <TextBlock Text="刻度模式："/>
@@ -101,8 +101,8 @@
                         <CheckBox x:Name="YAxisTextCheckBox" Content="显示文本" IsChecked="{Binding NeedYAxisText}"/>
                         <CheckBox x:Name="YAxisLineCheckBox" Content="显示刻度线" IsChecked="{Binding NeedYAxisLine}"/>
                         <WrapPanel>
-                            <TextBlock Text="间隔："/>
-                            <TextBox Width="40" x:Name="YAxisScaleInterval" Text="{Binding YAxisScaleInterval}"/>
+                            <TextBlock Text="数量："/>
+                            <TextBox Width="40" x:Name="YAxisScaleCount" Text="{Binding YAxisScaleCount}"/>
                         </WrapPanel>
                         <WrapPanel>
                             <TextBlock Text="刻度模式：" VerticalAlignment="Center"/>
@@ -172,7 +172,7 @@
                            XMin="{Binding ElementName=XMinTB,Path=Text}"
                            NeedXAxisLine="{Binding ElementName=XAxisLineCheckBox, Path=IsChecked}"
                            NeedXAxisText="{Binding ElementName=XAxisTextCheckBox, Path=IsChecked}"
-                           XAxisScaleInterval="{Binding ElementName=XAxisScaleInterval,Path=Text}"
+                           XAxisScaleCount="{Binding ElementName=XAxisScaleCount,Path=Text}"
                            XAxisLineMode="{Binding ElementName=XAxisLineModeComboBox,Path=SelectedItem}"
                            XAxisLocation="{Binding ElementName=XAxisLocationTB,Path=Text}"
                            XAxisBrush="{Binding ElementName=XAxisBrushComboBox, Path=SelectedValue}"
@@ -181,7 +181,7 @@
                            YMin="{Binding ElementName=YMinTB,Path=Text}"
                            NeedYAxisLine="{Binding ElementName=YAxisLineCheckBox, Path=IsChecked}"
                            NeedYAxisText="{Binding ElementName=YAxisTextCheckBox, Path=IsChecked}"
-                           YAxisScaleInterval="{Binding ElementName=YAxisScaleInterval,Path=Text}"
+                           YAxisScaleCount="{Binding ElementName=YAxisScaleCount,Path=Text}"
                            YAxisLineMode="{Binding ElementName=YAxisLineModeComboBox,Path=SelectedItem}"
                            YAxisLocation="{Binding ElementName=YAxisLocationTB,Path=Text}"
                            YAxisBrush="{Binding ElementName=YAxisBrushComboBox, Path=SelectedValue}"
@@ -189,7 +189,7 @@
                                  AxisLineBrush="{Binding ElementName=AxisLineBrushComboBox,Path=SelectedValue}"
                            Grid.Row="3"/>
             </Border>
-           
+
         </Grid>
 
     </Grid>

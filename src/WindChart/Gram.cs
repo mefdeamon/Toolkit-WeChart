@@ -44,8 +44,6 @@ namespace WindChart
             yAxisVisual = new DrawingVisual();
             Visuals.Add(yAxisVisual);
 
-
-
             xAxisPen = new Pen(XAxisBrush, 1);
             yAxisPen = new Pen(YAxisBrush, 1);
             xAxisPen.Freeze();
@@ -55,7 +53,7 @@ namespace WindChart
         }
 
         #region 画笔资源
-        
+
         /// <summary>
         /// 用于画X轴/刻度文本
         /// </summary>
@@ -194,7 +192,6 @@ namespace WindChart
             ((Gram)d).DrawXAxisScale();
         }
 
-
         #region X/Y Max/Min
 
         /// <summary>
@@ -205,8 +202,6 @@ namespace WindChart
             get { return (double)GetValue(YMaxProperty); }
             set { SetValue(YMaxProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for YMax.  This enables animation, styling, binding, etc...
         private static readonly DependencyProperty YMaxProperty =
             DependencyProperty.Register("YMax", typeof(double), typeof(Gram),
                 new FrameworkPropertyMetadata(100D, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, YRangeChanged));
@@ -219,8 +214,6 @@ namespace WindChart
             get { return (double)GetValue(YMinProperty); }
             set { SetValue(YMinProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for YMin.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty YMinProperty =
             DependencyProperty.Register("YMin", typeof(double), typeof(Gram),
                 new FrameworkPropertyMetadata(-100D, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, YRangeChanged));
@@ -233,8 +226,6 @@ namespace WindChart
             get { return (double)GetValue(XMaxProperty); }
             set { SetValue(XMaxProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for XMax.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty XMaxProperty =
             DependencyProperty.Register("XMax", typeof(double), typeof(Gram),
                 new FrameworkPropertyMetadata(100D, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, XRangeChanged));
@@ -247,8 +238,6 @@ namespace WindChart
             get { return (double)GetValue(XMinProperty); }
             set { SetValue(XMinProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for XMin.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty XMinProperty =
             DependencyProperty.Register("XMin", typeof(double), typeof(Gram),
                 new FrameworkPropertyMetadata(-100D, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, XRangeChanged));
@@ -258,37 +247,39 @@ namespace WindChart
 
         #region X/Y轴
 
-        #region 间隔
+        #region 刻度间隔&数量
 
         /// <summary>
-        /// X轴刻度之间间隔
-        /// 默认 20，单位：米（m）
+        /// X轴刻度间隔
         /// </summary>
-        public double XAxisScaleInterval
-        {
-            get { return (double)GetValue(XAxisScaleIntervalProperty); }
-            set { SetValue(XAxisScaleIntervalProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for AxisXScaleInterval.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty XAxisScaleIntervalProperty =
-            DependencyProperty.Register("XAxisScaleInterval", typeof(double), typeof(Gram),
-                new FrameworkPropertyMetadata(20D, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, XRangeChanged));
+        public double XAxisScaleInterval => absoluteActualX / XAxisScaleCount;
+        /// <summary>
+        /// Y轴刻度间隔
+        /// </summary>
+        public double YAxisScaleInterval => absoluteActualY / YAxisScaleCount;
 
         /// <summary>
-        /// Y轴刻度之间的间隔
-        /// 默认 20，单位：米（m）
+        /// X轴刻度个数
         /// </summary>
-        public double YAxisScaleInterval
+        public int XAxisScaleCount
         {
-            get { return (double)GetValue(YAxisScaleIntervalProperty); }
-            set { SetValue(YAxisScaleIntervalProperty, value); }
+            get { return (int)GetValue(XAxisScaleCountProperty); }
+            set { SetValue(XAxisScaleCountProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for AxisYScaleInterval.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty YAxisScaleIntervalProperty =
-            DependencyProperty.Register("YAxisScaleInterval", typeof(double), typeof(Gram),
-                new FrameworkPropertyMetadata(20D, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, YRangeChanged));
+        public static readonly DependencyProperty XAxisScaleCountProperty =
+            DependencyProperty.Register("XAxisScaleCount", typeof(int), typeof(Gram),
+                new FrameworkPropertyMetadata(5, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, XRangeChanged));
+        /// <summary>
+        /// Y轴刻度个数
+        /// </summary>
+        public int YAxisScaleCount
+        {
+            get { return (int)GetValue(YAxisScaleCountProperty); }
+            set { SetValue(YAxisScaleCountProperty, value); }
+        }
+        public static readonly DependencyProperty YAxisScaleCountProperty =
+            DependencyProperty.Register("YAxisScaleCount", typeof(int), typeof(Gram),
+                new FrameworkPropertyMetadata(5, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, YRangeChanged));
 
         #endregion
 
@@ -302,8 +293,6 @@ namespace WindChart
             get { return (bool)GetValue(NeedXAxisTextProperty); }
             set { SetValue(NeedXAxisTextProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for NeedXAxisText.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NeedXAxisTextProperty =
             DependencyProperty.Register("NeedXAxisText", typeof(bool), typeof(Gram),
                 new FrameworkPropertyMetadata(true, XRangeChanged));
@@ -316,8 +305,6 @@ namespace WindChart
             get { return (bool)GetValue(NeedXAxisLineProperty); }
             set { SetValue(NeedXAxisLineProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for NeedXAxisLine.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NeedXAxisLineProperty =
             DependencyProperty.Register("NeedXAxisLine", typeof(bool), typeof(Gram),
                 new FrameworkPropertyMetadata(true, XRangeChanged));
@@ -330,8 +317,6 @@ namespace WindChart
             get { return (AxisLineMode)GetValue(XAxisLineModeProperty); }
             set { SetValue(XAxisLineModeProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for XAxisLineMode.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty XAxisLineModeProperty =
             DependencyProperty.Register("XAxisLineMode", typeof(AxisLineMode), typeof(Gram),
                 new FrameworkPropertyMetadata(AxisLineMode.Center, XRangeChanged));
@@ -344,8 +329,6 @@ namespace WindChart
             get { return (bool)GetValue(NeedYAxisTextProperty); }
             set { SetValue(NeedYAxisTextProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for NeedYAxisText.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NeedYAxisTextProperty =
             DependencyProperty.Register("NeedYAxisText", typeof(bool), typeof(Gram),
                 new FrameworkPropertyMetadata(true, YRangeChanged));
@@ -358,8 +341,6 @@ namespace WindChart
             get { return (bool)GetValue(NeedYAxisLineProperty); }
             set { SetValue(NeedYAxisLineProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for NeedYAxisLine.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NeedYAxisLineProperty =
             DependencyProperty.Register("NeedYAxisLine", typeof(bool),
                 typeof(Gram),
@@ -373,8 +354,6 @@ namespace WindChart
             get { return (AxisLineMode)GetValue(YAxisLineModeProperty); }
             set { SetValue(YAxisLineModeProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for YAxisLineMode.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty YAxisLineModeProperty =
             DependencyProperty.Register("YAxisLineMode", typeof(AxisLineMode),
                 typeof(Gram),
@@ -392,8 +371,6 @@ namespace WindChart
             get { return (double)GetValue(YAxisLocationProperty); }
             set { SetValue(YAxisLocationProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for AxisYScaleLocation.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty YAxisLocationProperty =
             DependencyProperty.Register("YAxisLocation", typeof(double), typeof(Gram),
                 new FrameworkPropertyMetadata(0D, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, YRangeChanged));
@@ -406,8 +383,6 @@ namespace WindChart
             get { return (double)GetValue(XAxisLocationProperty); }
             set { SetValue(XAxisLocationProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for AxisXScaleLocation.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty XAxisLocationProperty =
             DependencyProperty.Register("XAxisLocation", typeof(double), typeof(Gram),
                 new FrameworkPropertyMetadata(0D, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, XRangeChanged));
@@ -424,8 +399,6 @@ namespace WindChart
             get { return (double)GetValue(AxisFontSizeProperty); }
             set { SetValue(AxisFontSizeProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for AxisScaleFontSize.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty AxisFontSizeProperty =
             DependencyProperty.Register("AxisFontSize", typeof(double), typeof(Gram),
                 new FrameworkPropertyMetadata(10D, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, XRangeChanged));
@@ -439,8 +412,6 @@ namespace WindChart
             get { return (Brush)GetValue(XAxisBrushProperty); }
             set { SetValue(XAxisBrushProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for ScaleBrush.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty XAxisBrushProperty =
             DependencyProperty.Register("XAxisBrush", typeof(Brush), typeof(Gram),
                 new FrameworkPropertyMetadata(Brushes.Black, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, XAxisBrushChanged));
@@ -454,28 +425,21 @@ namespace WindChart
             get { return (Brush)GetValue(YAxisBrushProperty); }
             set { SetValue(YAxisBrushProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for YAxisBrush.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty YAxisBrushProperty =
             DependencyProperty.Register("YAxisBrush", typeof(Brush), typeof(Gram),
                 new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromArgb(0xFF, 29, 14, 17)), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, YAxisBrushChanged));
 
-
-
-
-
+        /// <summary>
+        /// 轴线颜色
+        /// </summary>
         public Brush AxisLineBrush
         {
             get { return (Brush)GetValue(AxisLineBrushProperty); }
             set { SetValue(AxisLineBrushProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for AxisLineBrush.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty AxisLineBrushProperty =
             DependencyProperty.Register("AxisLineBrush", typeof(Brush), typeof(Gram),
                 new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromArgb(0xFF, 0x33, 0x33, 0x33)), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, AxisLineBrushChanged));
-
-
 
         #endregion
 
@@ -572,7 +536,7 @@ namespace WindChart
                         var x = XAxisConvertXToPixel(i);
 
                         // 画刻度文本
-                        var textcontent = i.ToString();
+                        var textcontent = ((int)i).ToString();
                         text = new FormattedText(textcontent, CultureInfo.GetCultureInfo("en-us"),
                                                                 FlowDirection.LeftToRight, new Typeface("Verdana"), AxisFontSize, XAxisBrush,
                                                                 VisualTreeHelper.GetDpi(this).PixelsPerDip);
@@ -700,7 +664,7 @@ namespace WindChart
                         var y = YAxisConvertYToPixel(i);
 
                         // 画刻度文本
-                        var textcontent = i.ToString();
+                        var textcontent = ((int)i).ToString();
                         text = new FormattedText(textcontent, CultureInfo.GetCultureInfo("en-us"),
                                                                 FlowDirection.LeftToRight, new Typeface("Verdana"), AxisFontSize, YAxisBrush,
                                                                 VisualTreeHelper.GetDpi(this).PixelsPerDip);
@@ -740,7 +704,7 @@ namespace WindChart
         #region override
 
         protected override int VisualChildrenCount => Visuals.Count;
-       
+
         protected override Visual GetVisualChild(int index)
         {
             return Visuals[index];

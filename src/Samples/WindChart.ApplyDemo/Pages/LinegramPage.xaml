@@ -28,10 +28,10 @@
             </Grid.RowDefinitions>
             <!--<wantcola:Linegram x:Name="line" AxisYScaleLocation="-80" Margin="10"/>-->
             <!--<wantcolakk:Gram  Margin="20" XAxisBrush="DarkGray" YAxisBrush="Gray"/>-->
-            <windchart:Linegram x:Name="line" Margin="20,20,20,20" XAxisBrush="Gray" YAxisScaleInterval="50" Grid.Row="0"/>
-            <windchart:Linegram x:Name="line2" Margin="20,20,20,20" XAxisBrush="Gray" YAxisBrush="Blue" YAxisScaleInterval="50" Grid.Row="1"/>
-            <windchart:Linegram x:Name="line3" Margin="20,20,20,20" XAxisBrush="Gray" YAxisBrush="SeaGreen" YAxisScaleInterval="50" Grid.Row="2"/>
-            <windchart:Linegram x:Name="line4" Margin="20,20,20,20" XAxisBrush="Gray" YAxisBrush="OrangeRed" YAxisScaleInterval="50" Grid.Row="3"/>
+            <windchart:Linegram x:Name="line" Margin="20,20,20,20" XAxisBrush="Gray" YAxisScaleCount="4" Grid.Row="0"/>
+            <windchart:Linegram x:Name="line2" Margin="20,20,20,20" XAxisBrush="Gray" YAxisBrush="Blue" YAxisScaleCount="4" Grid.Row="1"/>
+            <windchart:Linegram x:Name="line3" Margin="20,20,20,20" XAxisBrush="Gray" YAxisBrush="SeaGreen" YAxisScaleCount="4" Grid.Row="2"/>
+            <windchart:Linegram x:Name="line4" Margin="20,20,20,20" XAxisBrush="Gray" YAxisBrush="OrangeRed" YAxisScaleCount="4" Grid.Row="3"/>
         </Grid>
 
     </Grid>
