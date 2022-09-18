@@ -1,9 +1,36 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>windchart.ico</ApplicationIcon>
+    <Authors>Meiliyong</Authors>
+    <Description>Build Custom and Simple WPF Charts  Library</Description>
+    <RepositoryUrl>https://github.com/mefdeamon/Toolkit-WeChart</RepositoryUrl>
+    <RepositoryType>github</RepositoryType>
+    <PackageTags>WeChart WindChart WPF Chart</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>windchart.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Version>1.0.0-alpha</Version>
+    <PackageId>WeChart.Toolkit.WindChart</PackageId>
+    <Copyright>Copyright (c) Meiliyong</Copyright>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="windchart.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\res\windchart.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
