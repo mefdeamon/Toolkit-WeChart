@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+	<TargetFrameworks>net6.0-windows;netcoreapp3.1;net48;net472</TargetFrameworks>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>windchart.ico</ApplicationIcon>
@@ -13,11 +13,16 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>windchart.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.0.0-alpha</Version>
+    <Version>1.0.0-beta</Version>
     <PackageId>WeChart.Toolkit.WindChart</PackageId>
     <Copyright>Copyright (c) Meiliyong</Copyright>
   </PropertyGroup>
-
+  <PropertyGroup>
+	<LangVersion>preview</LangVersion>
+	<PackageReleaseNotes>Add net6.0-windows;netcoreapp3.1;net48;net472 TargetFramworks</PackageReleaseNotes>
+	<AssemblyVersion>1.0.0.1</AssemblyVersion>
+	<FileVersion>1.0.0.1</FileVersion>
+  </PropertyGroup>
   <ItemGroup>
     <Content Include="windchart.ico" />
   </ItemGroup>
