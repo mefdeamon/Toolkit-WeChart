@@ -150,22 +150,80 @@ namespace WindChart
             yPixelRatio = RenderSize.Height / absoluteActualY;
         }
 
+        /// <summary>
+        /// 确认点是否在图表范围中
+        /// </summary>
+        /// <param name="location">实际场景的点</param>
+        /// <returns></returns>
+        protected bool IsInGram(Point location)
+        {
+            if (XMin <= location.X && location.X <= XMax)
+            {
+                if (YMin <= location.Y && location.Y <= YMax)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 判断绘制的点是否在控件范围内
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        protected bool IsInRenderSize(Point location)
+        {
+            if (0 <= location.X && location.X <= RenderSize.Width)
+            {
+                if (0 <= location.Y && location.Y <= RenderSize.Height)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         #endregion
 
         #region 对外提供的参数设置
 
         private static void YRangeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((Gram)d).UpdatePixelRatio();
-
-            ((Gram)d).DrawYAxisScale();
+            if (d is Gram g)
+            {
+                if (g.IsRenderAxis)
+                {
+                    g.UpdatePixelRatio();
+                    g.DrawYAxisScale();
+                }
+            }
         }
 
         private static void XRangeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((Gram)d).UpdatePixelRatio();
-
-            ((Gram)d).DrawXAxisScale();
+            if (d is Gram g)
+            {
+                if (g.IsRenderAxis)
+                {
+                    g.UpdatePixelRatio();
+                    g.DrawXAxisScale();
+                }
+            }
         }
 
         private static void XAxisBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -241,6 +299,13 @@ namespace WindChart
         public static readonly DependencyProperty XMinProperty =
             DependencyProperty.Register("XMin", typeof(double), typeof(Gram),
                 new FrameworkPropertyMetadata(-100D, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, XRangeChanged));
+
+        /// <summary>
+        /// 当X/Y的Min/Max发生变化时，是否需要渲染轴信息
+        /// 提供给外部是否更新轴刻度的功能，用于节省性能
+        /// 默认值TRUE
+        /// </summary>
+        public bool IsRenderAxis { get; set; } = true;
 
         #endregion
 
@@ -458,7 +523,7 @@ namespace WindChart
         /// <summary>
         /// 更新绘制坐标轴相关的内容
         /// </summary>
-        private void DrawXAxisScale()
+        protected void DrawXAxisScale()
         {
             var dc = xAxisVisual.RenderOpen();
 
@@ -498,7 +563,7 @@ namespace WindChart
                 // 画刻度线条
                 if (NeedXAxisLine)
                 {
-                    for (double i = XMin; i <= XMax; i += XAxisScaleInterval)
+                    for (double i = XMin; i < XMax; i += XAxisScaleInterval)
                     {
                         var x = XAxisConvertXToPixel(i);
 
@@ -516,8 +581,26 @@ namespace WindChart
                             default:
                                 break;
                         }
-
                     }
+
+                    // 绘制最后一个刻度
+                    switch (XAxisLineMode)
+                    {
+                        case AxisLineMode.Grid:
+                        case AxisLineMode.TopLeft:
+                        case AxisLineMode.BottmRight:
+                        case AxisLineMode.Location:
+                            var x = XAxisConvertXToPixel(XMax);
+                            dc.DrawLine(axisLinePen, new Point(x, y1), new Point(x, y2));
+                            break;
+                        case AxisLineMode.Center:
+                            x = XAxisConvertXToPixel(XMax);
+                            dc.DrawLine(axisLinePen, new Point(x, y1 - scalelinePixel), new Point(x, y1 + scalelinePixel));
+                            break;
+                        default:
+                            break;
+                    }
+
                     var x1 = XAxisConvertXToPixel(XMin);
                     var x2 = XAxisConvertXToPixel(XMax);
                     if (XAxisLineMode == AxisLineMode.Grid)
@@ -531,7 +614,7 @@ namespace WindChart
                 if (NeedXAxisText)
                 {
                     FormattedText text;
-                    for (double i = XMin; i <= XMax; i += XAxisScaleInterval)
+                    for (double i = XMin; i < XMax; i += XAxisScaleInterval)
                     {
                         var x = XAxisConvertXToPixel(i);
 
@@ -562,6 +645,47 @@ namespace WindChart
                         }
 
                     }
+
+                    // 画最后一个文本
+                    switch (XAxisLineMode)
+                    {
+                        case AxisLineMode.Grid:
+                            var x = XAxisConvertXToPixel(XMax);
+                            // 画刻度文本
+                            var textcontent = ((int)XMax).ToString();
+                            text = new FormattedText(textcontent, CultureInfo.GetCultureInfo("en-us"),
+                                                                    FlowDirection.LeftToRight, new Typeface("Verdana"), AxisFontSize, XAxisBrush,
+                                                                    VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                            var offsetLeft = text.Width / 2;
+
+                            dc.DrawText(text, new Point(x - offsetLeft, y1));
+                            dc.DrawText(text, new Point(x - offsetLeft, y2 - (text.Height)));
+                            break;
+                        case AxisLineMode.TopLeft:
+                            x = XAxisConvertXToPixel(XMax);
+                            // 画刻度文本
+                            textcontent = ((int)XMax).ToString();
+                            text = new FormattedText(textcontent, CultureInfo.GetCultureInfo("en-us"),
+                                                                    FlowDirection.LeftToRight, new Typeface("Verdana"), AxisFontSize, XAxisBrush,
+                                                                    VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                            offsetLeft = text.Width / 2;
+                            dc.DrawText(text, new Point(x - offsetLeft, y1 - (text.Height)));
+                            break;
+                        case AxisLineMode.BottmRight:
+                        case AxisLineMode.Location:
+                        case AxisLineMode.Center:
+                            x = XAxisConvertXToPixel(XMax);
+                            // 画刻度文本
+                            textcontent = ((int)XMax).ToString();
+                            text = new FormattedText(textcontent, CultureInfo.GetCultureInfo("en-us"),
+                                                                    FlowDirection.LeftToRight, new Typeface("Verdana"), AxisFontSize, XAxisBrush,
+                                                                    VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                            offsetLeft = text.Width / 2;
+                            dc.DrawText(text, new Point(x - offsetLeft, y1));
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
 
@@ -573,7 +697,7 @@ namespace WindChart
         /// <summary>
         /// 绘制纵轴Y轴的刻度信息
         /// </summary>
-        private void DrawYAxisScale()
+        protected void DrawYAxisScale()
         {
             var dc = yAxisVisual.RenderOpen();
 
@@ -622,7 +746,8 @@ namespace WindChart
 
                 if (NeedYAxisLine)
                 {
-                    for (double i = YMin; i <= YMax; i += YAxisScaleInterval)
+
+                    for (double i = YMin; i < YMax; i += YAxisScaleInterval)
                     {
                         var y = YAxisConvertYToPixel(i);
 
@@ -640,6 +765,24 @@ namespace WindChart
                             default:
                                 break;
                         }
+                    }
+
+                    // 绘制最后一个刻度
+                    switch (YAxisLineMode)
+                    {
+                        case AxisLineMode.Grid:
+                        case AxisLineMode.TopLeft:
+                        case AxisLineMode.BottmRight:
+                        case AxisLineMode.Location:
+                            var y = YAxisConvertYToPixel(YMax);
+                            dc.DrawLine(axisLinePen, new Point(x1, y), new Point(x2, y));
+                            break;
+                        case AxisLineMode.Center:
+                            y = YAxisConvertYToPixel(YMax);
+                            dc.DrawLine(axisLinePen, new Point(x1 - scalelinePixel, y), new Point(x1 + scalelinePixel, y));
+                            break;
+                        default:
+                            break;
                     }
 
                     // 绘制轴线
@@ -725,5 +868,4 @@ namespace WindChart
 
         #endregion
     }
-
 }
