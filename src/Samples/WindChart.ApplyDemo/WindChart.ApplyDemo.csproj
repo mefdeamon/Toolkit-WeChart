@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\WindChart\WindChart.csproj" />
+    <ProjectReference Include="..\MeiMvvm\MeiMvvm.csproj" />
   </ItemGroup>
 
 </Project>

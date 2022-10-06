@@ -42,10 +42,13 @@
             
 
             <StackPanel  DockPanel.Dock="Top">
-
-
                 <fd:IconRadioButton Style="{StaticResource LeftNaviIconRaioButton}"
                                     IsChecked="True"
+                                    Icon="M256 576 128 576C89.6 576 64 550.4 64 512s25.6-64 64-64l128 0c38.4 0 64 25.6 64 64S294.4 576 256 576z M896 576l-128 0c-38.4 0-64-25.6-64-64s25.6-64 64-64l128 0c38.4 0 64 25.6 64 64S934.4 576 896 576z M441.6 768l-64 108.8c-19.2 32-57.6 38.4-89.6 25.6s-38.4-57.6-25.6-89.6l64-108.8c19.2-32 57.6-38.4 89.6-25.6S454.4 736 441.6 768z M761.6 211.2l-64 108.8C678.4 352 640 364.8 608 345.6S569.6 288 582.4 256l64-108.8c19.2-32 57.6-38.4 89.6-25.6S774.4 179.2 761.6 211.2z M697.6 704l64 108.8c19.2 32 6.4 70.4-25.6 89.6s-70.4 6.4-89.6-25.6l-64-108.8c-19.2-32-6.4-70.4 25.6-89.6S678.4 672 697.6 704z M377.6 147.2l64 108.8C454.4 288 448 326.4 416 345.6S345.6 352 326.4 320l-64-108.8C249.6 179.2 256 140.8 288 121.6S358.4 115.2 377.6 147.2z"
+                                    Tag="/Pages/WelcomePage.xaml" Content="欢迎" Margin="0 5 5 0" 
+                                    Click="NaviClick"/>
+
+                <fd:IconRadioButton Style="{StaticResource LeftNaviIconRaioButton}"
                                     Icon="M981.344 938.656H42.688V128h85.344v725.344h853.344z"
                                     Tag="/Pages/GramPage.xaml" Content="坐标系" Margin="0 5 5 0" 
                                     Click="NaviClick"/>
@@ -64,7 +67,7 @@
         <Path Grid.Column="1" Visibility="Collapsed" Fill="Black" Stroke="Red" StrokeThickness="20" Stretch="Uniform" Data="M1481.344 938.656H60.688V128h85.344v725.344h853.344z M215.2 355.2z l-59.744 59.744 200.856 280.856 70.456 -70.456z M415.2 755.2 l-59.744-59.744 285.856-285.856 213.344 213.344 311.456-311.456 59.744 59.744-371.2 371.2 -213.344-213.344z"
               />
 
-        <Frame Grid.Column="1" x:Name="frame" NavigationUIVisibility="Hidden" Source="/Pages/GramPage.xaml" />
+        <Frame Grid.Column="1" x:Name="frame" NavigationUIVisibility="Hidden" Source="/Pages/WelcomePage.xaml" />
 
 
     </Grid>

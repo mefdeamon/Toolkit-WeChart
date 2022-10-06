@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{EBE9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindChart.ApplyDemo", "Samples\WindChart.ApplyDemo\WindChart.ApplyDemo.csproj", "{36FD1AB4-E94A-4139-BEF4-EA51C501B87F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeiMvvm", "Samples\MeiMvvm\MeiMvvm.csproj", "{0F7F449E-508E-4D6E-8B4A-7CA6332A4413}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,12 +25,17 @@ Global
 		{36FD1AB4-E94A-4139-BEF4-EA51C501B87F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36FD1AB4-E94A-4139-BEF4-EA51C501B87F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36FD1AB4-E94A-4139-BEF4-EA51C501B87F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F7F449E-508E-4D6E-8B4A-7CA6332A4413}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F7F449E-508E-4D6E-8B4A-7CA6332A4413}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F7F449E-508E-4D6E-8B4A-7CA6332A4413}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F7F449E-508E-4D6E-8B4A-7CA6332A4413}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{36FD1AB4-E94A-4139-BEF4-EA51C501B87F} = {EBE9CDCD-BE95-43CE-801A-A604BD982C4E}
+		{0F7F449E-508E-4D6E-8B4A-7CA6332A4413} = {EBE9CDCD-BE95-43CE-801A-A604BD982C4E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7AB67895-0A79-4337-B8A1-E4F4C0592F31}
