@@ -19,7 +19,8 @@ namespace WindChart.ApplyDemo.PageModels
         public LinegramPageModel()
         {
             LinePoints = new ObservableCollection<Point>();
-            SimulateCommand?.Execute(null);
+            FillBrush = FillBrushes[6];
+            Simulate();
         }
 
         private Boolean needAiming = true;
@@ -138,7 +139,12 @@ namespace WindChart.ApplyDemo.PageModels
         /// <summary>
         /// 数据模拟
         /// </summary>
-        public RelayCommand SimulateCommand => new RelayCommand(() =>
+        public RelayCommand SimulateCommand => new RelayCommand(Simulate);
+
+        /// <summary>
+        /// 数据模拟
+        /// </summary>
+        private void Simulate()
         {
             if (IsSimulating)
             {
@@ -187,6 +193,6 @@ namespace WindChart.ApplyDemo.PageModels
 
                 IsSimulating = false;
             });
-        });
+        }
     }
 }

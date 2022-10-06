@@ -23,7 +23,7 @@ namespace WindChart.ApplyDemo.PageModels
             Task.Delay(10).ContinueWith(t =>
             {
                 double x = 0;
-                double y = 0;
+                double y = 50;
                 List<Point> list = new List<Point>();
                 while (true)
                 {

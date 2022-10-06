@@ -26,18 +26,34 @@
                                 YAxisScaleCount="4" XAxisScaleCount="10"
                                 YMax="100" YMin="40" XMin="10" XMax="100"
                                 LineSource="{Binding LinePoints}"
-                                LineThickness="1"
+                                LineThickness="0"
                                 LineBrush="Black"
                                 IsGraph="True" 
                                 KeepAllPoints="True"
                                 NeedAiming="True"
                                 >
                 <windchart:Linegram.Fill>
-                    <LinearGradientBrush>
-                        <GradientStop Color="#8FBC8F"/>
-                        <GradientStop Color="#408FBC8F"/>
+                    <LinearGradientBrush StartPoint="0 0" EndPoint="0 1">
+                        <GradientStop Color="#6495ED" Offset="0"/>
+                        <GradientStop Color="#406495ED" Offset="1"/>
                     </LinearGradientBrush>
                 </windchart:Linegram.Fill>
+            </windchart:Linegram>
+        </Border>
+
+        <Border Padding="24 12" Background="WhiteSmoke"
+                Grid.Row="0" Grid.Column="1">
+            <!-- 图标控件 -->
+            <windchart:Linegram 
+                                XAxisBrush="Black" YAxisBrush="Black"
+                                YAxisScaleCount="4" XAxisScaleCount="10"
+                                LineSource="{Binding LinePoints}"
+                                LineThickness="1"
+                                LineBrush="Black"
+                                IsGraph="False" 
+                                KeepAllPoints="True"
+                                NeedAiming="True"
+                                >
             </windchart:Linegram>
         </Border>
     </Grid>
