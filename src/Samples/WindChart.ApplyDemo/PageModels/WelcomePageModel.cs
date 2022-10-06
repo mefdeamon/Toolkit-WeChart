@@ -8,8 +8,16 @@ using System.Windows;
 
 namespace WindChart.ApplyDemo.PageModels
 {
+    /// <summary>
+    /// 欢迎页面数据模型
+    /// </summary>
     internal class WelcomePageModel : MeiMvvm.NotifyPropertyChanged
     {
+        private readonly Random random = new Random();
+
+        /// <summary>
+        /// 单线图的点
+        /// </summary>
         public ObservableCollection<Point> LinePoints { get; set; } = new ObservableCollection<Point>();
 
         public WelcomePageModel()
@@ -27,7 +35,7 @@ namespace WindChart.ApplyDemo.PageModels
                         break;
                     }
 
-                    var ran = Random.Shared.Next(-150, 150);
+                    var ran = random.Next(-150, 150);
 
                     if (ran > 0)
                     {
@@ -41,7 +49,6 @@ namespace WindChart.ApplyDemo.PageModels
 
                     list.Add(p);
 
-                    //x += Random.Shared.NextDouble();
                     x++;
                 }
             });

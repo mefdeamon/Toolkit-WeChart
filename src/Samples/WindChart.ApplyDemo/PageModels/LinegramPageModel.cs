@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,9 +9,13 @@ using System.Windows.Media;
 
 namespace WindChart.ApplyDemo.PageModels
 {
-
+    /// <summary>
+    /// 单线图示例页面数据模型
+    /// </summary>
     public class LinegramPageModel : NotifyPropertyChanged
     {
+        private readonly Random random = new Random();
+
         public LinegramPageModel()
         {
             LinePoints = new ObservableCollection<Point>();
@@ -31,7 +33,9 @@ namespace WindChart.ApplyDemo.PageModels
         }
 
         private Boolean keepAllPoints = true;
-
+        /// <summary>
+        /// 是否保持所有点
+        /// </summary>
         public Boolean KeepAllPoints
         {
             get { return keepAllPoints; }
@@ -39,7 +43,9 @@ namespace WindChart.ApplyDemo.PageModels
         }
 
         private Boolean isGraph = true;
-
+        /// <summary>
+        /// 是否是面积图
+        /// </summary>
         public Boolean IsGraph
         {
             get { return isGraph; }
@@ -47,7 +53,9 @@ namespace WindChart.ApplyDemo.PageModels
         }
 
         private Brush lineBrush = Brushes.Black;
-
+        /// <summary>
+        /// 线颜色
+        /// </summary>
         public Brush LineBrush
         {
             get { return lineBrush; }
@@ -55,7 +63,9 @@ namespace WindChart.ApplyDemo.PageModels
         }
 
         private double lineThinkness = 1;
-
+        /// <summary>
+        /// 线宽
+        /// </summary>
         public double LineThinkness
         {
             get { return lineThinkness; }
@@ -63,13 +73,17 @@ namespace WindChart.ApplyDemo.PageModels
         }
 
         private Brush fillBrush = Brushes.DarkSeaGreen;
-
+        /// <summary>
+        /// 填充颜色
+        /// </summary>
         public Brush FillBrush
         {
             get { return fillBrush; }
             set { Set(ref fillBrush, value); }
         }
-
+        /// <summary>
+        /// 面积区域填充颜色选择项
+        /// </summary>
         public List<Brush> FillBrushes => new List<Brush>() { Brushes.Black, Brushes.OrangeRed, Brushes.DarkSeaGreen, Brushes.CornflowerBlue,
             new LinearGradientBrush() { EndPoint = new Point(0, 1),
                 GradientStops=new GradientStopCollection (){new GradientStop() { Color= Colors.OrangeRed, Offset=0} ,
@@ -83,7 +97,9 @@ namespace WindChart.ApplyDemo.PageModels
         };
 
         private ObservableCollection<Point> linePoints = new ObservableCollection<Point>();
-
+        /// <summary>
+        /// 线点数据
+        /// </summary>
         public ObservableCollection<Point> LinePoints
         {
             get { return linePoints; }
@@ -91,7 +107,9 @@ namespace WindChart.ApplyDemo.PageModels
         }
 
         private bool isSimulating = false;
-
+        /// <summary>
+        /// 是否处于模拟状态
+        /// </summary>
         public bool IsSimulating
         {
             get { return isSimulating; }
@@ -101,7 +119,9 @@ namespace WindChart.ApplyDemo.PageModels
                 RaisePropertyChanged(nameof(CanSimulate));
             }
         }
-
+        /// <summary>
+        /// 是否可以再次模拟
+        /// </summary>
         public bool CanSimulate => !IsSimulating;
 
         private int sleepTime = 0;
@@ -115,6 +135,9 @@ namespace WindChart.ApplyDemo.PageModels
             set { Set(ref sleepTime, value); }
         }
 
+        /// <summary>
+        /// 数据模拟
+        /// </summary>
         public RelayCommand SimulateCommand => new RelayCommand(() =>
         {
             if (IsSimulating)
@@ -138,7 +161,7 @@ namespace WindChart.ApplyDemo.PageModels
                         break;
                     }
 
-                    var ran = Random.Shared.Next(-150, 150);
+                    var ran = random.Next(-150, 150);
 
                     if (ran > 0)
                     {
@@ -159,13 +182,11 @@ namespace WindChart.ApplyDemo.PageModels
                         Thread.Sleep(SleepTime);
                     }
 
-                    //x += Random.Shared.NextDouble();
                     x++;
                 }
 
                 IsSimulating = false;
             });
         });
-
     }
 }

@@ -13,5 +13,10 @@ namespace WindChart.ApplyDemo
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            MeiMvvm.ServiceProvider.LoadModule(new Data.MainModule());
+        }
     }
 }
