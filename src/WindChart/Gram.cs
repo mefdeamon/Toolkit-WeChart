@@ -15,6 +15,11 @@ namespace WindChart
         protected readonly int scalelinePixel = 5;
 
         /// <summary>
+        /// 默认文本字体
+        /// </summary>
+        protected readonly Typeface defaultTypeface = new Typeface("Verdana");
+
+        /// <summary>
         /// 图像
         /// </summary>
         protected VisualCollection Visuals;
@@ -386,6 +391,22 @@ namespace WindChart
             DependencyProperty.Register("XAxisLineMode", typeof(AxisLineMode), typeof(Gram),
                 new FrameworkPropertyMetadata(AxisLineMode.Center, XRangeChanged));
 
+
+        /// <summary>
+        /// X轴刻度文本样式
+        /// </summary>
+        public AxisTextMode XAxisTextMode
+        {
+            get { return (AxisTextMode)GetValue(XAxisTextModeProperty); }
+            set { SetValue(XAxisTextModeProperty, value); }
+        }
+        /// <summary>
+        /// <see cref="XAxisTextMode"/>
+        /// </summary>
+        public static readonly DependencyProperty XAxisTextModeProperty =
+            DependencyProperty.Register("XAxisTextMode", typeof(AxisTextMode), typeof(Gram),
+                new FrameworkPropertyMetadata(AxisTextMode.BottomRight, XRangeChanged));
+
         /// <summary>
         /// 需要Y轴刻度文本
         /// </summary>
@@ -423,6 +444,24 @@ namespace WindChart
             DependencyProperty.Register("YAxisLineMode", typeof(AxisLineMode),
                 typeof(Gram),
                 new FrameworkPropertyMetadata(AxisLineMode.Center, YRangeChanged));
+
+
+        /// <summary>
+        /// Y轴刻度文本样式
+        /// </summary>
+        public AxisTextMode YAxisTextMode
+        {
+            get { return (AxisTextMode)GetValue(YAxisTextModeProperty); }
+            set { SetValue(YAxisTextModeProperty, value); }
+        }
+        /// <summary>
+        /// <see cref="YAxisTextMode"/>
+        /// </summary>
+        public static readonly DependencyProperty YAxisTextModeProperty =
+            DependencyProperty.Register("YAxisTextMode", typeof(AxisTextMode),
+                typeof(Gram),
+                new FrameworkPropertyMetadata(AxisTextMode.TopLeft, YRangeChanged));
+
 
         #endregion
 
@@ -620,25 +659,37 @@ namespace WindChart
 
                         // 画刻度文本
                         var textcontent = ((int)i).ToString();
-                        text = new FormattedText(textcontent, CultureInfo.GetCultureInfo("en-us"),
-                                                                FlowDirection.LeftToRight, new Typeface("Verdana"), AxisFontSize, XAxisBrush,
+                        text = new FormattedText(textcontent, CultureInfo.CurrentCulture,
+                                                                FlowDirection.LeftToRight, defaultTypeface, AxisFontSize, XAxisBrush,
                                                                 VisualTreeHelper.GetDpi(this).PixelsPerDip);
 
                         var offsetLeft = text.Width / 2;
 
-                        switch (XAxisLineMode)
+                        switch (XAxisTextMode)
                         {
-                            case AxisLineMode.Grid:
+                            case AxisTextMode.Both:
                                 dc.DrawText(text, new Point(x - offsetLeft, y1));
                                 dc.DrawText(text, new Point(x - offsetLeft, y2 - (text.Height)));
                                 break;
-                            case AxisLineMode.TopLeft:
-                                dc.DrawText(text, new Point(x - offsetLeft, y1 - (text.Height)));
+                            case AxisTextMode.TopLeft:
+                                if (XAxisLineMode == AxisLineMode.Grid)
+                                {
+                                    dc.DrawText(text, new Point(x - offsetLeft, y2 - (text.Height)));
+                                }
+                                else
+                                {
+                                    dc.DrawText(text, new Point(x - offsetLeft, y1 - (text.Height)));
+                                }
                                 break;
-                            case AxisLineMode.BottmRight:
-                            case AxisLineMode.Location:
-                            case AxisLineMode.Center:
-                                dc.DrawText(text, new Point(x - offsetLeft, y1));
+                            case AxisTextMode.BottomRight:
+                                if (XAxisLineMode == AxisLineMode.Grid)
+                                {
+                                    dc.DrawText(text, new Point(x - offsetLeft, y1));
+                                }
+                                else
+                                {
+                                    dc.DrawText(text, new Point(x - offsetLeft, y1));
+                                }
                                 break;
                             default:
                                 break;
@@ -647,41 +698,39 @@ namespace WindChart
                     }
 
                     // 画最后一个文本
-                    switch (XAxisLineMode)
+                    var xx = XAxisConvertXToPixel(XMax);
+                    // 画刻度文本
+                    text = new FormattedText(((int)XMax).ToString(), CultureInfo.CurrentCulture,
+                                                            FlowDirection.LeftToRight, defaultTypeface, AxisFontSize, XAxisBrush,
+                                                            VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                    var textOffsetLeft = text.Width / 2;
+                    switch (XAxisTextMode)
                     {
-                        case AxisLineMode.Grid:
-                            var x = XAxisConvertXToPixel(XMax);
-                            // 画刻度文本
-                            var textcontent = ((int)XMax).ToString();
-                            text = new FormattedText(textcontent, CultureInfo.GetCultureInfo("en-us"),
-                                                                    FlowDirection.LeftToRight, new Typeface("Verdana"), AxisFontSize, XAxisBrush,
-                                                                    VisualTreeHelper.GetDpi(this).PixelsPerDip);
-                            var offsetLeft = text.Width / 2;
+                        case AxisTextMode.Both:
 
-                            dc.DrawText(text, new Point(x - offsetLeft, y1));
-                            dc.DrawText(text, new Point(x - offsetLeft, y2 - (text.Height)));
+                            dc.DrawText(text, new Point(xx - textOffsetLeft, y1));
+                            dc.DrawText(text, new Point(xx - textOffsetLeft, y2 - (text.Height)));
                             break;
-                        case AxisLineMode.TopLeft:
-                            x = XAxisConvertXToPixel(XMax);
-                            // 画刻度文本
-                            textcontent = ((int)XMax).ToString();
-                            text = new FormattedText(textcontent, CultureInfo.GetCultureInfo("en-us"),
-                                                                    FlowDirection.LeftToRight, new Typeface("Verdana"), AxisFontSize, XAxisBrush,
-                                                                    VisualTreeHelper.GetDpi(this).PixelsPerDip);
-                            offsetLeft = text.Width / 2;
-                            dc.DrawText(text, new Point(x - offsetLeft, y1 - (text.Height)));
+                        case AxisTextMode.TopLeft:
+
+                            if (XAxisLineMode == AxisLineMode.Grid)
+                            {
+                                dc.DrawText(text, new Point(xx - textOffsetLeft, y2 - (text.Height)));
+                            }
+                            else
+                            {
+                                dc.DrawText(text, new Point(xx - textOffsetLeft, y1 - (text.Height)));
+                            }
                             break;
-                        case AxisLineMode.BottmRight:
-                        case AxisLineMode.Location:
-                        case AxisLineMode.Center:
-                            x = XAxisConvertXToPixel(XMax);
-                            // 画刻度文本
-                            textcontent = ((int)XMax).ToString();
-                            text = new FormattedText(textcontent, CultureInfo.GetCultureInfo("en-us"),
-                                                                    FlowDirection.LeftToRight, new Typeface("Verdana"), AxisFontSize, XAxisBrush,
-                                                                    VisualTreeHelper.GetDpi(this).PixelsPerDip);
-                            offsetLeft = text.Width / 2;
-                            dc.DrawText(text, new Point(x - offsetLeft, y1));
+                        case AxisTextMode.BottomRight:
+                            if (XAxisLineMode == AxisLineMode.Grid)
+                            {
+                                dc.DrawText(text, new Point(xx - textOffsetLeft, y1));
+                            }
+                            else
+                            {
+                                dc.DrawText(text, new Point(xx - textOffsetLeft, y1));
+                            }
                             break;
                         default:
                             break;
@@ -746,7 +795,6 @@ namespace WindChart
 
                 if (NeedYAxisLine)
                 {
-
                     for (double i = YMin; i < YMax; i += YAxisScaleInterval)
                     {
                         var y = YAxisConvertYToPixel(i);
@@ -802,38 +850,81 @@ namespace WindChart
                     int lineTextGap = 2;
 
                     FormattedText text;
-                    for (double i = YMin; i <= YMax; i += YAxisScaleInterval)
+                    for (double i = YMin; i < YMax; i += YAxisScaleInterval)
                     {
                         var y = YAxisConvertYToPixel(i);
 
                         // 画刻度文本
                         var textcontent = ((int)i).ToString();
-                        text = new FormattedText(textcontent, CultureInfo.GetCultureInfo("en-us"),
-                                                                FlowDirection.LeftToRight, new Typeface("Verdana"), AxisFontSize, YAxisBrush,
+                        text = new FormattedText(textcontent, CultureInfo.CurrentCulture,
+                                                                FlowDirection.LeftToRight, defaultTypeface, AxisFontSize, YAxisBrush,
                                                                 VisualTreeHelper.GetDpi(this).PixelsPerDip);
 
-                        switch (YAxisLineMode)
+                        switch (YAxisTextMode)
                         {
-                            case AxisLineMode.Grid:
+                            case AxisTextMode.Both:
                                 dc.DrawText(text, new Point(x1 - text.Width - lineTextGap, y - text.Height / 2 - 1));
                                 dc.DrawText(text, new Point(x2 + lineTextGap, y - text.Height / 2 - 1));
                                 break;
-                            case AxisLineMode.TopLeft:
-                                dc.DrawText(text, new Point(x1 - text.Width - lineTextGap, y - text.Height / 2 - 1));
+                            case AxisTextMode.TopLeft:
+                                if (YAxisLineMode == AxisLineMode.Grid)
+                                {
+                                    dc.DrawText(text, new Point(x1 - text.Width - lineTextGap, y - text.Height / 2 - 1));
+                                }
+                                else
+                                {
+                                    dc.DrawText(text, new Point(x1 - text.Width - lineTextGap, y - text.Height / 2 - 1));
+                                }
                                 break;
-                            case AxisLineMode.BottmRight:
-                                dc.DrawText(text, new Point(x1 + lineTextGap, y - text.Height / 2 - 1));
-                                break;
-                            case AxisLineMode.Location:
-                                dc.DrawText(text, new Point(x1 - text.Width - lineTextGap, y - text.Height / 2 - 1));
-                                break;
-                            case AxisLineMode.Center:
-                                dc.DrawText(text, new Point(x1 - text.Width - lineTextGap, y - text.Height / 2 - 1));
+                            case AxisTextMode.BottomRight:
+                                if (YAxisLineMode == AxisLineMode.Grid)
+                                {
+                                    dc.DrawText(text, new Point(x2 + lineTextGap, y - text.Height / 2 - 1));
+                                }
+                                else
+                                {
+                                    dc.DrawText(text, new Point(x1 + lineTextGap, y - text.Height / 2 - 1));
+                                }
                                 break;
                             default:
                                 break;
                         }
 
+                    }
+
+                    text = new FormattedText(((int)YMax).ToString(), CultureInfo.CurrentCulture,
+                                                            FlowDirection.LeftToRight, defaultTypeface, AxisFontSize, YAxisBrush,
+                                                            VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                    var yy = YAxisConvertYToPixel(YMax);
+
+                    switch (YAxisTextMode)
+                    {
+                        case AxisTextMode.Both:
+                            dc.DrawText(text, new Point(x1 - text.Width - lineTextGap, yy - text.Height / 2 - 1));
+                            dc.DrawText(text, new Point(x2 + lineTextGap, yy - text.Height / 2 - 1));
+                            break;
+                        case AxisTextMode.TopLeft:
+                            if (YAxisLineMode == AxisLineMode.Grid)
+                            {
+                                dc.DrawText(text, new Point(x1 - text.Width - lineTextGap, yy - text.Height / 2 - 1));
+                            }
+                            else
+                            {
+                                dc.DrawText(text, new Point(x1 - text.Width - lineTextGap, yy - text.Height / 2 - 1));
+                            }
+                            break;
+                        case AxisTextMode.BottomRight:
+                            if (YAxisLineMode == AxisLineMode.Grid)
+                            {
+                                dc.DrawText(text, new Point(x2 + lineTextGap, yy - text.Height / 2 - 1));
+                            }
+                            else
+                            {
+                                dc.DrawText(text, new Point(x1 + lineTextGap, yy - text.Height / 2 - 1));
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
@@ -843,6 +934,7 @@ namespace WindChart
             // 显示图形
             InvalidateVisual();
         }
+
 
         #region override
 

@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace WindChart.ApplyDemo.Pages
 {
@@ -28,5 +19,30 @@ namespace WindChart.ApplyDemo.Pages
             YAxisTextCheckBox.IsChecked = true;
             YAxisLineCheckBox.IsChecked = true;
         }
+    }
+
+    /// <summary>
+    /// <see cref="AxisLineMode"/> To <see cref="Visibility"/>值转换器
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class AxisLineModeToVisibilityConverter : IValueConverter
+    {
+        public AxisLineModeToVisibilityConverter()
+        {
+        }
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            AxisLineMode mode = (AxisLineMode)value;
+            if (mode == AxisLineMode.Location)
+            {
+                return Visibility.Visible;
+            }
+            else
+            { return Visibility.Collapsed; }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => Binding.DoNothing;
     }
 }
