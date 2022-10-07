@@ -12,5 +12,6 @@ namespace WindChart.ApplyDemo.Data
     {
         public WelcomePageModel WelcomePageModel => ServiceProvider.Get<WelcomePageModel>();
         public LinegramPageModel LinegramPageModel => ServiceProvider.Get<LinegramPageModel>();
+        public BargramPageModel BargramPageModel => ServiceProvider.Get<BargramPageModel>();
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace WindChart.ApplyDemo.PageModels
 {
@@ -17,6 +18,14 @@ namespace WindChart.ApplyDemo.PageModels
         /// 单线图的点
         /// </summary>
         public ObservableCollection<Point> LinePoints { get; set; } = new ObservableCollection<Point>();
+
+        private ObservableCollection<Bar> bars=new ObservableCollection<Bar> ();
+
+        public ObservableCollection<Bar> Bars
+        {
+            get { return bars; }
+            set { Set(ref bars, value); }
+        }
 
         public WelcomePageModel()
         {
@@ -50,6 +59,16 @@ namespace WindChart.ApplyDemo.PageModels
                     x++;
                 }
             });
+
+            var lis = new List<Bar>() {
+                new Bar() {Value = 8, Label= "Sunday" },
+                new Bar() {Value = 7.5, Label= "Monday"},
+                new Bar() {Value = 8.6, Label = "Tuesday"}, 
+                new Bar() {Value = 8.2, Label = "Wednesday"}, 
+                new Bar() {Value = 7.6, Label = "Thursday"},
+                new Bar() {Value = 7.1, Label = "Friday"},
+                new Bar() {Value = 7.1, Label = "Saturday" } };
+            Bars = new ObservableCollection<Bar>(lis);
         }
     }
 }

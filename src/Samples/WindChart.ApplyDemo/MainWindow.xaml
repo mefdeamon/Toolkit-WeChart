@@ -57,6 +57,11 @@
                                     Icon="M981.344 938.656H60.688V128h85.344v725.344h853.344z M215.2 355.2z l-59.744 59.744 200.856 280.856 70.456 -70.456z M415.2 755.2 l-59.744-59.744 285.856-285.856 213.344 213.344 311.456-311.456 59.744 59.744-371.2 371.2 -213.344-213.344z"
                                     Tag="/Pages/LinegramPage.xaml" Content="单线图" Margin="0 5 5 0" 
                                     Click="NaviClick"/>
+
+                <fd:IconRadioButton Style="{StaticResource LeftNaviIconRaioButton}"
+                                    Icon="M938.666667 896H85.333333V128h85.333334v682.666667h85.333333v-384h170.666667v384h85.333333V256h170.666667v554.666667h85.333333v-213.333334h170.666667v298.666667z"
+                                    Tag="/Pages/BargramPage.xaml" Content="条形图" Margin="0 5 5 0" 
+                                    Click="NaviClick"/>
             </StackPanel>
         </DockPanel>
 
