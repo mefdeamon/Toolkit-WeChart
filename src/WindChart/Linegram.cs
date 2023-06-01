@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Media;
 
 namespace WindChart
@@ -66,6 +67,7 @@ namespace WindChart
                     {
                         l.linePen = new Pen((Brush)e.NewValue, l.LineThickness);
                         l.linePen.Freeze();
+                        l.Draw();
                     }
                 }));
 
@@ -83,9 +85,9 @@ namespace WindChart
                 {
                     if (d is Linegram l)
                     {
-
                         l.linePen = new Pen(l.LineBrush, (double)e.NewValue);
                         l.linePen.Freeze();
+                        l.Draw();
                     }
                 }));
 
@@ -99,7 +101,9 @@ namespace WindChart
             set { SetValue(FillProperty, value); }
         }
         public static readonly DependencyProperty FillProperty =
-            DependencyProperty.Register("Fill", typeof(Brush), typeof(Linegram), new PropertyMetadata(Brushes.CornflowerBlue));
+            DependencyProperty.Register("Fill", typeof(Brush), typeof(Linegram),
+                new FrameworkPropertyMetadata(Brushes.CornflowerBlue, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, LinePropertyChangedCallback));
+
 
         /// <summary>
         /// 是否显示面积区域
@@ -110,7 +114,21 @@ namespace WindChart
             set { SetValue(IsGraphProperty, value); }
         }
         public static readonly DependencyProperty IsGraphProperty =
-            DependencyProperty.Register("IsGraph", typeof(Boolean), typeof(Linegram), new PropertyMetadata(true));
+            DependencyProperty.Register("IsGraph", typeof(Boolean), typeof(Linegram),
+                new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, LinePropertyChangedCallback));
+
+        /// <summary>
+        /// 线条的状态发送变化时，重新绘制一次图形
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="e"></param>
+        private static void LinePropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is Linegram l)
+            {
+                l.Draw();
+            }
+        }
 
         /// <summary>
         /// 显示瞄点
@@ -121,7 +139,8 @@ namespace WindChart
             set { SetValue(NeedAimingProperty, value); }
         }
         public static readonly DependencyProperty NeedAimingProperty =
-            DependencyProperty.Register("NeedAiming", typeof(Boolean), typeof(Linegram), new PropertyMetadata(true));
+            DependencyProperty.Register("NeedAiming", typeof(Boolean), typeof(Linegram),
+                new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, LinePropertyChangedCallback));
 
         #endregion
 
@@ -137,47 +156,61 @@ namespace WindChart
         }
         public static readonly DependencyProperty LineSourceProperty =
             DependencyProperty.Register("LineSource", typeof(ObservableCollection<Point>), typeof(Linegram),
-                                new FrameworkPropertyMetadata(new ObservableCollection<Point>(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (d, e) =>
-                                {
-                                    if (d is Linegram l)
+                                new FrameworkPropertyMetadata(new ObservableCollection<Point>(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, LineSourceChanged));
+
+        /// <summary>
+        /// 线条集合发送变化时，更新图形
+        /// 只有在New的时候，再会被触发
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="e"></param>
+        private static void LineSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is Linegram l)
+            {
+                if (e.NewValue is ObservableCollection<Point> pos)
+                {
+                    // 对集合进行New操作，在构造函数中带有默认集合
+                    if (pos.Count > 1)
+                    {
+                        l.DrawLine(pos.ToList());
+                    }
+                    else
+                    {
+                        // 对集合进行new操作时，没有参数的构造函数
+                        // 清理界面
+                        l.ClearLine();
+
+                        // 绑定集合变化事件
+                        l.LineSource.CollectionChanged += (sender, e) =>
+                        {
+                            switch (e.Action)
+                            {
+                                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+                                    if (e.NewItems != null && e.NewItems.Count == 1)
                                     {
-                                        if (e.NewValue is ObservableCollection<Point> pos)
-                                        {
-                                            if (pos.Count > 1)
-                                            {
-                                                l.DrawLine(pos.ToList());
-                                            }
-                                            else
-                                            {
-                                                l.InitLine();
-                                                // TODO需要对事件进行删除-=
-                                                l.LineSource.CollectionChanged += (sender, e) =>
-                                                {
-                                                    switch (e.Action)
-                                                    {
-                                                        case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
-                                                            if (e.NewItems != null && e.NewItems.Count == 1)
-                                                            {
-                                                                if (e.NewItems[0] is Point p)
-                                                                    l.DrawLine(p);
-                                                            }
-                                                            break;
-                                                        case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
-                                                            break;
-                                                        case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
-                                                            break;
-                                                        case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
-                                                            break;
-                                                        case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                                                            break;
-                                                        default:
-                                                            break;
-                                                    }
-                                                };
-                                            }
-                                        }
+                                        if (e.NewItems[0] is Point p)
+                                            l.Add(p);
                                     }
-                                }));
+                                    break;
+                                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
+                                    break;
+                                case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+                                    break;
+                                case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
+                                    break;
+                                case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+                                    // 集合调用Clear函数时
+                                    l.ClearLine();
+                                    break;
+                                default:
+                                    break;
+                            }
+                        };
+                    }
+                }
+            }
+        }
 
         #endregion
 
@@ -273,10 +306,10 @@ namespace WindChart
 
         /// <summary>
         /// 绘制一个新点
-        /// 连续调用这个方法绘制图像前，需要先调用<see cref="InitLine"/>函数
+        /// 连续调用这个方法绘制图像前
         /// </summary>
         /// <param name="p"></param>
-        public void DrawLine(Point p)
+        public void Add(Point p)
         {
             if (points.Count > 1)
             {
@@ -287,83 +320,12 @@ namespace WindChart
         }
 
         /// <summary>
-        /// 初始化绘图点的集合
+        /// 清理界面
         /// </summary>
-        public void InitLine() => points.Clear();
-
-        /// <summary>
-        /// 绘制的路径
-        /// </summary>
-        PathGeometry path = new PathGeometry();
-
-        /// <summary>
-        /// 绘图
-        /// </summary>
-        private void Draw()
+        private void ClearLine()
         {
-            this.Dispatcher.Invoke(() =>
-            {
-                var dc = lineVisual.RenderOpen();
-
-                if (points.Count > 0)
-                {
-                    var last = ConvertToPixel(points[0]);
-
-                    if (NeedAiming)
-                    {
-                        dc.DrawRectangle(Brushes.Black, null, new Rect(last.X - 2, last.Y - 2, 4, 4));
-                    }
-
-                    path.Figures = new PathFigureCollection();
-                    PathFigure p = new PathFigure() { IsClosed = IsGraph };
-                    p.Segments = new PathSegmentCollection();
-
-                    if (IsGraph)
-                    {
-                        p.StartPoint = new Point(last.X, RenderSize.Height);
-                        p.Segments.Add(new LineSegment() { Point = last });
-                    }
-                    else
-                    {
-                        p.StartPoint = last;
-                    }
-
-                    for (int i = 1; i < points.Count; i++)
-                    {
-                        var location = ConvertToPixel(points[i]);
-                        // dc.DrawLine(linePen, last, location);
-
-                        p.Segments.Add(new LineSegment() { Point = location });
-                        last = location;
-                    }
-
-                    if (IsGraph)
-                    {
-                        p.Segments.Add(new LineSegment() { Point = new Point(last.X, RenderSize.Height) });
-                    }
-
-                    path.Figures.Add(p);
-
-                    if (IsGraph)
-                    {
-                        dc.DrawGeometry(Fill, linePen, path);
-                    }
-                    else
-                    {
-                        dc.DrawGeometry(null, linePen, path);
-                    }
-
-                    if (NeedAiming)
-                    {
-                        dc.DrawEllipse(Brushes.OrangeRed, null, last, 2, 2);
-                    }
-                }
-
-                dc.Close();
-
-                // 显示图形
-                InvalidateVisual();
-            });
+            points.Clear();
+            Draw();
         }
 
         /// <summary>
@@ -397,6 +359,78 @@ namespace WindChart
             IsRenderAxis = false;
 
             Draw();
+        }
+
+        /// <summary>
+        /// 绘制的路径
+        /// </summary>
+        PathGeometry path = new PathGeometry() { Figures = new PathFigureCollection() };
+
+        /// <summary>
+        /// 绘图
+        /// </summary>
+        private void Draw()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                var dc = lineVisual.RenderOpen();
+
+                if (points.Count > 0)
+                {
+                    Point p0 = ConvertToPixel(points[0]);
+
+                    if (NeedAiming)
+                    {
+                        dc.DrawRectangle(Brushes.Black, null, new Rect(p0.X - 2, p0.Y - 2, 4, 4));
+                    }
+
+                    if (IsGraph)
+                    {
+                        path.Figures.Clear();
+                        PathFigure p = new PathFigure() { IsClosed = IsGraph };
+                        p.Segments = new PathSegmentCollection();
+
+                        p.StartPoint = new Point(p0.X, RenderSize.Height);
+                        p.Segments.Add(new LineSegment() { Point = p0 });
+
+                        for (int i = 1; i < points.Count; i++)
+                        {
+                            var p1 = ConvertToPixel(points[i]);
+
+                            dc.DrawLine(linePen, p0, p1);
+
+                            p.Segments.Add(new LineSegment() { Point = p1 });
+                            p0 = p1;
+                        }
+
+                        p.Segments.Add(new LineSegment() { Point = new Point(p0.X, RenderSize.Height) });
+
+                        path.Figures.Add(p);
+
+                        dc.DrawGeometry(Fill, null, path);
+                    }
+                    else
+                    {
+                        for (int i = 1; i < points.Count; i++)
+                        {
+                            Point p1 = ConvertToPixel(points[i]);
+                            dc.DrawLine(linePen, p0, p1);
+
+                            p0 = p1;
+                        }
+                    }
+
+                    if (NeedAiming)
+                    {
+                        dc.DrawEllipse(Brushes.OrangeRed, null, p0, 2, 2);
+                    }
+                }
+
+                dc.Close();
+
+                // 显示图形
+                InvalidateVisual();
+            });
         }
 
         #region override
