@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WindChart
 {
@@ -17,6 +20,10 @@ namespace WindChart
         /// 折线画板
         /// </summary>
         private DrawingVisual lineVisual;
+        /// <summary>
+        /// 鼠标线
+        /// </summary>
+        private DrawingVisual mouseVisual;
 
         /// <summary>
         /// 线条颜色和粗细
@@ -27,6 +34,9 @@ namespace WindChart
         {
             lineVisual = new DrawingVisual();
             Visuals.Add(lineVisual);
+            mouseVisual = new DrawingVisual();
+            Visuals.Add(mouseVisual);
+
 
             linePen = new Pen(LineBrush, LineThickness);
             linePen.Freeze();
@@ -37,6 +47,94 @@ namespace WindChart
             XMin = 0;
             YMin = 0;
         }
+
+
+        #region 鼠标
+
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+
+            DrawMouse(e.GetPosition(this));
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+
+            if (e.MouseDevice.LeftButton == MouseButtonState.Pressed)
+            {
+                // 获取鼠标位置，检查周围是否存在目标，标记目标ID
+                var poi = e.GetPosition(this);
+                DrawMouse(poi);
+            }
+        }
+
+        private void DrawMouse(Point poi)
+        {
+            var dc = mouseVisual.RenderOpen();
+            if (points.Count > 0)
+            {
+                // 获取当前对应的目标点
+                var point = FindNearPoint(poi);
+
+                // 将目标点转换成像素坐标
+                poi = ConvertToPixel(point);
+
+                // 绘制鼠标原点和XY
+                dc.DrawEllipse(Brushes.Red, null, poi, 2, 2);
+                dc.DrawLine(new Pen(Brushes.Red, 1), new Point(poi.X, 0), new Point(poi.X, RenderSize.Height));
+                dc.DrawLine(new Pen(Brushes.Red, 1), new Point(0, poi.Y), new Point(RenderSize.Width, poi.Y));
+
+                // 画刻度文本
+                var textcontent = (Math.Round(point.Y, 2)).ToString();
+                FormattedText text = new FormattedText(textcontent, CultureInfo.CurrentCulture,
+                                                        FlowDirection.LeftToRight, defaultTypeface, AxisFontSize, XAxisBrush,
+                                                        VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                var wordWidth = (text.Width / textcontent.Length);
+                poi.X = poi.X + wordWidth / 2;
+                poi.Y = poi.Y + wordWidth / 2;
+                dc.DrawRectangle(Brushes.White, null, new Rect(poi, new Size(text.Width + wordWidth * 2, text.Height)));
+                poi.X = poi.X + wordWidth;
+                dc.DrawText(text, poi);
+            }
+
+            dc.Close();
+        }
+
+        private void ClearMouse()
+        {
+            var dc = mouseVisual.RenderOpen();
+            dc.Close();
+        }
+
+        /// <summary>
+        /// 找到对应位置的对应点
+        /// </summary>
+        /// <param name="xvv"></param>
+        /// <returns></returns>
+        Point FindNearPoint(Point poi)
+        {
+            var p2 = ConvertToActual(poi);
+            var xx = points.Select(t => t.X).OrderBy(x => Math.Abs(x - p2.X)).First();
+
+            var point = points.Where(t => t.X == xx).FirstOrDefault();
+            return point;
+        }
+
+
+
+        protected override void OnMouseRightButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseRightButtonDown(e);
+            ClearMouse();
+        }
+
+
+
+
+        #endregion
+
 
         #region 场景信息配置设置
 
@@ -439,6 +537,7 @@ namespace WindChart
         {
             base.OnRenderSizeChanged(sizeInfo);
             Draw();
+            ClearMouse();
         }
 
         #endregion

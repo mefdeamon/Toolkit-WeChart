@@ -203,6 +203,25 @@ namespace WindChart
             }
         }
 
+
+        protected Point ConvertToActual(Point pixcel)
+        {
+            pixcel.X = XAxisConvertToActual(pixcel.X);
+            pixcel.Y = YAxisConvertToActual(pixcel.Y);
+            return pixcel;
+        }
+
+        protected double YAxisConvertToActual(double pixelY)
+        {
+            var cur = (RenderSize.Height - pixelY) / yPixelRatio;
+            return cur + YMin;
+        }
+        protected double XAxisConvertToActual(double pixelX)
+        {
+            var cur = (pixelX) / xPixelRatio;
+            return cur + XMin;
+        }
+
         #endregion
 
         #region 对外提供的参数设置
