@@ -443,11 +443,25 @@ namespace WindChart
 
             IsRenderAxis = false;
 
-            YMax = maxY;
-            YMin = minY;
+            if (maxX > YMax)
+            {
+                YMax = maxY;
+            }
+            if (minX < YMin)
+            {
+                YMin = minY;
+            }
 
-            XMax = maxX;
-            XMin = minX;
+            if (minY < XMin)
+            {
+                XMin = minX;
+            }
+
+            if (maxX > XMax)
+            {
+                XMax = maxX;
+            }
+            
 
             // 更新图
             UpdatePixelRatio();

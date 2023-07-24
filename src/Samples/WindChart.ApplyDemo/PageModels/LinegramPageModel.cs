@@ -125,7 +125,7 @@ namespace WindChart.ApplyDemo.PageModels
         /// </summary>
         public bool CanSimulate => !IsSimulating;
 
-        private int sleepTime = 0;
+        private int sleepTime = 30;
         /// <summary>
         /// 模拟，点与点绘制间隔时间
         /// 单位毫秒
@@ -161,12 +161,6 @@ namespace WindChart.ApplyDemo.PageModels
                 List<Point> list = new List<Point>();
                 while (IsSimulating)
                 {
-                    if (x > 500)
-                    {
-                        LinePoints = new ObservableCollection<Point>(list);
-                        break;
-                    }
-
                     var ran = random.Next(-150, 150);
 
                     if (ran > 0)
