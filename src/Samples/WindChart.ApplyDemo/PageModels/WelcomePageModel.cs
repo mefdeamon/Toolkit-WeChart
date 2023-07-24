@@ -69,6 +69,37 @@ namespace WindChart.ApplyDemo.PageModels
                 new Bar() {Value = 7.1, Label = "Friday"},
                 new Bar() {Value = 7.1, Label = "Saturday" } };
             Bars = new ObservableCollection<Bar>(lis);
+
+
+            Task.Delay(10).ContinueWith(t =>
+            {
+                double x = 0;
+                double y = 0;
+
+                int count = 0;
+                var ss = new ObservableCollection<EllipseDot>();
+                while (count < 50)
+                {
+                    y = random.Next(-50, 50);
+                    x = random.Next(0, 350);
+                    var size = random.Next(1, 5);
+                    ss.Add(new EllipseDot() { X = x, Y = y, Type = random.Next(0, 3), Height = size, Width = size });
+
+                    count++;
+                }
+                DotSource = new ObservableCollection<EllipseDot>(ss);
+            });
         }
+
+        private ObservableCollection<EllipseDot> dotSource = new ObservableCollection<EllipseDot>();
+        /// <summary>
+        /// 线点数据
+        /// </summary>
+        public ObservableCollection<EllipseDot> DotSource
+        {
+            get { return dotSource; }
+            set { Set(ref dotSource, value); }
+        }
+
     }
 }

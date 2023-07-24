@@ -15,6 +15,8 @@ namespace WindChart.ApplyDemo.Data
             binder.BindSingleton<WelcomePageModel>();
             binder.BindSingleton<LinegramPageModel>();
             binder.BindSingleton<BargramPageModel>();
+            binder.BindSingleton<DotgramPageModel>();
         }
+
     }
 }
