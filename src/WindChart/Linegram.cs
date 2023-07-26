@@ -4,10 +4,8 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace WindChart
 {
@@ -139,15 +137,38 @@ namespace WindChart
         #region 场景信息配置设置
 
         /// <summary>
-        /// 是否显示绘制所有的点
+        /// 界面根据最新范围<see cref="FlashRangePointCount"/>刷新数据
         /// </summary>
-        public Boolean KeepAllPoints
+        public Boolean IsFlashRange
         {
-            get { return (Boolean)GetValue(KeepAllPointsProperty); }
-            set { SetValue(KeepAllPointsProperty, value); }
+            get { return (Boolean)GetValue(IsFlashRangeProperty); }
+            set { SetValue(IsFlashRangeProperty, value); }
         }
-        public static readonly DependencyProperty KeepAllPointsProperty =
-            DependencyProperty.Register("KeepAllPoints", typeof(Boolean), typeof(Linegram), new PropertyMetadata(false));
+
+        public static readonly DependencyProperty IsFlashRangeProperty =
+            DependencyProperty.Register("IsFlashRange", typeof(Boolean), typeof(Linegram), new PropertyMetadata(false));
+
+        /// <summary>
+        /// 最新刷新范围，默认200
+        /// </summary>
+        public int FlashRangePointCount
+        {
+            get { return (int)GetValue(FlashRangePointCountProperty); }
+            set { SetValue(FlashRangePointCountProperty, value); }
+        }
+        public static readonly DependencyProperty FlashRangePointCountProperty =
+            DependencyProperty.Register("FlashRangePointCount", typeof(int), typeof(Linegram), new PropertyMetadata(200));
+
+        /// <summary>
+        /// 界面的刻度根据数据的范围刷新
+        /// </summary>
+        public Boolean IsAxisFollowData
+        {
+            get { return (Boolean)GetValue(IsAxisFollowDataProperty); }
+            set { SetValue(IsAxisFollowDataProperty, value); }
+        }
+        public static readonly DependencyProperty IsAxisFollowDataProperty =
+            DependencyProperty.Register("IsAxisFollowData", typeof(Boolean), typeof(Linegram), new PropertyMetadata(true));
 
         /// <summary>
         /// 线条画刷
@@ -318,101 +339,12 @@ namespace WindChart
         List<Point> points = new List<Point>();
 
         /// <summary>
-        /// 重置坐标刻度
-        /// </summary>
-        /// <param name="p"></param>
-        private void ResetAxis(Point p)
-        {
-            IsRenderAxis = false;
-            bool yChanged = false, xChanged = false;
-            this.Dispatcher.Invoke(() =>
-            {
-                // X 轴
-                if (p.X > XMax)
-                {
-                    var changed = p.X - XMax;
-                    XMax += changed;
-
-                    if (KeepAllPoints)
-                    {
-                        if (points[0].X != XMin)
-                        {
-                            XMin = points[0].X;
-                        }
-                    }
-                    else
-                    {
-                        XMin += changed;
-
-                        if (points[0].X < XMin)
-                        {
-                            points.Remove(points[0]);
-                            XMin = points[0].X;
-                        }
-                    }
-                    xChanged = true;
-                }
-                else if (p.X < XMin)
-                {
-                    var changed = XMin - p.X;
-                    XMax -= changed;
-
-                    if (KeepAllPoints)
-                    {
-                        if (points[0].X != XMax)
-                        {
-                            XMax = points[0].X;
-                        }
-                    }
-                    else
-                    {
-                        XMin -= changed;
-                        if (points[0].X > XMax)
-                        {
-                            points.Remove(points[0]);
-                            XMax = points[0].X;
-                        }
-                    }
-                    xChanged = true;
-                }
-
-                // Y 轴
-                if (p.Y > YMax)
-                {
-                    YMax = p.Y;
-                    yChanged = true;
-                }
-                else if (p.Y < YMin)
-                {
-                    YMin = p.Y;
-                    yChanged = true;
-                }
-
-                IsRenderAxis = true;
-                UpdatePixelRatio();
-
-                if (xChanged)
-                {
-                    DrawXAxisScale();
-                }
-                if (yChanged)
-                {
-                    DrawYAxisScale();
-                }
-            });
-        }
-
-        /// <summary>
         /// 绘制一个新点
         /// 连续调用这个方法绘制图像前
         /// </summary>
         /// <param name="p"></param>
         public void Add(Point p)
         {
-            if (points.Count > 1)
-            {
-                ResetAxis(p);
-            }
             points.Add(p);
             Draw();
         }
@@ -434,43 +366,60 @@ namespace WindChart
         {
             points.Clear();
             points.AddRange(newPoints);
+            Draw();
+        }
 
-            var maxX = points.Max(t => t.X);
-            var minX = points.Min(t => t.X);
-
-            var maxY = points.Max(t => t.Y);
-            var minY = points.Min(t => t.Y);
+        private void UpdateAxis()
+        {
+            if (!IsAxisFollowData) { return; }
 
             IsRenderAxis = false;
+            var xs = points.Select(x => x.X);
+            var xmin = xs.Min();
+            var xmax = xs.Max();
 
-            if (maxX > YMax)
-            {
-                YMax = maxY;
-            }
-            if (minX < YMin)
-            {
-                YMin = minY;
-            }
+            var ys = points.Select(y => y.Y);
+            var ymin = ys.Min();
+            var ymax = ys.Max();
 
-            if (minY < XMin)
+            if (ymin < YMin)
             {
-                XMin = minX;
+                YMin = ymin;
             }
 
-            if (maxX > XMax)
+            if (ymax > YMax)
             {
-                XMax = maxX;
+                YMax = ymax;
             }
-            
+
+            if (IsFlashRange)
+            {
+                if (points.Count > FlashRangePointCount)
+                {
+                    var list = points.Skip(points.Count - FlashRangePointCount).ToList();
+                    XMin = list.Select(x => x.X).Min();
+                    points = list;
+                }
+            }
+            else
+            {
+                if (xmin < XMin)
+                {
+                    XMin = xmin;
+                }
+            }
+
+            if (xmax > XMax)
+            {
+                XMax = xmax;
+            }
 
             // 更新图
             UpdatePixelRatio();
             DrawXAxisScale();
             DrawYAxisScale();
 
-            IsRenderAxis = false;
-
-            Draw();
+            IsRenderAxis = true;
         }
 
         /// <summary>
@@ -489,6 +438,7 @@ namespace WindChart
 
                 if (points.Count > 0)
                 {
+                    UpdateAxis();
                     Point p0 = ConvertToPixel(points[0]);
 
                     if (NeedAiming)

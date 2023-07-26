@@ -56,9 +56,26 @@
                     </WrapPanel>
                 </WrapPanel>
                 <WrapPanel VerticalAlignment="Center" Margin="0 2">
-                    <TextBlock Text="保留数据：" VerticalAlignment="Center"/>
-                    <ToggleButton Style="{StaticResource RoundToggleButton}" IsChecked="{Binding KeepAllPoints}"/>
+                    <TextBlock Text="刻度跟随：" VerticalAlignment="Center"/>
+                    <ToggleButton Style="{StaticResource RoundToggleButton}" IsChecked="{Binding IsAxisFollowData}"/>
                 </WrapPanel>
+                <WrapPanel VerticalAlignment="Center" Margin="0 2">
+                    <TextBlock Text="范围刷新：" VerticalAlignment="Center"/>
+                    <ToggleButton Style="{StaticResource RoundToggleButton}" IsChecked="{Binding IsFlashRange}"/>
+
+                    <WrapPanel VerticalAlignment="Center" Margin="5 0" IsEnabled="{Binding IsFlashRange}">
+                        <TextBlock Text="范围：" VerticalAlignment="Center"/>
+                        <TextBox BorderThickness="0 0 0 1" Text="{Binding FlashRangePointCount}" MinWidth="30" TextAlignment="Center" VerticalAlignment="Center"/>
+                        <Viewbox Height="18">
+                            <Slider IsSnapToTickEnabled="True" TickFrequency="100" TickPlacement="BottomRight" 
+                            Value="{Binding FlashRangePointCount}" 
+                            Maximum="2000" Minimum="0"
+                            Width="100"
+                            VerticalAlignment="Center"/>
+                        </Viewbox>
+                    </WrapPanel>
+                </WrapPanel>
+
                 <WrapPanel VerticalAlignment="Center" Margin="0 2">
                     <TextBlock Text="显示锚点：" VerticalAlignment="Center"/>
                     <ToggleButton Style="{StaticResource RoundToggleButton}" IsChecked="{Binding NeedAiming}"/>
@@ -77,7 +94,7 @@
         </Border>
 
         <Grid Grid.Row="1">
-            <Border Padding="24 12" Background="WhiteSmoke">
+            <Border Padding="48" Background="WhiteSmoke">
                 <!-- 图标控件 -->
                 <windchart:Linegram 
                                 XAxisBrush="Gray" YAxisBrush="Black"
@@ -88,12 +105,16 @@
                                 LineBrush="{Binding LineBrush}"
                                 IsGraph="{Binding IsGraph}" 
                                 Fill="{Binding FillBrush}"
-                                KeepAllPoints="{Binding KeepAllPoints}"
+                                IsAxisFollowData="{Binding IsAxisFollowData}"
+                    IsFlashRange="{Binding IsFlashRange}"
+                    FlashRangePointCount="{Binding FlashRangePointCount}"
                                 NeedAiming="{Binding NeedAiming}"
                                 >
                 </windchart:Linegram>
             </Border>
 
+            <TextBlock Text="存款变化（万元）" Margin="10" FontWeight="Black"/>
+            <TextBlock Text="年龄（周岁）" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10" FontWeight="Black"/>
         </Grid>
 
     </Grid>

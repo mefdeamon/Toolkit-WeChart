@@ -62,8 +62,11 @@
 
 
         <Grid Grid.Row="1">
-            <Border Padding="24 12" Background="WhiteSmoke">
-                <windchart:Dotgram DotSource="{Binding DotSource}"   Grid.RowSpan="2" />
+            <Border Padding="48" Background="WhiteSmoke" >
+                <windchart:Dotgram DotSource="{Binding DotSource}" 
+                                   XMin="-80" XMax="80" YMin="-80" YMax="80" 
+                                   XAxisLineMode="Center" YAxisLineMode="Center"
+                                   Grid.RowSpan="2" />
             </Border>
 
         </Grid>

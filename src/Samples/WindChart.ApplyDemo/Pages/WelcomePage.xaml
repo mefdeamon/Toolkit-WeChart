@@ -29,7 +29,7 @@
                                 LineThickness="0"
                                 LineBrush="Black"
                                 IsGraph="True" 
-                                KeepAllPoints="True"
+                                IsFlashRange="True"
                                 NeedAiming="True"
                                 >
                 <windchart:Linegram.Fill>
@@ -51,7 +51,7 @@
                                 LineThickness="1"
                                 LineBrush="Black"
                                 IsGraph="False" 
-                                KeepAllPoints="True"
+                                IsFlashRange="True"
                                 NeedAiming="True"
                                 >
             </windchart:Linegram>
@@ -67,7 +67,6 @@
                                 ValueLabelBrush="OrangeRed"
                                 IsAutoInterval="True"
                                 YMax="10"
-                                
                                 XAxisBrush="Black" YAxisBrush="Black"
                                 AxisLineBrush="LightGray"
                                 >

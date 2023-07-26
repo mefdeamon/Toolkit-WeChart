@@ -126,7 +126,7 @@ namespace WindChart.ApplyDemo.PageModels
             while (count < DotCount)
             {
                 y = random.Next(-50, 50);
-                x = random.Next(0, 350);
+                x = random.Next(-50, 50);
                 var size = random.Next(1, (int)DotSize);
                 ss.Add(new EllipseDot() { X = x, Y = y, Type = random.Next(0, 3), Height = size, Width = size });
 

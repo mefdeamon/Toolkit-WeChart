@@ -20,7 +20,29 @@ namespace WindChart.ApplyDemo.PageModels
         {
             LinePoints = new ObservableCollection<Point>();
             FillBrush = FillBrushes[6];
-            Simulate();
+
+            // 初始化
+            double x = 0;
+            double y = 0;
+            List<Point> list = new List<Point>();
+            while (x < 100)
+            {
+                var ran = random.Next(-150, 150);
+
+                if (ran > 0)
+                {
+                    y -= Math.Abs(ran) / 10;
+                }
+                else
+                {
+                    y += Math.Abs(ran) / 10;
+                }
+                var p = new Point(x, y);
+
+                list.Add(p);
+                x++;
+            }
+            LinePoints = new ObservableCollection<Point>(list);
         }
 
         private Boolean needAiming = true;
@@ -33,15 +55,37 @@ namespace WindChart.ApplyDemo.PageModels
             set { Set(ref needAiming, value); }
         }
 
-        private Boolean keepAllPoints = true;
+        private Boolean isAxisFollowData = true;
         /// <summary>
-        /// 是否保持所有点
+        /// 界面是否跟随数据（保留所有数据）
         /// </summary>
-        public Boolean KeepAllPoints
+        public Boolean IsAxisFollowData
         {
-            get { return keepAllPoints; }
-            set { Set(ref keepAllPoints, value); }
+            get { return isAxisFollowData; }
+            set { Set(ref isAxisFollowData, value); }
         }
+
+        private Boolean isFlashRange = false;
+        /// <summary>
+        /// 是否刷新最新最大范围<see cref="FlashRangePointCount"/>
+        /// </summary>
+        public Boolean IsFlashRange
+        {
+            get { return isFlashRange; }
+            set { Set(ref isFlashRange, value); }
+        }
+
+        private int flashRangePointCount = 200;
+        /// <summary>
+        /// 刷新范围点个数
+        /// </summary>
+        public int FlashRangePointCount
+        {
+            get { return flashRangePointCount; }
+            set { Set(ref flashRangePointCount, value); }
+        }
+
+
 
         private Boolean isGraph = true;
         /// <summary>
