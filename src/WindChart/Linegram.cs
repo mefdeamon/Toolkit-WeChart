@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -44,6 +45,7 @@ namespace WindChart
             XAxisLineMode = AxisLineMode.BottmRight;
             XMin = 0;
             YMin = 0;
+
         }
 
 
@@ -135,6 +137,77 @@ namespace WindChart
 
 
         #region 场景信息配置设置
+
+        #region X 轴刻度格式化文本
+
+        /// <summary>
+        /// X轴刻度 格式化字符串 
+        /// </summary>
+        public String XAxisTextFormatString
+        {
+            get { return (String)GetValue(XAxisTextFormatStringProperty); }
+            set { SetValue(XAxisTextFormatStringProperty, value); }
+        }
+        public static readonly DependencyProperty XAxisTextFormatStringProperty =
+            DependencyProperty.Register("XAxisTextFormatString", typeof(String), typeof(Linegram),
+                new FrameworkPropertyMetadata(String.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+        /// <summary>
+        /// X轴刻度使用日期格式化显示
+        /// </summary>
+        public Boolean IsXAxisTextDateTimeFormat
+        {
+            get { return (Boolean)GetValue(IsXAxisTextDateTimeFormatProperty); }
+            set { SetValue(IsXAxisTextDateTimeFormatProperty, value); }
+        }
+        public static readonly DependencyProperty IsXAxisTextDateTimeFormatProperty =
+            DependencyProperty.Register("IsXAxisTextDateTimeFormat", typeof(Boolean), typeof(Linegram),
+                new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (d, e) =>
+                {
+                    if (d is Linegram line)
+                    {
+                        if (e.NewValue is bool need)
+                        {
+                            if (need)
+                            {
+                                line.SetDateTimeStringFormat();
+                            }
+                            else
+                            {
+                                line.SetNumericStringFormat();
+                            }
+                        }
+                    }
+                }));
+
+        private void SetNumericStringFormat()
+        {
+            GetXAxisTextFormat = new Func<double, string>(d =>
+            {
+                return Math.Round(d).ToString(CultureInfo.CurrentCulture);
+            });
+        }
+
+        private void SetDateTimeStringFormat()
+        {
+            try
+            {
+                TimeSpan timeSpan = DateTime.FromOADate(XMin) - DateTime.FromOADate(XMax);
+                XAxisTextFormatString = ((timeSpan.TotalDays > 1825.0) ? "{0:yyyy}" : ((timeSpan.TotalDays > 365.0) ? "{0:yyyy-MM}" : ((timeSpan.TotalDays > 0.5) ? "{0:yyyy-MM-dd}" : ((!(timeSpan.TotalMinutes > 0.5)) ? "{0:yyyy-MM-dd\nHH:mm:ss}" : "{0:yyyy-MM-dd\nHH:mm}"))));
+            }
+            catch
+            {
+            }
+
+            GetXAxisTextFormat = new Func<double, string>(d =>
+            {
+                DateTime dateTime = DateTime.FromOADate(d);
+                string text = string.Format(CultureInfo.CurrentCulture, XAxisTextFormatString, dateTime);
+                return text;
+            });
+        }
+
+        #endregion
 
         /// <summary>
         /// 界面根据最新范围<see cref="FlashRangePointCount"/>刷新数据
@@ -369,6 +442,7 @@ namespace WindChart
             Draw();
         }
 
+
         private void UpdateAxis()
         {
             if (!IsAxisFollowData) { return; }
@@ -414,6 +488,7 @@ namespace WindChart
                 XMax = xmax;
             }
 
+            // SetDateTimeStringFormat();
             // 更新图
             UpdatePixelRatio();
             DrawXAxisScale();

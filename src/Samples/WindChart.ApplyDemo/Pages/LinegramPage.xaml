@@ -77,6 +77,16 @@
                 </WrapPanel>
 
                 <WrapPanel VerticalAlignment="Center" Margin="0 2">
+                    <TextBlock Text="日期格式：" VerticalAlignment="Center"/>
+                    <ToggleButton Style="{StaticResource RoundToggleButton}" IsChecked="{Binding IsXAxisTextDateTimeFormat}"/>
+
+                    <DockPanel VerticalAlignment="Center" Margin="5 0" IsEnabled="{Binding IsXAxisTextDateTimeFormat}">
+                        <TextBlock Text="格式：" VerticalAlignment="Center"/>
+                        <TextBox BorderThickness="0 0 0 1" Text="{Binding XAxisTextFormat}"  TextAlignment="Center" VerticalAlignment="Center"/>
+                    </DockPanel>
+                </WrapPanel>
+
+                <WrapPanel VerticalAlignment="Center" Margin="0 2">
                     <TextBlock Text="显示锚点：" VerticalAlignment="Center"/>
                     <ToggleButton Style="{StaticResource RoundToggleButton}" IsChecked="{Binding NeedAiming}"/>
                 </WrapPanel>
@@ -109,6 +119,8 @@
                     IsFlashRange="{Binding IsFlashRange}"
                     FlashRangePointCount="{Binding FlashRangePointCount}"
                                 NeedAiming="{Binding NeedAiming}"
+                    IsXAxisTextDateTimeFormat="{Binding IsXAxisTextDateTimeFormat}"
+                    XAxisTextFormatString="{Binding XAxisTextFormat}"
                                 >
                 </windchart:Linegram>
             </Border>

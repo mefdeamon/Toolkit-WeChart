@@ -21,9 +21,8 @@
         <Border Padding="24 12" Background="WhiteSmoke"
                 Grid.Row="0" Grid.Column="0">
             <!-- 图标控件 -->
-            <windchart:Linegram 
-                                XAxisBrush="Gray" YAxisBrush="Black"
-                                YAxisScaleCount="4" XAxisScaleCount="10"
+            <windchart:Linegram XAxisBrush="Gray" YAxisBrush="Black"
+                                YAxisScaleCount="4" XAxisScaleCount="4"
                                 YMax="100" YMin="40" XMin="10" XMax="100"
                                 LineSource="{Binding LinePoints}"
                                 LineThickness="0"
@@ -31,6 +30,7 @@
                                 IsGraph="True" 
                                 IsFlashRange="True"
                                 NeedAiming="True"
+                                IsXAxisTextDateTimeFormat="True"
                                 >
                 <windchart:Linegram.Fill>
                     <LinearGradientBrush StartPoint="0 0" EndPoint="0 1">

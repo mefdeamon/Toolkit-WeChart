@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
@@ -579,6 +580,11 @@ namespace WindChart
         public bool NeedYAxisScale => NeedYAxisText | NeedYAxisLine;
 
         /// <summary>
+        /// 获取X轴刻度显示格式化文本
+        /// </summary>
+        protected Func<double, string> GetXAxisTextFormat = d => Math.Round(d).ToString();
+
+        /// <summary>
         /// 更新绘制坐标轴相关的内容
         /// </summary>
         protected void DrawXAxisScale()
@@ -677,7 +683,7 @@ namespace WindChart
                         var x = XAxisConvertXToPixel(i);
 
                         // 画刻度文本
-                        var textcontent = ((int)i).ToString();
+                        var textcontent = GetXAxisTextFormat.Invoke(i);
                         text = new FormattedText(textcontent, CultureInfo.CurrentCulture,
                                                                 FlowDirection.LeftToRight, defaultTypeface, AxisFontSize, XAxisBrush,
                                                                 VisualTreeHelper.GetDpi(this).PixelsPerDip);
@@ -719,7 +725,7 @@ namespace WindChart
                     // 画最后一个文本
                     var xx = XAxisConvertXToPixel(XMax);
                     // 画刻度文本
-                    text = new FormattedText(((int)XMax).ToString(), CultureInfo.CurrentCulture,
+                    text = new FormattedText(GetXAxisTextFormat.Invoke(XMax), CultureInfo.CurrentCulture,
                                                             FlowDirection.LeftToRight, defaultTypeface, AxisFontSize, XAxisBrush,
                                                             VisualTreeHelper.GetDpi(this).PixelsPerDip);
                     var textOffsetLeft = text.Width / 2;

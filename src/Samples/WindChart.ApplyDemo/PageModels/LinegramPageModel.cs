@@ -86,6 +86,27 @@ namespace WindChart.ApplyDemo.PageModels
         }
 
 
+        private Boolean isXAxisTextDateTimeFormat;
+        /// <summary>
+        /// X轴刻度是否格式化成日期
+        /// </summary>
+        public Boolean IsXAxisTextDateTimeFormat
+        {
+            get { return isXAxisTextDateTimeFormat; }
+            set { Set(ref isXAxisTextDateTimeFormat, value); }
+        }
+
+        private string xAxisTextFormat;
+        /// <summary>
+        /// X轴刻度日期格式化 字符
+        /// </summary>
+        public string XAxisTextFormat
+        {
+            get { return xAxisTextFormat; }
+            set { Set(ref xAxisTextFormat, value); }
+        }
+
+
 
         private Boolean isGraph = true;
         /// <summary>
