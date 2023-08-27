@@ -7,7 +7,7 @@
         xmlns:fd="clr-namespace:FirstDraft.Controls;assembly=FirstDraft"
         mc:Ignorable="d"
          WindowStartupLocation="CenterScreen"
-        Title="Wind Chart Apply 1.0.0-alpha 缓慢而坚定地前进" Height="600" Width="1100">
+        Title="Wind Chart Apply 1.0.1 缓慢而坚定地前进" Height="600" Width="1100">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
