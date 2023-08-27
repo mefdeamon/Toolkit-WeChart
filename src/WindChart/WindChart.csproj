@@ -13,15 +13,15 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>windchart.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.0.0-beta</Version>
+    <Version>1.0.1</Version>
     <PackageId>WeChart.Toolkit.WindChart</PackageId>
     <Copyright>Copyright (c) Meiliyong</Copyright>
   </PropertyGroup>
   <PropertyGroup>
 	<LangVersion>preview</LangVersion>
 	<PackageReleaseNotes>Add net6.0-windows;netcoreapp3.1;net48;net472 TargetFramworks</PackageReleaseNotes>
-	<AssemblyVersion>1.0.0.1</AssemblyVersion>
-	<FileVersion>1.0.0.1</FileVersion>
+	<AssemblyVersion>1.0.1.0</AssemblyVersion>
+	<FileVersion>1.0.1.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="windchart.ico" />
