@@ -14,8 +14,8 @@ namespace WindChart
         public Dotgram() : base()
         {
             // 初始化画板刻度信息
-            YAxisLineMode = AxisLineMode.Location;
-            XAxisLineMode = AxisLineMode.BottmRight;
+            YAxisLineAlignment = YAxisLineAlignment.Location;
+            XAxisLineAlignment = XAxisLineAlignment.Bottom;
             XMin = 0;
             XMax = 400;
             YMin = -100;

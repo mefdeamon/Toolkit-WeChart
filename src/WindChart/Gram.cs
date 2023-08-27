@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Net;
 using System.Windows;
 using System.Windows.Media;
 
@@ -402,30 +403,30 @@ namespace WindChart
         /// <summary>
         /// X轴刻度线样式
         /// </summary>
-        public AxisLineMode XAxisLineMode
+        public XAxisLineAlignment XAxisLineAlignment
         {
-            get { return (AxisLineMode)GetValue(XAxisLineModeProperty); }
-            set { SetValue(XAxisLineModeProperty, value); }
+            get { return (XAxisLineAlignment)GetValue(XAxisLineAlignmentProperty); }
+            set { SetValue(XAxisLineAlignmentProperty, value); }
         }
-        public static readonly DependencyProperty XAxisLineModeProperty =
-            DependencyProperty.Register("XAxisLineMode", typeof(AxisLineMode), typeof(Gram),
-                new FrameworkPropertyMetadata(AxisLineMode.Center, XRangeChanged));
+        public static readonly DependencyProperty XAxisLineAlignmentProperty =
+            DependencyProperty.Register("XAxisLineAlignment", typeof(XAxisLineAlignment), typeof(Gram),
+                new FrameworkPropertyMetadata(XAxisLineAlignment.Center, XRangeChanged));
 
 
         /// <summary>
         /// X轴刻度文本样式
         /// </summary>
-        public AxisTextMode XAxisTextMode
+        public XAxisTextAlignment XAxisTextAlignment
         {
-            get { return (AxisTextMode)GetValue(XAxisTextModeProperty); }
-            set { SetValue(XAxisTextModeProperty, value); }
+            get { return (XAxisTextAlignment)GetValue(XAxisTextAlignmentProperty); }
+            set { SetValue(XAxisTextAlignmentProperty, value); }
         }
         /// <summary>
-        /// <see cref="XAxisTextMode"/>
+        /// <see cref="XAxisTextAlignment"/>
         /// </summary>
-        public static readonly DependencyProperty XAxisTextModeProperty =
-            DependencyProperty.Register("XAxisTextMode", typeof(AxisTextMode), typeof(Gram),
-                new FrameworkPropertyMetadata(AxisTextMode.BottomRight, XRangeChanged));
+        public static readonly DependencyProperty XAxisTextAlignmentProperty =
+            DependencyProperty.Register("XAxisTextAlignment", typeof(XAxisTextAlignment), typeof(Gram),
+                new FrameworkPropertyMetadata(XAxisTextAlignment.Bottom, XRangeChanged));
 
         /// <summary>
         /// 需要Y轴刻度文本
@@ -455,32 +456,32 @@ namespace WindChart
         /// <summary>
         /// Y轴刻度线样式
         /// </summary>
-        public AxisLineMode YAxisLineMode
+        public YAxisLineAlignment YAxisLineAlignment
         {
-            get { return (AxisLineMode)GetValue(YAxisLineModeProperty); }
-            set { SetValue(YAxisLineModeProperty, value); }
+            get { return (YAxisLineAlignment)GetValue(YAxisLineAlignmentProperty); }
+            set { SetValue(YAxisLineAlignmentProperty, value); }
         }
-        public static readonly DependencyProperty YAxisLineModeProperty =
-            DependencyProperty.Register("YAxisLineMode", typeof(AxisLineMode),
+        public static readonly DependencyProperty YAxisLineAlignmentProperty =
+            DependencyProperty.Register("YAxisLineAlignment", typeof(YAxisLineAlignment),
                 typeof(Gram),
-                new FrameworkPropertyMetadata(AxisLineMode.Center, YRangeChanged));
+                new FrameworkPropertyMetadata(YAxisLineAlignment.Center, YRangeChanged));
 
 
         /// <summary>
         /// Y轴刻度文本样式
         /// </summary>
-        public AxisTextMode YAxisTextMode
+        public YAxisTextAlignment YAxisTextAlignment
         {
-            get { return (AxisTextMode)GetValue(YAxisTextModeProperty); }
-            set { SetValue(YAxisTextModeProperty, value); }
+            get { return (YAxisTextAlignment)GetValue(YAxisTextAlignmentProperty); }
+            set { SetValue(YAxisTextAlignmentProperty, value); }
         }
         /// <summary>
-        /// <see cref="YAxisTextMode"/>
+        /// <see cref="YAxisTextAlignment"/>
         /// </summary>
-        public static readonly DependencyProperty YAxisTextModeProperty =
-            DependencyProperty.Register("YAxisTextMode", typeof(AxisTextMode),
+        public static readonly DependencyProperty YAxisTextAlignmentProperty =
+            DependencyProperty.Register("YAxisTextAlignment", typeof(YAxisTextAlignment),
                 typeof(Gram),
-                new FrameworkPropertyMetadata(AxisTextMode.TopLeft, YRangeChanged));
+                new FrameworkPropertyMetadata(YAxisTextAlignment.Left, YRangeChanged));
 
 
         #endregion
@@ -554,6 +555,44 @@ namespace WindChart
                 new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromArgb(0xFF, 29, 14, 17)), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, YAxisBrushChanged));
 
         /// <summary>
+        /// X 轴箭头显示
+        /// </summary>
+        public Boolean NeedXAxisArrow
+        {
+            get { return (Boolean)GetValue(NeedXAxisArrowProperty); }
+            set { SetValue(NeedXAxisArrowProperty, value); }
+        }
+
+        public static readonly DependencyProperty NeedXAxisArrowProperty =
+            DependencyProperty.Register("NeedXAxisArrow", typeof(Boolean), typeof(Gram),
+                new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (d, e) =>
+                {
+                    if (d is Gram gram)
+                    {
+                        gram.DrawXAxisScale();
+                    }
+                }));
+
+        /// <summary>
+        /// Y 轴箭头显示
+        /// </summary>
+        public Boolean NeedYAxisArrow
+        {
+            get { return (Boolean)GetValue(NeedYAxisArrowProperty); }
+            set { SetValue(NeedYAxisArrowProperty, value); }
+        }
+
+        public static readonly DependencyProperty NeedYAxisArrowProperty =
+            DependencyProperty.Register("NeedYAxisArrow", typeof(Boolean), typeof(Gram),
+                new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (d, e) =>
+                {
+                    if (d is Gram gram)
+                    {
+                        gram.DrawYAxisScale();
+                    }
+                }));
+
+        /// <summary>
         /// 轴线颜色
         /// </summary>
         public Brush AxisLineBrush
@@ -599,25 +638,25 @@ namespace WindChart
                 double y1 = 0;
                 double y2 = 0;
 
-                switch (XAxisLineMode)
+                switch (XAxisLineAlignment)
                 {
-                    case AxisLineMode.Grid:
+                    case XAxisLineAlignment.Grid:
                         y1 = YAxisConvertYToPixel(YMin);
                         y2 = YAxisConvertYToPixel(YMax);
                         break;
-                    case AxisLineMode.TopLeft:
+                    case XAxisLineAlignment.Top:
                         y1 = YAxisConvertYToPixel(YMax);
+                        y2 = y1 - scalelinePixel;
+                        break;
+                    case XAxisLineAlignment.Bottom:
+                        y1 = YAxisConvertYToPixel(YMin);
                         y2 = y1 + scalelinePixel;
                         break;
-                    case AxisLineMode.BottmRight:
-                        y1 = YAxisConvertYToPixel(YMin);
-                        y2 = y1 - scalelinePixel;
-                        break;
-                    case AxisLineMode.Location:
+                    case XAxisLineAlignment.Location:
                         y1 = YAxisConvertYToPixel(XAxisLocation);
-                        y2 = y1 - scalelinePixel;
+                        y2 = y1 + scalelinePixel;
                         break;
-                    case AxisLineMode.Center:
+                    case XAxisLineAlignment.Center:
                         y1 = YAxisConvertYToPixel((YMax + YMin) / 2);
                         break;
                     default:
@@ -631,15 +670,15 @@ namespace WindChart
                     {
                         var x = XAxisConvertXToPixel(i);
 
-                        switch (XAxisLineMode)
+                        switch (XAxisLineAlignment)
                         {
-                            case AxisLineMode.Grid:
-                            case AxisLineMode.TopLeft:
-                            case AxisLineMode.BottmRight:
-                            case AxisLineMode.Location:
+                            case XAxisLineAlignment.Grid:
+                            case XAxisLineAlignment.Top:
+                            case XAxisLineAlignment.Bottom:
+                            case XAxisLineAlignment.Location:
                                 dc.DrawLine(axisLinePen, new Point(x, y1), new Point(x, y2));
                                 break;
-                            case AxisLineMode.Center:
+                            case XAxisLineAlignment.Center:
                                 dc.DrawLine(axisLinePen, new Point(x, y1 - scalelinePixel), new Point(x, y1 + scalelinePixel));
                                 break;
                             default:
@@ -648,18 +687,41 @@ namespace WindChart
                     }
 
                     // 绘制最后一个刻度
-                    switch (XAxisLineMode)
+                    switch (XAxisLineAlignment)
                     {
-                        case AxisLineMode.Grid:
-                        case AxisLineMode.TopLeft:
-                        case AxisLineMode.BottmRight:
-                        case AxisLineMode.Location:
+                        case XAxisLineAlignment.Top:
+                        case XAxisLineAlignment.Bottom:
+                        case XAxisLineAlignment.Location:
                             var x = XAxisConvertXToPixel(XMax);
+                            if (NeedXAxisArrow)
+                            {
+                                var startPoint = new Point(XAxisConvertXToPixel(XMin), y1);
+                                var endPoint = new Point(x + scalelinePixel * 2, y1);
+                                var geo = CreateArrowGeometry(startPoint, endPoint, scalelinePixel * 2, scalelinePixel);
+                                dc.DrawGeometry(axisLinePen.Brush, null, geo);
+                            }
+                            else
+                            {
+                                dc.DrawLine(axisLinePen, new Point(x, y1), new Point(x, y2));
+                            }
+                            break;
+                        case XAxisLineAlignment.Grid:
+                            x = XAxisConvertXToPixel(XMax);
                             dc.DrawLine(axisLinePen, new Point(x, y1), new Point(x, y2));
                             break;
-                        case AxisLineMode.Center:
+                        case XAxisLineAlignment.Center:
                             x = XAxisConvertXToPixel(XMax);
-                            dc.DrawLine(axisLinePen, new Point(x, y1 - scalelinePixel), new Point(x, y1 + scalelinePixel));
+                            if (NeedXAxisArrow)
+                            {
+                                var startPoint = new Point(XAxisConvertXToPixel(XMin), y1);
+                                var endPoint = new Point(x + scalelinePixel * 2, y1);
+                                var geo = CreateArrowGeometry(startPoint, endPoint, scalelinePixel * 2, scalelinePixel);
+                                dc.DrawGeometry(axisLinePen.Brush, null, geo);
+                            }
+                            else
+                            {
+                                dc.DrawLine(axisLinePen, new Point(x, y1 - scalelinePixel), new Point(x, y1 + scalelinePixel));
+                            }
                             break;
                         default:
                             break;
@@ -667,7 +729,7 @@ namespace WindChart
 
                     var x1 = XAxisConvertXToPixel(XMin);
                     var x2 = XAxisConvertXToPixel(XMax);
-                    if (XAxisLineMode == AxisLineMode.Grid)
+                    if (XAxisLineAlignment == XAxisLineAlignment.Grid)
                     {
                         dc.DrawLine(axisLinePen, new Point(x1, y2), new Point(x2, y2));
                     }
@@ -690,30 +752,30 @@ namespace WindChart
 
                         var offsetLeft = text.Width / 2;
 
-                        switch (XAxisTextMode)
+                        switch (XAxisTextAlignment)
                         {
-                            case AxisTextMode.Both:
+                            case XAxisTextAlignment.Both:
                                 dc.DrawText(text, new Point(x - offsetLeft, y1));
                                 dc.DrawText(text, new Point(x - offsetLeft, y2 - (text.Height)));
                                 break;
-                            case AxisTextMode.TopLeft:
-                                if (XAxisLineMode == AxisLineMode.Grid)
+                            case XAxisTextAlignment.Top:
+                                if (XAxisLineAlignment == XAxisLineAlignment.Grid)
                                 {
-                                    dc.DrawText(text, new Point(x - offsetLeft, y2 - (text.Height)));
+                                    dc.DrawText(text, new Point(x - offsetLeft, y2 - (text.Height) - scalelinePixel));
                                 }
                                 else
                                 {
-                                    dc.DrawText(text, new Point(x - offsetLeft, y1 - (text.Height)));
+                                    dc.DrawText(text, new Point(x - offsetLeft, y1 - (text.Height) - scalelinePixel));
                                 }
                                 break;
-                            case AxisTextMode.BottomRight:
-                                if (XAxisLineMode == AxisLineMode.Grid)
+                            case XAxisTextAlignment.Bottom:
+                                if (XAxisLineAlignment == XAxisLineAlignment.Grid)
                                 {
-                                    dc.DrawText(text, new Point(x - offsetLeft, y1));
+                                    dc.DrawText(text, new Point(x - offsetLeft, y1 + scalelinePixel));
                                 }
                                 else
                                 {
-                                    dc.DrawText(text, new Point(x - offsetLeft, y1));
+                                    dc.DrawText(text, new Point(x - offsetLeft, y1 + scalelinePixel));
                                 }
                                 break;
                             default:
@@ -729,32 +791,32 @@ namespace WindChart
                                                             FlowDirection.LeftToRight, defaultTypeface, AxisFontSize, XAxisBrush,
                                                             VisualTreeHelper.GetDpi(this).PixelsPerDip);
                     var textOffsetLeft = text.Width / 2;
-                    switch (XAxisTextMode)
+                    switch (XAxisTextAlignment)
                     {
-                        case AxisTextMode.Both:
+                        case XAxisTextAlignment.Both:
 
                             dc.DrawText(text, new Point(xx - textOffsetLeft, y1));
                             dc.DrawText(text, new Point(xx - textOffsetLeft, y2 - (text.Height)));
                             break;
-                        case AxisTextMode.TopLeft:
+                        case XAxisTextAlignment.Top:
 
-                            if (XAxisLineMode == AxisLineMode.Grid)
+                            if (XAxisLineAlignment == XAxisLineAlignment.Grid)
                             {
-                                dc.DrawText(text, new Point(xx - textOffsetLeft, y2 - (text.Height)));
+                                dc.DrawText(text, new Point(xx - textOffsetLeft, y2 - (text.Height) - scalelinePixel));
                             }
                             else
                             {
-                                dc.DrawText(text, new Point(xx - textOffsetLeft, y1 - (text.Height)));
+                                dc.DrawText(text, new Point(xx - textOffsetLeft, y1 - (text.Height) - scalelinePixel));
                             }
                             break;
-                        case AxisTextMode.BottomRight:
-                            if (XAxisLineMode == AxisLineMode.Grid)
+                        case XAxisTextAlignment.Bottom:
+                            if (XAxisLineAlignment == XAxisLineAlignment.Grid)
                             {
-                                dc.DrawText(text, new Point(xx - textOffsetLeft, y1));
+                                dc.DrawText(text, new Point(xx - textOffsetLeft, y1 + scalelinePixel));
                             }
                             else
                             {
-                                dc.DrawText(text, new Point(xx - textOffsetLeft, y1));
+                                dc.DrawText(text, new Point(xx - textOffsetLeft, y1 + scalelinePixel));
                             }
                             break;
                         default:
@@ -786,31 +848,29 @@ namespace WindChart
                 // 刻度线高度
                 var scaleWidth = absoluteActualX / 60;
 
-                switch (YAxisLineMode)
+                switch (YAxisLineAlignment)
                 {
-                    case AxisLineMode.Grid:
-                        // 画满
+                    case YAxisLineAlignment.Grid:
                         x1 = XAxisConvertXToPixel(XMin);
                         x2 = XAxisConvertXToPixel(XMax);
                         break;
-                    case AxisLineMode.TopLeft:
-                        // 底部
+                    case YAxisLineAlignment.Left:
                         x1 = XAxisConvertXToPixel(XMin);
-                        x2 = x1 + scalelinePixel;
+                        x2 = x1 - scalelinePixel;
 
                         break;
-                    case AxisLineMode.BottmRight:
+                    case YAxisLineAlignment.Right:
                         // 顶部
                         x1 = XAxisConvertXToPixel(XMax);
-                        x2 = x1 - scalelinePixel;
-                        break;
-
-                    case AxisLineMode.Location:
-                        // 在定位上画
-                        x1 = XAxisConvertXToPixel(YAxisLocation);
                         x2 = x1 + scalelinePixel;
                         break;
-                    case AxisLineMode.Center:
+
+                    case YAxisLineAlignment.Location:
+                        // 在定位上画
+                        x1 = XAxisConvertXToPixel(YAxisLocation);
+                        x2 = x1 - scalelinePixel;
+                        break;
+                    case YAxisLineAlignment.Center:
                         // 中心
                         x1 = XAxisConvertXToPixel((XMax + XMin) / 2);
                         break;
@@ -824,15 +884,15 @@ namespace WindChart
                     {
                         var y = YAxisConvertYToPixel(i);
 
-                        switch (YAxisLineMode)
+                        switch (YAxisLineAlignment)
                         {
-                            case AxisLineMode.Grid:
-                            case AxisLineMode.TopLeft:
-                            case AxisLineMode.BottmRight:
-                            case AxisLineMode.Location:
+                            case YAxisLineAlignment.Grid:
+                            case YAxisLineAlignment.Left:
+                            case YAxisLineAlignment.Right:
+                            case YAxisLineAlignment.Location:
                                 dc.DrawLine(axisLinePen, new Point(x1, y), new Point(x2, y));
                                 break;
-                            case AxisLineMode.Center:
+                            case YAxisLineAlignment.Center:
                                 dc.DrawLine(axisLinePen, new Point(x1 - scalelinePixel, y), new Point(x1 + scalelinePixel, y));
                                 break;
                             default:
@@ -841,18 +901,41 @@ namespace WindChart
                     }
 
                     // 绘制最后一个刻度
-                    switch (YAxisLineMode)
+                    switch (YAxisLineAlignment)
                     {
-                        case AxisLineMode.Grid:
-                        case AxisLineMode.TopLeft:
-                        case AxisLineMode.BottmRight:
-                        case AxisLineMode.Location:
+                        case YAxisLineAlignment.Left:
+                        case YAxisLineAlignment.Right:
+                        case YAxisLineAlignment.Location:
                             var y = YAxisConvertYToPixel(YMax);
+                            if (NeedYAxisArrow)
+                            {
+                                var startPoint = new Point(x1, y);
+                                var endPoint = new Point(x1, y - scalelinePixel * 2);
+                                var geo = CreateArrowGeometry(startPoint, endPoint, scalelinePixel * 2, scalelinePixel);
+                                dc.DrawGeometry(axisLinePen.Brush, null, geo);
+                            }
+                            else
+                            {
+                                dc.DrawLine(axisLinePen, new Point(x1, y), new Point(x2, y));
+                            }
+                            break;
+                        case YAxisLineAlignment.Grid:
+                            y = YAxisConvertYToPixel(YMax);
                             dc.DrawLine(axisLinePen, new Point(x1, y), new Point(x2, y));
                             break;
-                        case AxisLineMode.Center:
+                        case YAxisLineAlignment.Center:
                             y = YAxisConvertYToPixel(YMax);
-                            dc.DrawLine(axisLinePen, new Point(x1 - scalelinePixel, y), new Point(x1 + scalelinePixel, y));
+                            if (NeedYAxisArrow)
+                            {
+                                var startPoint = new Point(x1, y);
+                                var endPoint = new Point(x1, y - scalelinePixel * 2);
+                                var geo = CreateArrowGeometry(startPoint, endPoint, scalelinePixel * 2, scalelinePixel);
+                                dc.DrawGeometry(axisLinePen.Brush, null, geo);
+                            }
+                            else
+                            {
+                                dc.DrawLine(axisLinePen, new Point(x1 - scalelinePixel, y), new Point(x1 + scalelinePixel, y));
+                            }
                             break;
                         default:
                             break;
@@ -861,7 +944,7 @@ namespace WindChart
                     // 绘制轴线
                     var y1 = YAxisConvertYToPixel(YMin);
                     var y2 = YAxisConvertYToPixel(YMax);
-                    if (YAxisLineMode == AxisLineMode.Grid)
+                    if (YAxisLineAlignment == YAxisLineAlignment.Grid)
                     {
                         dc.DrawLine(axisLinePen, new Point(x2, y1), new Point(x2, y2));
                     }
@@ -885,30 +968,30 @@ namespace WindChart
                                                                 FlowDirection.LeftToRight, defaultTypeface, AxisFontSize, YAxisBrush,
                                                                 VisualTreeHelper.GetDpi(this).PixelsPerDip);
 
-                        switch (YAxisTextMode)
+                        switch (YAxisTextAlignment)
                         {
-                            case AxisTextMode.Both:
+                            case YAxisTextAlignment.Both:
                                 dc.DrawText(text, new Point(x1 - text.Width - lineTextGap, y - text.Height / 2 - 1));
                                 dc.DrawText(text, new Point(x2 + lineTextGap, y - text.Height / 2 - 1));
                                 break;
-                            case AxisTextMode.TopLeft:
-                                if (YAxisLineMode == AxisLineMode.Grid)
+                            case YAxisTextAlignment.Left:
+                                if (YAxisLineAlignment == YAxisLineAlignment.Grid)
                                 {
-                                    dc.DrawText(text, new Point(x1 - text.Width - lineTextGap, y - text.Height / 2 - 1));
+                                    dc.DrawText(text, new Point(x1 - text.Width - lineTextGap - scalelinePixel, y - text.Height / 2 - 1));
                                 }
                                 else
                                 {
-                                    dc.DrawText(text, new Point(x1 - text.Width - lineTextGap, y - text.Height / 2 - 1));
+                                    dc.DrawText(text, new Point(x1 - text.Width - lineTextGap - scalelinePixel, y - text.Height / 2 - 1));
                                 }
                                 break;
-                            case AxisTextMode.BottomRight:
-                                if (YAxisLineMode == AxisLineMode.Grid)
+                            case YAxisTextAlignment.Right:
+                                if (YAxisLineAlignment == YAxisLineAlignment.Grid)
                                 {
-                                    dc.DrawText(text, new Point(x2 + lineTextGap, y - text.Height / 2 - 1));
+                                    dc.DrawText(text, new Point(x2 + lineTextGap + scalelinePixel, y - text.Height / 2 - 1));
                                 }
                                 else
                                 {
-                                    dc.DrawText(text, new Point(x1 + lineTextGap, y - text.Height / 2 - 1));
+                                    dc.DrawText(text, new Point(x1 + lineTextGap + scalelinePixel, y - text.Height / 2 - 1));
                                 }
                                 break;
                             default:
@@ -922,30 +1005,30 @@ namespace WindChart
                                                             VisualTreeHelper.GetDpi(this).PixelsPerDip);
                     var yy = YAxisConvertYToPixel(YMax);
 
-                    switch (YAxisTextMode)
+                    switch (YAxisTextAlignment)
                     {
-                        case AxisTextMode.Both:
+                        case YAxisTextAlignment.Both:
                             dc.DrawText(text, new Point(x1 - text.Width - lineTextGap, yy - text.Height / 2 - 1));
                             dc.DrawText(text, new Point(x2 + lineTextGap, yy - text.Height / 2 - 1));
                             break;
-                        case AxisTextMode.TopLeft:
-                            if (YAxisLineMode == AxisLineMode.Grid)
+                        case YAxisTextAlignment.Left:
+                            if (YAxisLineAlignment == YAxisLineAlignment.Grid)
                             {
-                                dc.DrawText(text, new Point(x1 - text.Width - lineTextGap, yy - text.Height / 2 - 1));
+                                dc.DrawText(text, new Point(x1 - text.Width - lineTextGap - scalelinePixel, yy - text.Height / 2 - 1));
                             }
                             else
                             {
-                                dc.DrawText(text, new Point(x1 - text.Width - lineTextGap, yy - text.Height / 2 - 1));
+                                dc.DrawText(text, new Point(x1 - text.Width - lineTextGap - scalelinePixel, yy - text.Height / 2 - 1));
                             }
                             break;
-                        case AxisTextMode.BottomRight:
-                            if (YAxisLineMode == AxisLineMode.Grid)
+                        case YAxisTextAlignment.Right:
+                            if (YAxisLineAlignment == YAxisLineAlignment.Grid)
                             {
-                                dc.DrawText(text, new Point(x2 + lineTextGap, yy - text.Height / 2 - 1));
+                                dc.DrawText(text, new Point(x2 + lineTextGap + scalelinePixel, yy - text.Height / 2 - 1));
                             }
                             else
                             {
-                                dc.DrawText(text, new Point(x1 + lineTextGap, yy - text.Height / 2 - 1));
+                                dc.DrawText(text, new Point(x1 + lineTextGap + scalelinePixel, yy - text.Height / 2 - 1));
                             }
                             break;
                         default:
@@ -958,6 +1041,39 @@ namespace WindChart
 
             // 显示图形
             InvalidateVisual();
+        }
+
+
+
+        /// <summary>
+        /// 获取箭头图形
+        /// </summary>
+        /// <param name="startPoint"></param>
+        /// <param name="endPoint"></param>
+        /// <param name="arrowLength"></param>
+        /// <param name="arrowWidth"></param>
+        /// <returns></returns>
+        private PathGeometry CreateArrowGeometry(Point startPoint, Point endPoint, double arrowLength = 10, double arrowWidth = 5)
+        {
+            Vector arrowDirection = endPoint - startPoint;
+            arrowDirection.Normalize();
+
+            Point arrowTip = endPoint - arrowDirection * arrowLength;
+
+            Vector arrowSide = new Vector(arrowDirection.Y, arrowDirection.X) * arrowWidth;
+            Point arrowBase1 = arrowTip + arrowSide;
+            Point arrowBase2 = arrowTip - arrowSide;
+
+            PathFigure arrowHead = new PathFigure();
+            arrowHead.StartPoint = endPoint;
+            arrowHead.Segments.Add(new LineSegment(arrowBase1, isStroked: true));
+            arrowHead.Segments.Add(new LineSegment(arrowBase2, isStroked: true));
+            arrowHead.IsClosed = true;
+            arrowHead.IsFilled = true;
+
+            PathGeometry arrowGeometry = new PathGeometry();
+            arrowGeometry.Figures.Add(arrowHead);
+            return arrowGeometry;
         }
 
 

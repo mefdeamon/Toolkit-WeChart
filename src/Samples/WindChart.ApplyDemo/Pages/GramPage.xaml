@@ -9,17 +9,24 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="GramPage">
     <Page.Resources>
-        <ObjectDataProvider x:Key="AxisLineModes" MethodName="GetValues" 
-                            ObjectType="{x:Type windchart:AxisLineMode}">
+        <ObjectDataProvider x:Key="YAxisLineAlignments" MethodName="GetValues" 
+                            ObjectType="{x:Type windchart:YAxisLineAlignment}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="windchart:AxisLineMode"/>
+                <x:Type TypeName="windchart:YAxisLineAlignment"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
-        <ObjectDataProvider x:Key="AxisTextModes" MethodName="GetValues" 
-                            ObjectType="{x:Type windchart:AxisTextMode}">
+        <ObjectDataProvider x:Key="XAxisTextAlignments" MethodName="GetValues" 
+                            ObjectType="{x:Type windchart:XAxisTextAlignment}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="windchart:AxisTextMode"/>
+                <x:Type TypeName="windchart:XAxisTextAlignment"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider x:Key="YAxisTextAlignments" MethodName="GetValues" 
+                            ObjectType="{x:Type windchart:YAxisTextAlignment}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="windchart:YAxisTextAlignment"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
@@ -32,8 +39,14 @@
             <Setter Property="TextAlignment" Value="Center"/>
         </Style>
 
-        <local:AxisLineModeToVisibilityConverter x:Key="AxisModeConverter"/>
-
+        <ObjectDataProvider x:Key="XAxisLineAlignments" MethodName="GetValues" 
+                            ObjectType="{x:Type windchart:XAxisLineAlignment}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="windchart:XAxisLineAlignment"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <local:YAxisLineAlignmentToVisibilityConverter x:Key="YAxisAlignmentConverter"/>
+        <local:XAxisLineAlignmentToVisibilityConverter x:Key="XAxisAlignmentConverter"/>
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -68,8 +81,8 @@
                                     <ToggleButton HorizontalAlignment="Left" Style="{StaticResource RoundToggleButton}" x:Name="XAxisTextCheckBox" IsChecked="{Binding NeedXAxisText}"/>
                                     <WrapPanel>
                                         <TextBlock Text="位置：" VerticalAlignment="Center"/>
-                                        <ComboBox ItemsSource="{Binding Source={StaticResource AxisTextModes} }" 
-                                  SelectedItem="{Binding XAxisTextMode}"
+                                        <ComboBox ItemsSource="{Binding Source={StaticResource XAxisTextAlignments} }" 
+                                  SelectedItem="{Binding XAxisTextAlignment}"
                                   x:Name="XAxisTextModeComboBox"/>
                                     </WrapPanel>
                                     <WrapPanel>
@@ -100,16 +113,21 @@
                                               x:Name="XAxisLineCheckBox" IsChecked="{Binding NeedXAxisLine}"/>
                                     <WrapPanel>
                                         <TextBlock Text="模式：" VerticalAlignment="Center"/>
-                                        <ComboBox ItemsSource="{Binding Source={StaticResource AxisLineModes} }" 
-                                              SelectedItem="{Binding XAxisLineMode}"
+                                        <ComboBox ItemsSource="{Binding Source={StaticResource XAxisLineAlignments} }" 
+                                              SelectedItem="{Binding XAxisLineAlignment}"
                                               x:Name="XAxisLineModeComboBox"/>
                                     </WrapPanel>
-                                    <WrapPanel Visibility="{Binding XAxisLineMode,Converter={StaticResource AxisModeConverter}}">
+                                    <WrapPanel Visibility="{Binding XAxisLineAlignment,Converter={StaticResource XAxisAlignmentConverter}}">
                                         <TextBlock Text="Location时位置：)" VerticalAlignment="Center"/>
                                         <TextBox Width="40" x:Name="XAxisLocationTB" Text="{Binding XAxisLocation}" VerticalAlignment="Center" />
                                         <Slider Value="{Binding ElementName=XAxisLocationTB,Path=Text}" Width="100" 
                                             Minimum="{Binding YMin}"
                                             Maximum="{Binding YMax}" />
+                                    </WrapPanel>
+                                    <WrapPanel>
+                                        <TextBlock Text="箭头：" VerticalAlignment="Center"/>
+                                        <ToggleButton HorizontalAlignment="Left" Style="{StaticResource RoundToggleButton}" 
+                                              x:Name="XAxisArrowCheckBox" IsChecked="False"/>
                                     </WrapPanel>
                                 </StackPanel>
                             </WrapPanel>
@@ -143,8 +161,8 @@
                                     <ToggleButton x:Name="YAxisTextCheckBox" HorizontalAlignment="Left" Style="{StaticResource RoundToggleButton}" IsChecked="{Binding NeedYAxisText}"/>
                                     <WrapPanel>
                                         <TextBlock Text="位置：" VerticalAlignment="Center"/>
-                                        <ComboBox ItemsSource="{Binding Source={StaticResource AxisTextModes} }" 
-                                              SelectedItem="{Binding YAxisTextMode}"
+                                        <ComboBox ItemsSource="{Binding Source={StaticResource YAxisTextAlignments} }" 
+                                              SelectedItem="{Binding YAxisTextAlignment}"
                                               x:Name="YAxisTextModeComboBox"/>
                                     </WrapPanel>
                                     <WrapPanel>
@@ -175,16 +193,21 @@
                                     <ToggleButton HorizontalAlignment="Left" x:Name="YAxisLineCheckBox" Style="{StaticResource RoundToggleButton}" IsChecked="{Binding NeedYAxisLine}"/>
                                     <WrapPanel>
                                         <TextBlock Text="模式：" VerticalAlignment="Center"/>
-                                        <ComboBox ItemsSource="{Binding Source={StaticResource AxisLineModes} }" 
-                                              SelectedItem="{Binding YAxisLineMode}"
+                                        <ComboBox ItemsSource="{Binding Source={StaticResource YAxisLineAlignments} }" 
+                                              SelectedItem="{Binding YAxisLineAlignment}"
                                               x:Name="YAxisLineModeComboBox"/>
                                     </WrapPanel>
-                                    <WrapPanel Visibility="{Binding YAxisLineMode,Converter={StaticResource AxisModeConverter}}">
+                                    <WrapPanel Visibility="{Binding YAxisLineAlignment,Converter={StaticResource YAxisAlignmentConverter}}">
                                         <TextBlock Text="Location时位置：)"/>
                                         <TextBox Width="40" x:Name="YAxisLocationTB" Text="{Binding YAxisLocation}"/>
                                         <Slider Width="100" Value="{Binding ElementName=YAxisLocationTB,Path=Text}"
                                             Minimum="{Binding XMin}"
                                             Maximum="{Binding XMax}"/>
+                                    </WrapPanel>
+                                    <WrapPanel>
+                                        <TextBlock Text="箭头：" VerticalAlignment="Center"/>
+                                        <ToggleButton HorizontalAlignment="Left" Style="{StaticResource RoundToggleButton}" 
+                                              x:Name="YAxisArrowCheckBox" IsChecked="True"/>
                                     </WrapPanel>
                                 </StackPanel>
 
@@ -223,21 +246,23 @@
                                  XMin="{Binding ElementName=XMinTB,Path=Text}"
                                  NeedXAxisLine="{Binding ElementName=XAxisLineCheckBox, Path=IsChecked}"
                                  NeedXAxisText="{Binding ElementName=XAxisTextCheckBox, Path=IsChecked}"
+                                 NeedXAxisArrow="{Binding ElementName=XAxisArrowCheckBox,Path=IsChecked}"
                                  XAxisScaleCount="{Binding ElementName=XAxisScaleCount,Path=Text}"
-                                 XAxisLineMode="{Binding ElementName=XAxisLineModeComboBox,Path=SelectedItem}"
+                                 XAxisLineAlignment="{Binding ElementName=XAxisLineModeComboBox,Path=SelectedItem}"
                                  XAxisLocation="{Binding ElementName=XAxisLocationTB,Path=Text}"
                                  XAxisBrush="{Binding ElementName=XAxisBrushComboBox, Path=SelectedValue}"
-                                 XAxisTextMode="{Binding ElementName=XAxisTextModeComboBox,Path=SelectedItem}"
+                                 XAxisTextAlignment="{Binding ElementName=XAxisTextModeComboBox,Path=SelectedItem}"
                                  
                                  YMax="{Binding ElementName=YMaxTB,Path=Text}"
                                  YMin="{Binding ElementName=YMinTB,Path=Text}"
                                  NeedYAxisLine="{Binding ElementName=YAxisLineCheckBox, Path=IsChecked}"
                                  NeedYAxisText="{Binding ElementName=YAxisTextCheckBox, Path=IsChecked}"
+                                 NeedYAxisArrow="{Binding ElementName=YAxisArrowCheckBox,Path=IsChecked}"
                                  YAxisScaleCount="{Binding ElementName=YAxisScaleCount,Path=Text}"
-                                 YAxisLineMode="{Binding ElementName=YAxisLineModeComboBox,Path=SelectedItem}"
+                                 YAxisLineAlignment="{Binding ElementName=YAxisLineModeComboBox,Path=SelectedItem}"
                                  YAxisLocation="{Binding ElementName=YAxisLocationTB,Path=Text}"
                                  YAxisBrush="{Binding ElementName=YAxisBrushComboBox, Path=SelectedValue}"
-                                 YAxisTextMode="{Binding ElementName=YAxisTextModeComboBox,Path=SelectedItem}"
+                                 YAxisTextAlignment="{Binding ElementName=YAxisTextModeComboBox,Path=SelectedItem}"
                                  
                                  AxisLineBrush="{Binding ElementName=AxisLineBrushComboBox,Path=SelectedValue}"
                                  Grid.Row="3"/>

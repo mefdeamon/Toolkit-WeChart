@@ -24,8 +24,8 @@ namespace WindChart
             Visuals.Add(barVisual);
 
             // 初始化画板刻度信息
-            YAxisLineMode = AxisLineMode.TopLeft;
-            XAxisLineMode = AxisLineMode.BottmRight;
+            YAxisLineAlignment = YAxisLineAlignment.Left;
+            XAxisLineAlignment = XAxisLineAlignment.Bottom;
             XMin = 0;
             YMin = 0;
             XMax = 10;

@@ -65,7 +65,7 @@
             <Border Padding="48" Background="WhiteSmoke" >
                 <windchart:Dotgram DotSource="{Binding DotSource}" 
                                    XMin="-80" XMax="80" YMin="-80" YMax="80" 
-                                   XAxisLineMode="Center" YAxisLineMode="Center"
+                                   XAxisLineAlignment="Center" YAxisLineAlignment="Center"
                                    Grid.RowSpan="2" />
             </Border>
 
