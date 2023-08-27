@@ -193,7 +193,10 @@ namespace WindChart
             try
             {
                 TimeSpan timeSpan = DateTime.FromOADate(XMin) - DateTime.FromOADate(XMax);
-                XAxisTextFormatString = ((timeSpan.TotalDays > 1825.0) ? "{0:yyyy}" : ((timeSpan.TotalDays > 365.0) ? "{0:yyyy-MM}" : ((timeSpan.TotalDays > 0.5) ? "{0:yyyy-MM-dd}" : ((!(timeSpan.TotalMinutes > 0.5)) ? "{0:yyyy-MM-dd\nHH:mm:ss}" : "{0:yyyy-MM-dd\nHH:mm}"))));
+                if (String.IsNullOrEmpty(XAxisTextFormatString))
+                {
+                    XAxisTextFormatString = ((timeSpan.TotalDays > 1825.0) ? "yyyy" : ((timeSpan.TotalDays > 365.0) ? "yyyy-MM" : ((timeSpan.TotalDays > 0.5) ? "yyyy-MM-dd" : ((!(timeSpan.TotalMinutes > 0.5)) ? "yyyy-MM-dd\nHH:mm:ss" : "yyyy-MM-dd\nHH:mm"))));
+                }
             }
             catch
             {
@@ -202,7 +205,7 @@ namespace WindChart
             GetXAxisTextFormat = new Func<double, string>(d =>
             {
                 DateTime dateTime = DateTime.FromOADate(d);
-                string text = string.Format(CultureInfo.CurrentCulture, XAxisTextFormatString, dateTime);
+                string text = string.Format(CultureInfo.CurrentCulture, "{0:" + XAxisTextFormatString + "}", dateTime);
                 return text;
             });
         }
