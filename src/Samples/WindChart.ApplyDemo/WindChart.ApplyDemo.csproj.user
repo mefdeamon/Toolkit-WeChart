@@ -16,6 +16,12 @@
     <Compile Update="Pages\LinegramPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\Linegrams\CodebehindDemo1Page.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Linegrams\CodebehindDemo0Page.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="MainWindow.xaml">
@@ -28,6 +34,12 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\LinegramPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Linegrams\CodebehindDemo1Page.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Linegrams\CodebehindDemo0Page.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

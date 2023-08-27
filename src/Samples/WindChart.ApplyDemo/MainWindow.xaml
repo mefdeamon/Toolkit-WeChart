@@ -54,6 +54,7 @@
                                     Click="NaviClick"/>
 
                 <fd:IconRadioButton Style="{StaticResource LeftNaviIconRaioButton}"
+                                    x:Name="IconRadioButton_LinegramPage"
                                     Icon="M981.344 938.656H60.688V128h85.344v725.344h853.344z M215.2 355.2z l-59.744 59.744 200.856 280.856 70.456 -70.456z M415.2 755.2 l-59.744-59.744 285.856-285.856 213.344 213.344 311.456-311.456 59.744 59.744-371.2 371.2 -213.344-213.344z"
                                     Tag="/Pages/LinegramPage.xaml" Content="单线图" Margin="0 5 5 0" 
                                     Click="NaviClick"/>
@@ -77,8 +78,37 @@
         <Path Grid.Column="1" Visibility="Collapsed" Fill="Black" Stroke="Red" StrokeThickness="20" Stretch="Uniform" Data="M1481.344 938.656H60.688V128h85.344v725.344h853.344z M215.2 355.2z l-59.744 59.744 200.856 280.856 70.456 -70.456z M415.2 755.2 l-59.744-59.744 285.856-285.856 213.344 213.344 311.456-311.456 59.744 59.744-371.2 371.2 -213.344-213.344z"
               />
 
-        <Frame Grid.Column="1" x:Name="frame" NavigationUIVisibility="Hidden" Source="/Pages/WelcomePage.xaml" />
+        <Border  Grid.Column="1" BorderThickness="0" BorderBrush="{DynamicResource Accent}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
+
+                    <fd:IconRadioButton Style="{StaticResource BottomNaviIconRaioButton}" Visibility="{Binding ElementName=IconRadioButton_LinegramPage,Path=IsChecked,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Icon="{Binding home_line, Source={StaticResource IconSet}}"
+                                        Tag="/Pages/LinegramPage.xaml" Content="首页" Margin="0 0 0 0" 
+                                        IsChecked="True"
+                                        Click="NaviClick"/>
+
+                    <fd:IconRadioButton Style="{StaticResource BottomNaviIconRaioButton}" Visibility="{Binding ElementName=IconRadioButton_LinegramPage,Path=IsChecked,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Icon="M873.472 277.504c-59.904 0-108.544 48.64-108.544 108.544 0 17.92 4.608 35.328 12.288 50.176l-176.64 174.592c-9.728-5.632-20.48-8.192-31.232-8.192-7.168 0-13.824 1.536-19.968 3.584l-71.168-97.28c0.512-3.584 0.512-6.656 0.512-10.24 0-35.328-28.672-64-64-64s-64.512 28.672-64.512 64v1.024L247.296 599.04H162.304c-11.776-18.944-32.256-30.72-54.784-31.232-35.84 0-64.512 29.184-64.512 64.512 0 35.84 29.184 64.512 64.512 64.512 23.552 0 45.056-12.8 56.832-33.28h110.592l111.616-108.544c9.216 4.608 18.944 7.168 29.696 7.168 7.168 0 14.336-1.536 20.48-3.584L506.88 655.36c-0.512 3.584-1.024 7.168-1.024 11.264 0 35.328 28.672 64 64 64 34.816 0 63.488-27.648 64-62.464L822.272 481.28c52.736 28.16 118.272 8.192 146.432-45.056 8.192-15.872 12.8-33.28 12.8-50.688 0-59.392-48.128-108.032-108.032-108.032z m1.536 154.112c-25.088 0-45.568-20.48-46.08-46.08s20.48-46.08 46.08-46.08 46.08 20.992 46.08 46.08c-0.512 25.6-20.992 46.08-46.08 46.08z"
+                                        Tag="/Pages/Linegrams/CodebehindDemo0Page.xaml" Content="实时单点更新" Margin="0 0 0 0" 
+                                        Click="NaviClick"/>
+
+                    <fd:IconRadioButton Style="{StaticResource BottomNaviIconRaioButton}" Visibility="{Binding ElementName=IconRadioButton_LinegramPage,Path=IsChecked,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Icon="M938.666667 860.437333H85.333333v-597.333333l234.666667 64 192-106.666667 213.333333 21.333334 213.333334-64z"
+                                        Tag="/Pages/Linegrams/CodebehindDemo1Page.xaml" Content="一次性更新" Margin="0 0 0 0" 
+                                        Click="NaviClick"/>
+
+                </StackPanel>
+
+                <Frame Grid.Row="1" x:Name="frame" NavigationUIVisibility="Hidden" Source="/Pages/WelcomePage.xaml" />
+            </Grid>
+        </Border>
+       
 
     </Grid>
 </Window>
