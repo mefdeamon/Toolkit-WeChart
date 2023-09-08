@@ -64,16 +64,16 @@ namespace WindChart
         /// <summary>
         /// 用于画X轴/刻度文本
         /// </summary>
-        Pen xAxisPen;
+        protected Pen xAxisPen;
         /// <summary>
         /// 用于画Y轴/刻度文本
         /// </summary>
-        Pen yAxisPen;
+        protected Pen yAxisPen;
 
         /// <summary>
         /// 用于绘制刻度线
         /// </summary>
-        Pen axisLinePen;
+        protected Pen axisLinePen;
 
         #endregion
 
@@ -611,12 +611,12 @@ namespace WindChart
         /// <summary>
         /// 是否显示X轴刻度信息
         /// </summary>
-        public bool NeedXAxisScale => NeedXAxisText | NeedXAxisLine;
+        public bool NeedXAxisScale { get; set; } = true;
 
         /// <summary>
         /// 是否显示Y轴刻度信息
         /// </summary>
-        public bool NeedYAxisScale => NeedYAxisText | NeedYAxisLine;
+        public bool NeedYAxisScale { get; set; } = true;
 
         /// <summary>
         /// 获取X轴刻度显示格式化文本
@@ -663,7 +663,7 @@ namespace WindChart
                         break;
                 }
 
-                // 画刻度线条
+                // 是否需要绘制刻度线条
                 if (NeedXAxisLine)
                 {
                     for (double i = XMin; i < XMax; i += XAxisScaleInterval)
@@ -726,15 +726,16 @@ namespace WindChart
                         default:
                             break;
                     }
-
-                    var x1 = XAxisConvertXToPixel(XMin);
-                    var x2 = XAxisConvertXToPixel(XMax);
-                    if (XAxisLineAlignment == XAxisLineAlignment.Grid)
-                    {
-                        dc.DrawLine(axisLinePen, new Point(x1, y2), new Point(x2, y2));
-                    }
-                    dc.DrawLine(axisLinePen, new Point(x1, y1), new Point(x2, y1));
                 }
+
+                // 轴线
+                var x1 = XAxisConvertXToPixel(XMin);
+                var x2 = XAxisConvertXToPixel(XMax);
+                if (XAxisLineAlignment == XAxisLineAlignment.Grid)
+                {
+                    dc.DrawLine(axisLinePen, new Point(x1, y2), new Point(x2, y2));
+                }
+                dc.DrawLine(axisLinePen, new Point(x1, y1), new Point(x2, y1));
 
                 // 是否需要绘制文本
                 if (NeedXAxisText)
@@ -845,9 +846,6 @@ namespace WindChart
                 double x1 = 0;
                 double x2 = 0;
 
-                // 刻度线高度
-                var scaleWidth = absoluteActualX / 60;
-
                 switch (YAxisLineAlignment)
                 {
                     case YAxisLineAlignment.Grid:
@@ -878,6 +876,7 @@ namespace WindChart
                         break;
                 }
 
+                // 是否绘制刻度线
                 if (NeedYAxisLine)
                 {
                     for (double i = YMin; i < YMax; i += YAxisScaleInterval)
@@ -940,16 +939,16 @@ namespace WindChart
                         default:
                             break;
                     }
-
-                    // 绘制轴线
-                    var y1 = YAxisConvertYToPixel(YMin);
-                    var y2 = YAxisConvertYToPixel(YMax);
-                    if (YAxisLineAlignment == YAxisLineAlignment.Grid)
-                    {
-                        dc.DrawLine(axisLinePen, new Point(x2, y1), new Point(x2, y2));
-                    }
-                    dc.DrawLine(axisLinePen, new Point(x1, y1), new Point(x1, y2));
                 }
+
+                // 绘制轴线
+                var y1 = YAxisConvertYToPixel(YMin);
+                var y2 = YAxisConvertYToPixel(YMax);
+                if (YAxisLineAlignment == YAxisLineAlignment.Grid)
+                {
+                    dc.DrawLine(axisLinePen, new Point(x2, y1), new Point(x2, y2));
+                }
+                dc.DrawLine(axisLinePen, new Point(x1, y1), new Point(x1, y2));
 
                 // 是否需要绘制文本
                 if (NeedYAxisText)

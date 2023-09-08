@@ -30,7 +30,7 @@ namespace WindChart
             YMin = 0;
             XMax = 10;
             YMax = 10;
-            NeedXAxisLine = true;
+            NeedXAxisLine = false;
             NeedXAxisText = false;
         }
 
@@ -110,16 +110,20 @@ namespace WindChart
                     switch (g.Direction)
                     {
                         case BarDirection.Vertical:
+                            g.NeedXAxisArrow = false;
                             g.NeedXAxisText = false;
-                            g.NeedXAxisLine = true;
+                            g.NeedXAxisLine = false;
                             g.NeedYAxisLine = true;
                             g.NeedYAxisText = true;
+                            g.NeedYAxisArrow = true;
                             break;
                         case BarDirection.Horizontal:
+                            g.NeedXAxisArrow = true;
                             g.NeedXAxisText = true;
                             g.NeedXAxisLine = true;
-                            g.NeedYAxisLine = true;
+                            g.NeedYAxisLine = false;
                             g.NeedYAxisText = false;
+                            g.NeedYAxisArrow = false;
                             break;
                         default:
                             break;
@@ -208,14 +212,14 @@ namespace WindChart
 
                     if (IsAutoInterval)
                     {
-                        barHeight = barHeight * 6 / 8.0;
-                        barYLocation = barHeight / 6.0;
+                        barHeight = barHeight / 2.0;
+                        barYLocation = barHeight / 2.0;
                     }
                     foreach (var item in Bars)
                     {
                         var barWidth = XAxisConvertXToPixel(item.Value);
 
-                        dc.DrawRectangle(item.Fill, null, new Rect(0, barYLocation, barWidth, barHeight));
+                        dc.DrawRectangle(item.Fill, axisLinePen, new Rect(0, barYLocation, barWidth, barHeight));
 
                         // 值文本
                         text = new FormattedText(item.Value.ToString(), CultureInfo.CurrentCulture,
@@ -254,7 +258,7 @@ namespace WindChart
                         barYLocation += barHeight;
                         if (IsAutoInterval)
                         {
-                            barYLocation += barHeight / 3.0;
+                            barYLocation += barHeight;
                         }
                     }
                 }
@@ -296,14 +300,14 @@ namespace WindChart
 
                     if (IsAutoInterval)
                     {
-                        barWidth = barWidth * 6 / 8.0;
-                        barXLocation = barWidth / 6.0;
+                        barWidth = barWidth / 2.0;
+                        barXLocation = barWidth / 2.0;
                     }
                     foreach (var item in Bars)
                     {
                         var barHeight = YAxisConvertYToPixel(item.Value);
 
-                        dc.DrawRectangle(item.Fill, null, new Rect(barXLocation, barHeight, barWidth, RenderSize.Height - barHeight));
+                        dc.DrawRectangle(item.Fill, axisLinePen, new Rect(barXLocation, barHeight, barWidth, RenderSize.Height - barHeight));
 
                         // 值文本
                         text = new FormattedText(item.Value.ToString(), CultureInfo.CurrentCulture,
@@ -335,7 +339,7 @@ namespace WindChart
                         barXLocation += barWidth;
                         if (IsAutoInterval)
                         {
-                            barXLocation += barWidth / 3.0;
+                            barXLocation += barWidth;
                         }
                     }
                 }

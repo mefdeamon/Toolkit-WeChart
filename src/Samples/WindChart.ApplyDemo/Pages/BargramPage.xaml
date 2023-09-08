@@ -89,14 +89,14 @@
 
             <Border Padding="60" Background="WhiteSmoke">
                 <windchart:Bargram  BarSource="{Binding Bars}" 
-                                Direction="{Binding Direction}"
-                                ValueLabelLocation="{Binding ValueLabelLocation}"
-                                ValueLabelBrush="{Binding ValueLabelBrush}"
-                                IsAutoInterval="{Binding IsAutoInterval}"
-                                
-                                XAxisBrush="Black" YAxisBrush="Black"
-                                AxisLineBrush="LightGray"
-                                >
+                                    Direction="{Binding Direction}"
+                                    ValueLabelLocation="{Binding ValueLabelLocation}"
+                                    ValueLabelBrush="{Binding ValueLabelBrush}"
+                                    IsAutoInterval="{Binding IsAutoInterval}"
+                                    YMax="24"
+                                    XAxisBrush="Black" YAxisBrush="Black"
+                                    AxisLineBrush="Black"
+                                    >
                 </windchart:Bargram>
             </Border>
 
