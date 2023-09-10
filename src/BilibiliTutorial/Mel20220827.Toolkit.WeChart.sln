@@ -25,7 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindChart.Lesson9", "WindCh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindChart.Lesson10", "WindChart.Lesson10\WindChart.Lesson10.csproj", "{C9795C3A-11E0-4EBE-8E46-8A65EB4B3E37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindChart.Lesson11", "WindChart.Lesson11\WindChart.Lesson11.csproj", "{B5997C23-EE42-4AB0-897B-B3289FFEAA5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindChart.Lesson11", "WindChart.Lesson11\WindChart.Lesson11.csproj", "{B5997C23-EE42-4AB0-897B-B3289FFEAA5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindChart.Lesson12", "WindChart.Lesson12\WindChart.Lesson12.csproj", "{EC2BB83D-4DC2-4B0D-8CE6-CA7F29579B2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,6 +83,10 @@ Global
 		{B5997C23-EE42-4AB0-897B-B3289FFEAA5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5997C23-EE42-4AB0-897B-B3289FFEAA5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5997C23-EE42-4AB0-897B-B3289FFEAA5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC2BB83D-4DC2-4B0D-8CE6-CA7F29579B2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC2BB83D-4DC2-4B0D-8CE6-CA7F29579B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC2BB83D-4DC2-4B0D-8CE6-CA7F29579B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC2BB83D-4DC2-4B0D-8CE6-CA7F29579B2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

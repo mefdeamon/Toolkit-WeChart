@@ -12,11 +12,14 @@ namespace WindChart
         {
             _children = new VisualCollection(this);
 
-            axisVisual = new DrawingVisual();
-            _children.Add(axisVisual);
+            xAxisVisual = new DrawingVisual();
+            _children.Add(xAxisVisual);
+            yAxisVisual = new DrawingVisual();
+            _children.Add(yAxisVisual);
         }
 
-        private DrawingVisual axisVisual;
+        private DrawingVisual xAxisVisual;
+        private DrawingVisual yAxisVisual;
 
 
         /// <summary>
@@ -30,7 +33,23 @@ namespace WindChart
         /// </summary>
         protected void DrawAxis()
         {
-            var drawingContext = axisVisual.RenderOpen();
+            DrawXAxis();
+            DrawYAxis();
+        }
+
+
+        public int XAxisScaleCount { get; set; } = 10;
+        public int YAxisScaleCount { get; set; } = 10;
+
+        public Boolean NeedXAxisLine { get; set; } = true;
+        public Boolean NeedXAxisText { get; set; } = true;
+
+        /// <summary>
+        /// 绘制原点
+        /// </summary>
+        protected void DrawXAxis()
+        {
+            var drawingContext = xAxisVisual.RenderOpen();
 
             Point org = new Point(0, 0);
             ConvertToPixcel(ref org);
@@ -43,33 +62,56 @@ namespace WindChart
             ConvertToPixcel(ref xStart);
             ConvertToPixcel(ref xEnd);
             drawingContext.DrawLine(pen, xStart, xEnd);
-            int interval = (int)(XWidth / 10);
+            int interval = (int)(XWidth / XAxisScaleCount);
             for (double i = XMin; i <= XMax; i += interval)
             {
                 Point xPstart = new Point(i, 0);
                 ConvertToPixcel(ref xPstart);
-                Point xPend = new Point(xPstart.X, xPstart.Y - 5);
-                drawingContext.DrawLine(pen, xPstart, xPend);
 
-                FormattedText text = new FormattedText(GetXAxisTextFormat.Invoke(i),
-                    System.Globalization.CultureInfo.CurrentCulture,
-                    FlowDirection.LeftToRight,
-                    new Typeface("Microsoft Yahei"),
-                    12,
-                    Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+                if (NeedXAxisLine)
+                {
+                    Point xPend = new Point(xPstart.X, xPstart.Y - 5);
+                    drawingContext.DrawLine(pen, xPstart, xPend);
+                }
 
-                Point loca = new Point(xPstart.X - text.Width / 2, xPstart.Y);
-                drawingContext.DrawText(text, loca);
+                if (NeedXAxisText)
+                {
+                    FormattedText text = new FormattedText(GetXAxisTextFormat.Invoke(i),
+                        System.Globalization.CultureInfo.CurrentCulture,
+                        FlowDirection.LeftToRight,
+                        new Typeface("Microsoft Yahei"),
+                        12,
+                        Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+
+                    Point loca = new Point(xPstart.X - text.Width / 2, xPstart.Y);
+                    drawingContext.DrawText(text, loca);
+                }
             }
 
+            drawingContext.Close();
+        }
 
+
+
+        /// <summary>
+        /// 绘制原点
+        /// </summary>
+        protected void DrawYAxis()
+        {
+            var drawingContext = yAxisVisual.RenderOpen();
+
+            Point org = new Point(0, 0);
+            ConvertToPixcel(ref org);
+            drawingContext.DrawEllipse(Brushes.Black, new Pen(Brushes.OrangeRed, 1), org, 5, 5);
+
+            Pen pen = new Pen(Brushes.Black, 1);
             // Y轴
             Point yStart = new Point(XMin, YMin);
             Point yEnd = new Point(XMin, YMax);
             ConvertToPixcel(ref yStart);
             ConvertToPixcel(ref yEnd);
             drawingContext.DrawLine(pen, yStart, yEnd);
-            interval = (int)(YHeight / 10);
+            var interval = (int)(YHeight / YAxisScaleCount);
             for (double i = YMin; i <= YMax; i += interval)
             {
                 Point yPstart = new Point(XMin, i);
@@ -88,11 +130,9 @@ namespace WindChart
                 drawingContext.DrawText(text, loca);
             }
 
-
-
-
             drawingContext.Close();
         }
+
 
         #region 场景大小
 
