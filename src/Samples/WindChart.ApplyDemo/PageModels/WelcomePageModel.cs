@@ -39,8 +39,45 @@ namespace WindChart.ApplyDemo.PageModels
             set { Set(ref bars, value); }
         }
 
+        private Uri theme;
+
+        public Uri Theme
+        {
+            get { return theme; }
+            set
+            {
+                Set(ref theme, value);
+                var themeDict = new ResourceDictionary { Source = theme };
+                Application.Current.Resources.MergedDictionaries.Add(themeDict);
+            }
+        }
+
+        public Dictionary<string, Uri> Sources { get; set; }
+
+        private Boolean isDark;
+        public Boolean IsDark
+        {
+            get { return isDark; }
+            set { Set(ref isDark, value);
+                if (isDark)
+                {
+                    Theme = Sources["幽暗"];
+                }
+                else
+                {
+                    Theme = Sources["明亮"];
+                }
+            }
+        }
+
+
         public WelcomePageModel()
         {
+            Sources = new Dictionary<string, Uri>();
+            Sources.Add("明亮", new Uri("/FirstDraft;component/Themes/Ui.Light.xaml", UriKind.Relative));
+            Sources.Add("幽暗", new Uri("/FirstDraft;component/Themes/Ui.Dark.xaml", UriKind.Relative));
+            Theme = Sources["明亮"];
+
             double x = 0;
             double y = 50;
             while (x < 500)

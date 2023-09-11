@@ -1,13 +1,18 @@
-﻿<Page x:Class="WindChart.ApplyDemo.Pages.Linegrams.CodebehindDemo0Page"
+﻿<Page x:Class="WindChart.ApplyDemo.Pages.Bargrams.CodebehindDemo0Page"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:WindChart.ApplyDemo.Pages.Linegrams"
+      xmlns:local="clr-namespace:WindChart.ApplyDemo.Pages.Bargrams"
       xmlns:windchart="clr-namespace:WindChart;assembly=WindChart"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CodebehindDemo0Page">
+    <Page.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{DynamicResource DefaultForeground}"/>
+        </Style>
+    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -30,9 +35,21 @@
                 <TextBox VerticalAlignment="Stretch" IsReadOnly="True" Foreground="Green" x:Name="code" ScrollViewer.VerticalScrollBarVisibility="Auto" FontFamily="Consolas"/>
             </DockPanel>
         </Grid>
-        <Border Padding="24" 
+        <Grid Grid.Row="1"  >
+            <StackPanel Orientation="Horizontal" Margin="5" VerticalAlignment="Top">
+                <TextBlock Text="近2月睡眠时长分布（小时）"  FontWeight="Black"/>
+                <TextBlock Text="不足8小时" Margin="10 0 5 0"/>
+                <Rectangle HorizontalAlignment="Left" VerticalAlignment="Center" Fill="OrangeRed" Height="10" Width="30"/>
+               
+                 <TextBlock Text="睡眠充足" Margin="10 0 5 0"/>
+                <Rectangle HorizontalAlignment="Left" VerticalAlignment="Center" Fill="CornflowerBlue" Height="10" Width="30"/>
+            </StackPanel>
+
+            <Border Padding="24 36 24 24"
                 Grid.Row="1" >
-            <windchart:Linegram x:Name="line"/>
-        </Border>
+                <windchart:Bargram x:Name="bar"/>
+            </Border>
+        </Grid>
+       
     </Grid>
 </Page>

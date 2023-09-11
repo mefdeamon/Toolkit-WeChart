@@ -29,7 +29,7 @@
                 <TextBox VerticalAlignment="Stretch" IsReadOnly="True" Foreground="Green" x:Name="code" ScrollViewer.VerticalScrollBarVisibility="Auto" FontFamily="Consolas"/>
             </DockPanel>
         </Grid>
-        <Border Padding="24" Background="WhiteSmoke"
+        <Border Padding="24" 
                 Grid.Row="1" >
             <windchart:Linegram x:Name="line"/>
         </Border>

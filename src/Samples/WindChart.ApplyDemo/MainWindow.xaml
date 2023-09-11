@@ -5,9 +5,178 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WindChart.ApplyDemo"
         xmlns:fd="clr-namespace:FirstDraft.Controls;assembly=FirstDraft"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Background="{DynamicResource DefaultBackground}"
          WindowStartupLocation="CenterScreen"
         Title="Wind Chart Apply 1.0.1 缓慢而坚定地前进" Height="600" Width="1100">
+    <Window.Resources>
+
+        <Style x:Key="LightDarkIconRaioButton" TargetType="{x:Type fd:IconRadioButton}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource Button.Static.Foreground}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="10 10 10 5"/>
+            <Setter Property="IconSize" Value="{DynamicResource DefalutIconSize}"/>
+            <Setter Property="FontSize" Value="{DynamicResource DefalutFontSize}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type fd:IconRadioButton}">
+                        <Grid x:Name="root" >
+                            <Border x:Name="border" Background="{TemplateBinding Background}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    SnapsToDevicePixels="true">
+                            </Border>
+
+                            <Border  Margin="0 0 0 0">
+                                <DockPanel>
+                                    <DockPanel DockPanel.Dock="Top"  Margin="{TemplateBinding Padding}">
+                                        <Path Data="{TemplateBinding Icon}" Margin="0 0 0 0"
+                                      DockPanel.Dock="Left"
+                                          Width="{TemplateBinding IconSize}" Height="{TemplateBinding IconSize}"
+                                          x:Name="path" Fill="{TemplateBinding Foreground}"
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"
+                                          Stretch="Uniform">
+                                        </Path>
+
+                                        <ContentPresenter x:Name="contentPresenter" DockPanel.Dock="Right"
+                                          Focusable="False"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          RecognizesAccessKey="True" 
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    </DockPanel>
+
+                                    <Rectangle x:Name="rect" Visibility="Hidden" Fill="{DynamicResource Accent}" Height="1" DockPanel.Dock="Bottom" 
+                                   HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
+
+                                </DockPanel>
+                            </Border>
+
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{DynamicResource IconRadioButton.Checked.Background}"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Visibility" Value="Visible" TargetName="rect"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{DynamicResource Button.Pressed.Background}"/>
+                                <Setter Property="Effect" TargetName="path" Value="{DynamicResource DeepPathEffect}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="Black"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{DynamicResource Button.Disabled.Background}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{DynamicResource Button.Disabled.Foreground}"/>
+                                <Setter Property="Fill" TargetName="rect" Value="{DynamicResource Button.Disabled.Foreground}"/>
+                                <Setter Property="Fill" TargetName="path" Value="{DynamicResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="LightDarkRoundToggleButton" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ToggleButtonBase}">
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="border"
+                                    Width="128"
+                                    Height="24"
+                                    CornerRadius="12"
+                                    Background="SkyBlue"
+                                    SnapsToDevicePixels="true">
+                                <Border x:Name="back" Margin="1" Background="SkyBlue" CornerRadius="12">
+                                    <Grid x:Name="grid" Background="Transparent">
+                                        <Path x:Name="ell" Width="16" Height="16" Stretch="Uniform" HorizontalAlignment="Left" Margin="4 0 0 0"  Fill="Gold">
+                                            <Path.Data>
+                                                <StreamGeometry>
+                                                    M512 831.508c16.264 0 29.792 11.72 32.597 27.176l0.534 5.955v62.23C545.13 945.167 530.298 960 512 960c-16.265 0-29.792-11.72-32.597-27.175l-0.534-5.956v-62.23c0-18.298 14.833-33.13 33.131-33.13z m267.584-97.826l5.197 4.245 44.002 44.002c12.938 12.938 12.938 33.916 0 46.854-11.321 11.321-28.797 12.736-41.656 4.245l-5.198-4.245-44.002-44.002c-12.938-12.938-12.938-33.915 0-46.854 11.321-11.32 28.797-12.736 41.657-4.245z m-493.511 4.246c11.32 11.32 12.736 28.796 4.245 41.656l-4.246 5.197-44.002 44.002c-12.939 12.938-33.916 12.938-46.854 0-11.32-11.321-12.736-28.797-4.245-41.657l4.245-5.197 44.003-44.002c12.938-12.938 33.916-12.938 46.854 0zM512 274.932c130.929 0 237.068 106.14 237.068 237.068 0 130.929-106.14 237.068-237.068 237.068-130.929 0-237.068-106.14-237.068-237.068 0-130.929 106.14-237.068 237.068-237.068z m414.87 203.937c18.297 0 33.13 14.833 33.13 33.131 0 16.264-11.72 29.792-27.175 32.597l-5.956 0.534h-62.23c-18.298 0-33.13-14.833-33.13-33.131 0-16.265 11.72-29.792 27.175-32.597l5.955-0.534h62.23z m-767.509 0c18.298 0 33.13 14.833 33.13 33.131 0 16.264-11.72 29.792-27.175 32.597l-5.955 0.534h-62.23C78.833 545.13 64 530.298 64 512c0-16.265 11.72-29.792 27.175-32.597l5.956-0.534h62.23z m669.422-283.653c11.321 11.32 12.736 28.797 4.246 41.656l-4.246 5.198-44.002 44.002c-12.938 12.939-33.915 12.94-46.853 0-11.322-11.32-12.737-28.796-4.246-41.656l4.245-5.197 44.002-44.003c12.938-12.938 33.915-12.938 46.854 0z m-591.91-4.245l5.197 4.245 44.003 44.003c12.938 12.938 12.938 33.915 0 46.854-11.321 11.32-28.797 12.736-41.657 4.245l-5.197-4.245-44.003-44.003c-12.938-12.938-12.938-33.915 0-46.854 11.321-11.32 28.797-12.736 41.657-4.245zM512 64c16.264 0 29.792 11.72 32.597 27.175l0.534 5.956v62.23c0 18.298-14.833 33.13-33.131 33.13-16.265 0-29.792-11.72-32.597-27.175l-0.534-5.955v-62.23C478.87 78.833 493.702 64 512 64z
+                                                </StreamGeometry>
+                                            </Path.Data>
+                                            <Path.LayoutTransform>
+                                                <ScaleTransform x:Name="ellScale" />
+                                            </Path.LayoutTransform>
+                                        </Path>
+                                    </Grid>
+                                </Border>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ThicknessAnimation Duration="0:0:0.45" To="110 0 0 0" From="4 0 0 0"
+                                                                Storyboard.TargetProperty="Margin" Storyboard.TargetName="ell"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ThicknessAnimation Duration="0:0:0.45" To="4 0 0 0" From="110 0 0 0"
+                                                                Storyboard.TargetProperty="Margin" Storyboard.TargetName="ell"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+
+                                <Setter Property="Data" TargetName="ell">
+                                    <Setter.Value>
+                                        <StreamGeometry>
+                                            M593.054 120.217C483.656 148.739 402.91 248.212 402.91 366.546c0 140.582 113.962 254.544 254.544 254.544 118.334 0 217.808-80.746 246.328-190.144C909.17 457.12 912 484.23 912 512c0 220.914-179.086 400-400 400S112 732.914 112 512s179.086-400 400-400c27.77 0 54.88 2.83 81.054 8.217z
+                                        </StreamGeometry>
+                                    </Setter.Value>
+                                </Setter>
+
+                                <Setter Property="Fill" Value="Gold" TargetName="ell"/>
+                                <Setter Property="Width" Value="12" TargetName="ell"/>
+                                <Setter Property="Height" Value="12" TargetName="ell"/>
+                                <Setter Property="Background" Value="Blue" TargetName="border"/>
+                                <Setter Property="Background" Value="Blue" TargetName="back"/>
+                            </Trigger>
+
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter Property="Fill" Value="Red" TargetName="ell"/>
+                            </Trigger>
+                           
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Fill" Value="{DynamicResource Button.Pressed.Foreground}" TargetName="ell"/>
+                                <Setter Property="Background" TargetName="border" Value="{DynamicResource Button.Pressed.Background}"/>
+                                <Setter Property="Background" TargetName="back" Value="{DynamicResource Button.Pressed.Border}"/>
+                            </Trigger>
+
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" Value="CornflowerBlue" TargetName="border"/>
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="back" Value="{DynamicResource Button.Disabled.Background}"/>
+                                <Setter Property="Background" TargetName="border" Value="{DynamicResource Button.Disabled.Border}"/>
+                                <Setter Property="Fill" TargetName="ell" Value="{DynamicResource Button.Disabled.Border}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -17,7 +186,24 @@
 
         <DockPanel Margin="10">
 
-            <TextBlock Text="Wind Chart" HorizontalAlignment="Center" DockPanel.Dock="Bottom"/>
+            <WrapPanel DockPanel.Dock="Bottom" Grid.Row="2"  DataContext="{Binding WelcomePageModel, Source={StaticResource Locator}}">
+                <!--<ComboBox ItemsSource="{Binding Sources}" SelectedValuePath="Value" DisplayMemberPath="Key"
+                              SelectedValue="{Binding Theme}"/>-->
+
+
+                <!--<fd:IconRadioButton IconSize="12" Style="{StaticResource LightDarkIconRaioButton}"
+                                    Icon="M512 831.508c16.264 0 29.792 11.72 32.597 27.176l0.534 5.955v62.23C545.13 945.167 530.298 960 512 960c-16.265 0-29.792-11.72-32.597-27.175l-0.534-5.956v-62.23c0-18.298 14.833-33.13 33.131-33.13z m267.584-97.826l5.197 4.245 44.002 44.002c12.938 12.938 12.938 33.916 0 46.854-11.321 11.321-28.797 12.736-41.656 4.245l-5.198-4.245-44.002-44.002c-12.938-12.938-12.938-33.915 0-46.854 11.321-11.32 28.797-12.736 41.657-4.245z m-493.511 4.246c11.32 11.32 12.736 28.796 4.245 41.656l-4.246 5.197-44.002 44.002c-12.939 12.938-33.916 12.938-46.854 0-11.32-11.321-12.736-28.797-4.245-41.657l4.245-5.197 44.003-44.002c12.938-12.938 33.916-12.938 46.854 0zM512 274.932c130.929 0 237.068 106.14 237.068 237.068 0 130.929-106.14 237.068-237.068 237.068-130.929 0-237.068-106.14-237.068-237.068 0-130.929 106.14-237.068 237.068-237.068z m414.87 203.937c18.297 0 33.13 14.833 33.13 33.131 0 16.264-11.72 29.792-27.175 32.597l-5.956 0.534h-62.23c-18.298 0-33.13-14.833-33.13-33.131 0-16.265 11.72-29.792 27.175-32.597l5.955-0.534h62.23z m-767.509 0c18.298 0 33.13 14.833 33.13 33.131 0 16.264-11.72 29.792-27.175 32.597l-5.955 0.534h-62.23C78.833 545.13 64 530.298 64 512c0-16.265 11.72-29.792 27.175-32.597l5.956-0.534h62.23z m669.422-283.653c11.321 11.32 12.736 28.797 4.246 41.656l-4.246 5.198-44.002 44.002c-12.938 12.939-33.915 12.94-46.853 0-11.322-11.32-12.737-28.796-4.246-41.656l4.245-5.197 44.002-44.003c12.938-12.938 33.915-12.938 46.854 0z m-591.91-4.245l5.197 4.245 44.003 44.003c12.938 12.938 12.938 33.915 0 46.854-11.321 11.32-28.797 12.736-41.657 4.245l-5.197-4.245-44.003-44.003c-12.938-12.938-12.938-33.915 0-46.854 11.321-11.32 28.797-12.736 41.657-4.245zM512 64c16.264 0 29.792 11.72 32.597 27.175l0.534 5.956v62.23c0 18.298-14.833 33.13-33.131 33.13-16.265 0-29.792-11.72-32.597-27.175l-0.534-5.955v-62.23C478.87 78.833 493.702 64 512 64z"
+                                    Foreground="Red"/>
+
+                <fd:IconRadioButton IconSize="12" IsChecked="{Binding IsDark}" Style="{StaticResource LightDarkIconRaioButton}"
+                                    Icon="M593.054 120.217C483.656 148.739 402.91 248.212 402.91 366.546c0 140.582 113.962 254.544 254.544 254.544 118.334 0 217.808-80.746 246.328-190.144C909.17 457.12 912 484.23 912 512c0 220.914-179.086 400-400 400S112 732.914 112 512s179.086-400 400-400c27.77 0 54.88 2.83 81.054 8.217z"
+                                    Foreground="Gold"/>-->
+
+                <fd:IconToggleButton Style="{StaticResource LightDarkRoundToggleButton}" IsChecked="{Binding IsDark}"/>
+
+            </WrapPanel>
+
+            <TextBlock Text="Wind Chart" Foreground="{DynamicResource DefaultForeground}" HorizontalAlignment="Center" DockPanel.Dock="Bottom"/>
             <Border BorderThickness="0" 
                   Width="128" Height="128"
                     CornerRadius="30" Padding="8 5 5 8"
@@ -39,7 +225,7 @@
                   Data="M200,200 L300,400 400,200 500,400 600,200 500,560 400,300 300,560Z M100 650 L650,570 180,570 180,100 Z"
                   />
             </Border>
-            
+
 
             <StackPanel  DockPanel.Dock="Top">
                 <fd:IconRadioButton Style="{StaticResource LeftNaviIconRaioButton}"
@@ -61,6 +247,7 @@
 
                 <fd:IconRadioButton Style="{StaticResource LeftNaviIconRaioButton}"
                                     Icon="M938.666667 896H85.333333V128h85.333334v682.666667h85.333333v-384h170.666667v384h85.333333V256h170.666667v554.666667h85.333333v-213.333334h170.666667v298.666667z"
+                                    x:Name="IconRadioButton_BargramPage"
                                     Tag="/Pages/BargramPage.xaml" Content="条形图" Margin="0 5 5 0" 
                                     Click="NaviClick"/>
                 <fd:IconRadioButton Style="{StaticResource LeftNaviIconRaioButton}"
@@ -87,21 +274,42 @@
 
                 <StackPanel Orientation="Horizontal" Margin="0 0 0 0">
 
-                    <fd:IconRadioButton Style="{StaticResource BottomNaviIconRaioButton}" Visibility="{Binding ElementName=IconRadioButton_LinegramPage,Path=IsChecked,Converter={StaticResource BooleanToVisibilityConverter}}"
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 0"  Visibility="{Binding ElementName=IconRadioButton_LinegramPage,Path=IsChecked,Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <fd:IconRadioButton Style="{StaticResource BottomNaviIconRaioButton}"
                                         Icon="{Binding home_line, Source={StaticResource IconSet}}"
                                         Tag="/Pages/LinegramPage.xaml" Content="首页" Margin="0 0 0 0" 
                                         IsChecked="True"
                                         Click="NaviClick"/>
 
-                    <fd:IconRadioButton Style="{StaticResource BottomNaviIconRaioButton}" Visibility="{Binding ElementName=IconRadioButton_LinegramPage,Path=IsChecked,Converter={StaticResource BooleanToVisibilityConverter}}"
+                        <fd:IconRadioButton Style="{StaticResource BottomNaviIconRaioButton}" 
                                         Icon="M873.472 277.504c-59.904 0-108.544 48.64-108.544 108.544 0 17.92 4.608 35.328 12.288 50.176l-176.64 174.592c-9.728-5.632-20.48-8.192-31.232-8.192-7.168 0-13.824 1.536-19.968 3.584l-71.168-97.28c0.512-3.584 0.512-6.656 0.512-10.24 0-35.328-28.672-64-64-64s-64.512 28.672-64.512 64v1.024L247.296 599.04H162.304c-11.776-18.944-32.256-30.72-54.784-31.232-35.84 0-64.512 29.184-64.512 64.512 0 35.84 29.184 64.512 64.512 64.512 23.552 0 45.056-12.8 56.832-33.28h110.592l111.616-108.544c9.216 4.608 18.944 7.168 29.696 7.168 7.168 0 14.336-1.536 20.48-3.584L506.88 655.36c-0.512 3.584-1.024 7.168-1.024 11.264 0 35.328 28.672 64 64 64 34.816 0 63.488-27.648 64-62.464L822.272 481.28c52.736 28.16 118.272 8.192 146.432-45.056 8.192-15.872 12.8-33.28 12.8-50.688 0-59.392-48.128-108.032-108.032-108.032z m1.536 154.112c-25.088 0-45.568-20.48-46.08-46.08s20.48-46.08 46.08-46.08 46.08 20.992 46.08 46.08c-0.512 25.6-20.992 46.08-46.08 46.08z"
                                         Tag="/Pages/Linegrams/CodebehindDemo0Page.xaml" Content="实时单点更新" Margin="0 0 0 0" 
                                         Click="NaviClick"/>
 
-                    <fd:IconRadioButton Style="{StaticResource BottomNaviIconRaioButton}" Visibility="{Binding ElementName=IconRadioButton_LinegramPage,Path=IsChecked,Converter={StaticResource BooleanToVisibilityConverter}}"
+                        <fd:IconRadioButton Style="{StaticResource BottomNaviIconRaioButton}" 
                                         Icon="M938.666667 860.437333H85.333333v-597.333333l234.666667 64 192-106.666667 213.333333 21.333334 213.333334-64z"
                                         Tag="/Pages/Linegrams/CodebehindDemo1Page.xaml" Content="一次性更新" Margin="0 0 0 0" 
                                         Click="NaviClick"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 0"  Visibility="{Binding ElementName=IconRadioButton_BargramPage,Path=IsChecked,Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <fd:IconRadioButton Style="{StaticResource BottomNaviIconRaioButton}"
+                                            Icon="{Binding home_line, Source={StaticResource IconSet}}"
+                                            Tag="/Pages/BargramPage.xaml" Content="首页" Margin="0 0 0 0" 
+                                            IsChecked="True"
+                                            Click="NaviClick"/>
+
+                        <fd:IconRadioButton Style="{StaticResource BottomNaviIconRaioButton}" 
+                                            Icon="M938.666667 896H85.333333V128h85.333334v682.666667h85.333333v-384h170.666667v384h85.333333V256h170.666667v554.666667h85.333333v-213.333334h170.666667v298.666667z"
+                                            Tag="/Pages/Bargrams/CodebehindDemo0Page.xaml" Content="近两月睡眠" Margin="0 0 0 0" 
+                                            Click="NaviClick"/>
+
+                        <fd:IconRadioButton Style="{StaticResource BottomNaviIconRaioButton}" 
+                                            Icon="M512 128v170.666667H128V128h384z m170.666667 597.333333v170.666667H128v-170.666667h554.666667z m256-298.666666v170.666666H128v-170.666666h810.666667z"
+                                            Tag="/Pages/Bargrams/CodebehindDemo1Page.xaml" Content="语言受欢迎情况" Margin="0 0 0 0" 
+                                            Click="NaviClick"/>
+
+                    </StackPanel>
 
                 </StackPanel>
 

@@ -39,12 +39,21 @@ namespace WindChart
         /// <summary>
         /// 背景色
         /// </summary>
-        public Brush Background { get; set; }
+
+
+        public Brush Background
+        {
+            get { return (Brush)GetValue(BackgroundProperty); }
+            set { SetValue(BackgroundProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Background.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty BackgroundProperty =
+            DependencyProperty.Register("Background", typeof(Brush), typeof(Gram), new PropertyMetadata(Brushes.WhiteSmoke));
+
 
         public Gram()
         {
-            Background = Brushes.WhiteSmoke;
-
             Visuals = new VisualCollection(this);
             xAxisVisual = new DrawingVisual();
             Visuals.Add(xAxisVisual);
@@ -255,7 +264,7 @@ namespace WindChart
         private static void XAxisBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ((Gram)d).xAxisPen = new Pen((Brush)e.NewValue, 1);
-            ((Gram)d).xAxisPen.Freeze();
+            //((Gram)d).xAxisPen.Freeze();
             ((Gram)d).UpdatePixelRatio();
             ((Gram)d).DrawXAxisScale();
         }
@@ -263,14 +272,14 @@ namespace WindChart
         private static void YAxisBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ((Gram)d).yAxisPen = new Pen((Brush)e.NewValue, 1);
-            ((Gram)d).yAxisPen.Freeze();
+           // ((Gram)d).yAxisPen.Freeze();
             ((Gram)d).UpdatePixelRatio();
             ((Gram)d).DrawYAxisScale();
         }
         private static void AxisLineBrushChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ((Gram)d).axisLinePen = new Pen((Brush)e.NewValue, 1);
-            ((Gram)d).axisLinePen.Freeze();
+            //((Gram)d).axisLinePen.Freeze();
             ((Gram)d).UpdatePixelRatio();
             ((Gram)d).DrawYAxisScale();
             ((Gram)d).DrawXAxisScale();

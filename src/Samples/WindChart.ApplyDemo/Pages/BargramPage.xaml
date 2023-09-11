@@ -25,77 +25,146 @@
         </ObjectDataProvider>
 
         <ObjectDataProvider   ObjectInstance="{x:Type Brushes}"  MethodName="GetProperties"  x:Key="ColorPropertiesOdp" />
-
+        
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{DynamicResource DefaultForeground}"/>
+        </Style>
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="349*"/>
         </Grid.RowDefinitions>
-        <Border Padding="5" BorderThickness="1" BorderBrush="Gray" HorizontalAlignment="Left">
-            <StackPanel>
 
-                <WrapPanel VerticalAlignment="Center" Margin="0 2">
-                    <TextBlock Text="图例方向：" VerticalAlignment="Center"/>
-                    <ComboBox ItemsSource="{Binding Source={StaticResource BarDirections}}" 
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Border Padding="5" BorderThickness="1" BorderBrush="Gray" >
+                <StackPanel>
+
+                    <WrapPanel VerticalAlignment="Center" Margin="0 2">
+                        <TextBlock Text="图例方向：" VerticalAlignment="Center"/>
+                        <ComboBox ItemsSource="{Binding Source={StaticResource BarDirections}}" 
                                   SelectedItem="{Binding Direction}"/>
-                </WrapPanel>
-                <WrapPanel VerticalAlignment="Center" Margin="0 2">
-                    <TextBlock Text="显示间隔：" VerticalAlignment="Center"/>
-                    <ToggleButton Style="{StaticResource RoundToggleButton}" IsChecked="{Binding IsAutoInterval}"/>
-                </WrapPanel>
+                    </WrapPanel>
+                    <WrapPanel VerticalAlignment="Center" Margin="0 2">
+                        <TextBlock Text="显示间隔：" VerticalAlignment="Center"/>
+                        <ToggleButton Style="{StaticResource RoundToggleButton}" IsChecked="{Binding NeedInterval}"/>
 
-                <WrapPanel>
-                    <WrapPanel VerticalAlignment="Center">
-                        <TextBlock Text="标签位置：" VerticalAlignment="Center"/>
-                        <ComboBox ItemsSource="{Binding Source={StaticResource BarValueLocations}}" 
-                                  SelectedItem="{Binding ValueLabelLocation}"/>
+                        <WrapPanel Margin="5 0  0 0" Visibility="{Binding IsAutoInterval, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <WrapPanel VerticalAlignment="Center">
+                                <TextBlock Text="边框颜色：" VerticalAlignment="Center"/>
+                                <ComboBox ItemsSource="{Binding Source={StaticResource ColorPropertiesOdp}}" 
+                                      SelectedValue="{Binding BarBorderBrush}"
+                                      SelectedIndex="17"
+                                          SelectedValuePath="Name"
+                                          >
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Rectangle Fill="{Binding Name}" Width="50" Height="12"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+
+                            </WrapPanel>
+                        </WrapPanel>
                     </WrapPanel>
 
-                </WrapPanel>
-                <WrapPanel>
-                    <WrapPanel VerticalAlignment="Center">
-                        <TextBlock Text="标签颜色：" VerticalAlignment="Center"/>
-                        <ComboBox ItemsSource="{Binding Source={StaticResource ColorPropertiesOdp}}" 
+                    <WrapPanel>
+                        <WrapPanel VerticalAlignment="Center">
+                            <TextBlock Text="标签位置：" VerticalAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource BarValueLocations}}" 
+                                  SelectedItem="{Binding ValueLabelLocation}"/>
+                        </WrapPanel>
+
+                    </WrapPanel>
+                    <WrapPanel>
+                        <WrapPanel VerticalAlignment="Center">
+                            <TextBlock Text="标签颜色：" VerticalAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource ColorPropertiesOdp}}" 
                                       SelectedValue="{Binding ValueLabelBrush}"
                                       SelectedIndex="17"
                                           SelectedValuePath="Name"
                                           >
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Rectangle Fill="{Binding Name}" Width="50" Height="12"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Rectangle Fill="{Binding Name}" Width="50" Height="12"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                        </WrapPanel>
+                    </WrapPanel>
+
+
+                    <WrapPanel VerticalAlignment="Center" Margin="0 2">
+                        <TextBlock Text="数据模拟：" VerticalAlignment="Center"/>
+                        <TextBlock  Text="间隔时间：" VerticalAlignment="Center"/>
+                        <TextBox BorderThickness="0 0 0 1" IsEnabled="{Binding CanSimulate}" Text="{Binding SleepTime,UpdateSourceTrigger=PropertyChanged}" MinWidth="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock Text="毫秒"  VerticalAlignment="Center"/>
+
+                        <Button Content="开始" VerticalAlignment="Center" IsEnabled="{Binding CanSimulate}" Command="{Binding SimulateCommand}" Margin="5 0 0 0" Width="60"/>
+                        <Button Content="停止" VerticalAlignment="Center" IsEnabled="{Binding IsSimulating}" Command="{Binding SimulateCommand}" Margin="5 0 0 0" Width="60"/>
 
                     </WrapPanel>
-                </WrapPanel>
+                </StackPanel>
+            </Border>
 
-                <WrapPanel VerticalAlignment="Center" Margin="0 2">
-                    <TextBlock Text="数据模拟：" VerticalAlignment="Center"/>
-                    <TextBlock  Text="间隔时间：" VerticalAlignment="Center"/>
-                    <TextBox BorderThickness="0 0 0 1" IsEnabled="{Binding CanSimulate}" Text="{Binding SleepTime,UpdateSourceTrigger=PropertyChanged}" MinWidth="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <TextBlock Text="毫秒"  VerticalAlignment="Center"/>
+            <Border Grid.Column="2" Padding="5" BorderThickness="1" BorderBrush="Gray" HorizontalAlignment="Stretch">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top">
+                        <Run Text="条形图控件"/>
+                        <Run Text="Bargram" FontWeight="Black"/>
+                        <Run Text="支持数据绑定和直接调用内部函数进行绘图"/>
+                    </TextBlock>
+                    <Border Height="1" Margin="0 5" DockPanel.Dock="Top" Background="{DynamicResource ExAccent}" HorizontalAlignment="Stretch"/>
 
-                    <Button Content="开始" VerticalAlignment="Center" IsEnabled="{Binding CanSimulate}" Command="{Binding SimulateCommand}" Margin="5 0 0 0" Width="60"/>
-                    <Button Content="停止" VerticalAlignment="Center" IsEnabled="{Binding IsSimulating}" Command="{Binding SimulateCommand}" Margin="5 0 0 0" Width="60"/>
+                    <TextBlock Margin="5 0 0 0" DockPanel.Dock="Top">
+                        <Run Text="数据绑定" FontWeight="Black"/>
+                        <Run Text="请参考当前示例"/>
+                    </TextBlock>
 
-                </WrapPanel>
-            </StackPanel>
-        </Border>
+                    <TextBlock Margin="20 5 0 0" DockPanel.Dock="Top">
+                        <Run Text="直接将数据绑定到"/>
+                        <Run Text="BarSource" FontWeight="Black"/>
+                        <Run Text="左边所有参数均支持绑定"/>
+                    </TextBlock>
+                    <Border Height="1" Margin="0 5" DockPanel.Dock="Top" Background="{DynamicResource ExAccent}" HorizontalAlignment="Stretch"/>
 
+                    <TextBlock Margin="5 0 0 0" DockPanel.Dock="Top">
+                        <Run Text="直接调用内部函数" FontWeight="Black"/>
+                        <Run Text="请参考"/>
+                    </TextBlock>
+
+                    <TextBlock Margin="20 5 0 0" DockPanel.Dock="Top">
+                        <Run Text="近两月睡眠" FontWeight="Black"/>
+                        <Run Text="调用内部的"/>
+                        <Run Text="Draw(List&lt;Bar> bars)" FontWeight="Black"/>
+                        <Run Text="实现的"/>
+                    </TextBlock>
+
+
+                </DockPanel>
+            </Border>
+
+        </Grid>
+        
         <Grid Grid.Row="1">
 
 
-            <Border Padding="60" Background="WhiteSmoke">
+            <Border Padding="60">
                 <windchart:Bargram  BarSource="{Binding Bars}" 
                                     Direction="{Binding Direction}"
                                     ValueLabelLocation="{Binding ValueLabelLocation}"
                                     ValueLabelBrush="{Binding ValueLabelBrush}"
-                                    IsAutoInterval="{Binding IsAutoInterval}"
-                                    YMax="24"
-                                    XAxisBrush="Black" YAxisBrush="Black"
-                                    AxisLineBrush="Black"
+                                    NeedInterval="{Binding NeedInterval}"
+                                    BarBorderBrush="{Binding BarBorderBrush}"
+                                    YMax="24" YAxisScaleCount="8"
+                                    XMax="24" XAxisScaleCount="8"
                                     >
                 </windchart:Bargram>
             </Border>

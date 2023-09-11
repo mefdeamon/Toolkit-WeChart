@@ -3,15 +3,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:WindChart.ApplyDemo"
              xmlns:data="clr-namespace:WindChart.ApplyDemo.Data"
+             xmlns:windchart="clr-namespace:WindChart;assembly=WindChart"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/FirstDraft;component/Themes/Ui.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/FirstDraft;component/Themes/Ui.Dark.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <Color x:Key="AccentColor">#362486</Color>
-            <Color x:Key="ExAccentColor">#F35A5A</Color>
             <data:ServiceLocator x:Key="Locator"/>
+
+
+            <Style x:Key="BaseGram" TargetType="{x:Type windchart:Gram}">
+                <Setter Property="Background" Value="{DynamicResource DefaultBackground}"/>
+                <Setter Property="YAxisBrush" Value="{DynamicResource DefaultForeground}"/>
+                <Setter Property="XAxisBrush" Value="{DynamicResource DefaultForeground}"/>
+                <Setter Property="AxisLineBrush" Value="{DynamicResource DefaultForeground}"/>
+            </Style>
+
+            <Style x:Key="{x:Type windchart:Gram}" TargetType="{x:Type windchart:Gram}"  BasedOn="{StaticResource BaseGram}">
+            </Style>
+            
+            <Style x:Key="{x:Type windchart:Linegram}" TargetType="{x:Type windchart:Linegram}" BasedOn="{StaticResource BaseGram}">
+                <Setter Property="LineBrush" Value="{DynamicResource DefaultForeground}"/>
+                <Setter Property="Fill">
+                    <Setter.Value>
+                        <LinearGradientBrush StartPoint="0 0" EndPoint="0 1">
+                            <GradientStop Color="#6495ED" Offset="0"/>
+                            <GradientStop Color="#406495ED" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="{x:Type windchart:Bargram}" TargetType="{x:Type windchart:Bargram}" BasedOn="{StaticResource BaseGram}">
+                <Setter Property="ValueLabelBrush" Value="{DynamicResource Accent}"/>
+                <Setter Property="BarBorderBrush" Value="{DynamicResource DefaultForeground}"/>
+            </Style>
+
+            <Style x:Key="{x:Type windchart:Dotgram}" TargetType="{x:Type windchart:Dotgram}" BasedOn="{StaticResource BaseGram}">
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

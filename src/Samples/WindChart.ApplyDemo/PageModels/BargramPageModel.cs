@@ -31,16 +31,19 @@ namespace WindChart.ApplyDemo.PageModels
                 new Bar() {Value = 7.1, Label = "Friday"},
                 new Bar() {Value = 7.1, Label = "Saturday" } };
             Bars = new ObservableCollection<Bar>(lis);
+
+            ValueLabelBrush = Brushes.Black;
+            BarBorderBrush = Brushes.Black;
         }
 
 
 
-        private bool isAutoInterval = true;
+        private bool needInterval = true;
 
-        public bool IsAutoInterval
+        public bool NeedInterval
         {
-            get { return isAutoInterval; }
-            set { Set(ref isAutoInterval, value); }
+            get { return needInterval; }
+            set { Set(ref needInterval, value); }
         }
 
         private BarDirection direction = BarDirection.Vertical;
@@ -59,12 +62,19 @@ namespace WindChart.ApplyDemo.PageModels
             set { Set(ref valueLabelLocation, value); }
         }
 
-        private Brush valueLabelBrush = Brushes.LimeGreen;
+        private Brush valueLabelBrush;
 
         public Brush ValueLabelBrush
         {
             get { return valueLabelBrush; }
             set { Set(ref valueLabelBrush, value); }
+        }
+
+        private Brush barBorderBrush;
+        public Brush BarBorderBrush
+        {
+            get { return barBorderBrush; }
+            set { Set(ref barBorderBrush, value); }
         }
 
 

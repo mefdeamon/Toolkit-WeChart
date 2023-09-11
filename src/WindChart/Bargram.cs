@@ -35,7 +35,7 @@ namespace WindChart
         }
 
         private List<Bar> Bars = new List<Bar>();
-        public void DrawBar(List<Bar> bars)
+        public void Draw(List<Bar> bars)
         {
             Bars = bars;
             Draw();
@@ -49,18 +49,18 @@ namespace WindChart
         #region 依赖属性
 
         /// <summary>
-        /// 自动间隔
+        /// 需要间隔
         /// </summary>
-        public bool IsAutoInterval
+        public bool NeedInterval
         {
-            get { return (bool)GetValue(IsAutoIntervalProperty); }
-            set { SetValue(IsAutoIntervalProperty, value); }
+            get { return (bool)GetValue(NeedIntervalProperty); }
+            set { SetValue(NeedIntervalProperty, value); }
         }
         /// <summary>
-        /// <see cref="IsAutoInterval"/>
+        /// <see cref="NeedInterval"/>
         /// </summary>
-        public static readonly DependencyProperty IsAutoIntervalProperty =
-            DependencyProperty.Register("IsAutoInterval", typeof(bool), typeof(Bargram), new PropertyMetadata(true, (d, e) => ((Bargram)d).Draw()));
+        public static readonly DependencyProperty NeedIntervalProperty =
+            DependencyProperty.Register("NeedInterval", typeof(bool), typeof(Bargram), new PropertyMetadata(true, (d, e) => ((Bargram)d).Draw()));
 
         /// <summary>
         /// 值标签位置
@@ -148,7 +148,29 @@ namespace WindChart
         /// </summary>
         public static readonly DependencyProperty BarSourceProperty =
             DependencyProperty.Register("BarSource", typeof(ObservableCollection<Bar>), typeof(Bargram),
-                new FrameworkPropertyMetadata(default(ObservableCollection<Bar>), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (d, e) => ((Bargram)d).DrawBar(((ObservableCollection<Bar>)e.NewValue).ToList())));
+                new FrameworkPropertyMetadata(default(ObservableCollection<Bar>), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (d, e) => ((Bargram)d).Draw(((ObservableCollection<Bar>)e.NewValue).ToList())));
+
+
+        /// <summary>
+        /// 条形边框的颜色
+        /// </summary>
+        public Brush BarBorderBrush
+        {
+            get { return (Brush)GetValue(BarBorderBrushProperty); }
+            set { SetValue(BarBorderBrushProperty, value); }
+        }
+        public static readonly DependencyProperty BarBorderBrushProperty =
+            DependencyProperty.Register("BarBorderBrush", typeof(Brush), typeof(Bargram),
+                new FrameworkPropertyMetadata(Brushes.Black, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (d, e) =>
+                {
+                    if (d is Bargram g)
+                    {
+                        g.rectBorderPen = new Pen((Brush)e.NewValue, 1);
+                        g.Draw();
+                    }
+                }));
+
+        Pen rectBorderPen = new Pen(Brushes.Black, 1);
 
         #endregion
 
@@ -210,7 +232,7 @@ namespace WindChart
                     var barHeight = (RenderSize.Height) / Bars.Count;
                     double barYLocation = 0;
 
-                    if (IsAutoInterval)
+                    if (NeedInterval)
                     {
                         barHeight = barHeight / 2.0;
                         barYLocation = barHeight / 2.0;
@@ -219,7 +241,14 @@ namespace WindChart
                     {
                         var barWidth = XAxisConvertXToPixel(item.Value);
 
-                        dc.DrawRectangle(item.Fill, axisLinePen, new Rect(0, barYLocation, barWidth, barHeight));
+                        if (!NeedInterval)
+                        {
+                            if (rectBorderPen.Brush != item.Fill)
+                            {
+                                rectBorderPen = new Pen(item.Fill, 1);
+                            }
+                        }
+                        dc.DrawRectangle(item.Fill, rectBorderPen, new Rect(0, barYLocation, barWidth, barHeight));
 
                         // 值文本
                         text = new FormattedText(item.Value.ToString(), CultureInfo.CurrentCulture,
@@ -256,7 +285,7 @@ namespace WindChart
                         dc.DrawText(text, labelLocation);
 
                         barYLocation += barHeight;
-                        if (IsAutoInterval)
+                        if (NeedInterval)
                         {
                             barYLocation += barHeight;
                         }
@@ -298,7 +327,7 @@ namespace WindChart
                     var barWidth = (RenderSize.Width) / Bars.Count;
                     double barXLocation = 0;
 
-                    if (IsAutoInterval)
+                    if (NeedInterval)
                     {
                         barWidth = barWidth / 2.0;
                         barXLocation = barWidth / 2.0;
@@ -306,8 +335,14 @@ namespace WindChart
                     foreach (var item in Bars)
                     {
                         var barHeight = YAxisConvertYToPixel(item.Value);
-
-                        dc.DrawRectangle(item.Fill, axisLinePen, new Rect(barXLocation, barHeight, barWidth, RenderSize.Height - barHeight));
+                        if (!NeedInterval)
+                        {
+                            if (rectBorderPen.Brush != item.Fill)
+                            {
+                                rectBorderPen = new Pen(item.Fill, 1);
+                            }
+                        }
+                        dc.DrawRectangle(item.Fill, rectBorderPen, new Rect(barXLocation, barHeight, barWidth, RenderSize.Height - barHeight));
 
                         // 值文本
                         text = new FormattedText(item.Value.ToString(), CultureInfo.CurrentCulture,
@@ -337,7 +372,7 @@ namespace WindChart
                         dc.DrawText(text, labelLocation);
 
                         barXLocation += barWidth;
-                        if (IsAutoInterval)
+                        if (NeedInterval)
                         {
                             barXLocation += barWidth;
                         }

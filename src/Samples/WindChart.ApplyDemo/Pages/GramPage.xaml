@@ -32,11 +32,8 @@
 
         <ObjectDataProvider   ObjectInstance="{x:Type Brushes}"  MethodName="GetProperties"  x:Key="ColorPropertiesOdp" />
 
-        <Style TargetType="{x:Type TextBox}">
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0 0 0 1"/>
-            <Setter Property="TextAlignment" Value="Center"/>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{DynamicResource DefaultForeground}"/>
         </Style>
 
         <ObjectDataProvider x:Key="XAxisLineAlignments" MethodName="GetValues" 
@@ -240,7 +237,7 @@
             </Border>
         </StackPanel>
         <Grid Grid.Row="1">
-            <Border Background="WhiteSmoke" Padding="24 12">
+            <Border Padding="24 12">
                 <windchart:Gram  Name="gram"
                                  XMax="{Binding ElementName=XMaxTB,Path=Text}"
                                  XMin="{Binding ElementName=XMinTB,Path=Text}"

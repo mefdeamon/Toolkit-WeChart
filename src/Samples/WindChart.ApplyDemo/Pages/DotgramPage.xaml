@@ -5,64 +5,77 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WindChart.ApplyDemo.Pages"
              xmlns:windchart="clr-namespace:WindChart;assembly=WindChart"
-      DataContext="{Binding DotgramPageModel, Source={StaticResource Locator}}"
+             DataContext="{Binding DotgramPageModel, Source={StaticResource Locator}}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{DynamicResource DefaultForeground}"/>
+        </Style>
+    </UserControl.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Border Padding="5" BorderThickness="1" BorderBrush="Gray" HorizontalAlignment="Left">
-            <StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border Padding="5" BorderThickness="1" BorderBrush="Gray">
+                <StackPanel>
 
 
-                <WrapPanel VerticalAlignment="Center" Margin="0 2">
-                    <TextBlock  Text="每帧间隔时间：" VerticalAlignment="Center"/>
-                    <TextBox BorderThickness="0 0 0 1" IsEnabled="{Binding CanSimulate}" Text="{Binding SleepTime,UpdateSourceTrigger=PropertyChanged}" MinWidth="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <TextBlock Text="毫秒"  VerticalAlignment="Center"/>
+                    <WrapPanel VerticalAlignment="Center" Margin="0 2">
+                        <TextBlock  Text="每帧间隔时间：" VerticalAlignment="Center"/>
+                        <TextBox BorderThickness="0 0 0 1" IsEnabled="{Binding CanSimulate}" Text="{Binding SleepTime,UpdateSourceTrigger=PropertyChanged}" MinWidth="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock Text="毫秒"  VerticalAlignment="Center"/>
 
 
-                </WrapPanel>
-                <WrapPanel VerticalAlignment="Center">
-                    <TextBlock Text="点数量：" Margin="4 0 0 0" VerticalAlignment="Center"/>
-                    <TextBox BorderThickness="0 0 0 1" Text="{Binding DotCount}" MinWidth="30" TextAlignment="Center" VerticalAlignment="Center"/>
-                    <Viewbox Height="18">
-                        <Slider IsSnapToTickEnabled="True" TickFrequency="1" TickPlacement="BottomRight" 
+                    </WrapPanel>
+                    <WrapPanel VerticalAlignment="Center">
+                        <TextBlock Text="点数量：" Margin="4 0 0 0" VerticalAlignment="Center"/>
+                        <TextBox BorderThickness="0 0 0 1" Text="{Binding DotCount}" MinWidth="30" TextAlignment="Center" VerticalAlignment="Center"/>
+                        <Viewbox Height="18">
+                            <Slider IsSnapToTickEnabled="True" TickFrequency="1" TickPlacement="BottomRight" 
                             Value="{Binding DotCount}" 
                             Maximum="1000" Minimum="0"
                             Width="100"
                             VerticalAlignment="Center"/>
-                    </Viewbox>
-                </WrapPanel>
+                        </Viewbox>
+                    </WrapPanel>
 
-                <WrapPanel VerticalAlignment="Center">
-                    <TextBlock Text="点最大：" Margin="4 0 0 0" VerticalAlignment="Center"/>
-                    <TextBox BorderThickness="0 0 0 1" Text="{Binding DotSize}" MinWidth="30" TextAlignment="Center" VerticalAlignment="Center"/>
-                    <Viewbox Height="18">
-                        <Slider IsSnapToTickEnabled="True" TickFrequency="1" TickPlacement="BottomRight" 
+                    <WrapPanel VerticalAlignment="Center">
+                        <TextBlock Text="点最大：" Margin="4 0 0 0" VerticalAlignment="Center"/>
+                        <TextBox BorderThickness="0 0 0 1" Text="{Binding DotSize}" MinWidth="30" TextAlignment="Center" VerticalAlignment="Center"/>
+                        <Viewbox Height="18">
+                            <Slider IsSnapToTickEnabled="True" TickFrequency="1" TickPlacement="BottomRight" 
                             Value="{Binding DotSize}" 
                             Maximum="20" Minimum="0"
                             Width="100"
                             VerticalAlignment="Center"/>
-                    </Viewbox>
-                </WrapPanel>
+                        </Viewbox>
+                    </WrapPanel>
 
-                <WrapPanel VerticalAlignment="Center" Margin="0 2">
-                    <TextBlock Text="数据模拟：" VerticalAlignment="Center"/>
+                    <WrapPanel VerticalAlignment="Center" Margin="0 2">
+                        <TextBlock Text="数据模拟：" VerticalAlignment="Center"/>
 
-                    <Button Content="开始" VerticalAlignment="Center" IsEnabled="{Binding CanSimulate}" Command="{Binding SimulateCommand}" Margin="5 0 0 0" Width="60"/>
-                    <Button Content="停止" VerticalAlignment="Center" IsEnabled="{Binding IsSimulating}" Command="{Binding SimulateCommand}" Margin="5 0 0 0" Width="60"/>
+                        <Button Content="开始" VerticalAlignment="Center" IsEnabled="{Binding CanSimulate}" Command="{Binding SimulateCommand}" Margin="5 0 0 0" Width="60"/>
+                        <Button Content="停止" VerticalAlignment="Center" IsEnabled="{Binding IsSimulating}" Command="{Binding SimulateCommand}" Margin="5 0 0 0" Width="60"/>
 
-                </WrapPanel>
+                    </WrapPanel>
 
-            </StackPanel>
-        </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
+
 
 
         <Grid Grid.Row="1">
-            <Border Padding="48" Background="WhiteSmoke" >
+            <Border Padding="48" >
                 <windchart:Dotgram DotSource="{Binding DotSource}" 
                                    XMin="-80" XMax="80" YMin="-80" YMax="80" 
                                    XAxisLineAlignment="Center" YAxisLineAlignment="Center"

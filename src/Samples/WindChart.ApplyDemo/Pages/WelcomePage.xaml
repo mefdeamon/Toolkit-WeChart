@@ -9,6 +9,10 @@
       DataContext="{Binding WelcomePageModel, Source={StaticResource Locator}}"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="WelcomePage">
+    <Page.Resources>
+        
+
+    </Page.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -17,17 +21,21 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Border Padding="24" Background="WhiteSmoke"
+
+
+        <Border Padding="24" Background="{DynamicResource DefaultBackground}"
                 Grid.Row="0" Grid.Column="0">
             <!-- 图标控件 -->
-            <windchart:Linegram XAxisBrush="Gray" YAxisBrush="Black"
+            <windchart:Linegram XAxisBrush="{DynamicResource DefaultForeground}" YAxisBrush="{DynamicResource DefaultForeground}" Background="{DynamicResource DefaultBackground}"
                                 YAxisScaleCount="4" XAxisScaleCount="4"
                                 YMax="100" YMin="40" XMin="10" XMax="100"
                                 LineSource="{Binding LinePoints}"
                                 XAxisTextFormatString="yyyy-MM-dd"
-                                LineThickness="0"
-                                LineBrush="Black"
+                                LineThickness="1" 
+                                AxisLineBrush="{DynamicResource DefaultForeground}"
+                                LineBrush="{DynamicResource DefaultForeground}"
                                 IsGraph="True" 
                                 IsFlashRange="True"
                                 NeedAiming="True"
@@ -42,15 +50,13 @@
             </windchart:Linegram>
         </Border>
 
-        <Border Padding="24" Background="WhiteSmoke"
+        <Border Padding="24" Background="{DynamicResource DefaultBackground}"
                 Grid.Row="0" Grid.Column="1">
             <!-- 图标控件 -->
             <windchart:Linegram 
-                                XAxisBrush="Black" YAxisBrush="Black"
                                 YAxisScaleCount="4" XAxisScaleCount="10"
                                 LineSource="{Binding LinePoints}"
                                 LineThickness="1"
-                                LineBrush="Black"
                                 IsGraph="False" 
                                 IsFlashRange="True"
                                 NeedAiming="True"
@@ -58,7 +64,7 @@
             </windchart:Linegram>
         </Border>
 
-        <Border Padding="24" Background="WhiteSmoke"
+        <Border Padding="24" Background="{DynamicResource DefaultBackground}"
                 Grid.Row="1" Grid.Column="0">
             <!-- 图标控件 -->
             <windchart:Bargram  BarSource="{Binding Bars}" 
@@ -66,17 +72,15 @@
                                 Direction="Vertical"
                                 ValueLabelLocation="Follow"
                                 ValueLabelBrush="OrangeRed"
-                                IsAutoInterval="True"
+                                NeedInterval="True"
                                 YMax="10"
-                                XAxisBrush="Black" YAxisBrush="Black"
-                                AxisLineBrush="LightGray"
                                 >
             </windchart:Bargram>
         </Border>
 
 
 
-        <Border Padding="24 12 24 24" Background="WhiteSmoke"
+        <Border Padding="24 12 24 24" Background="{DynamicResource DefaultBackground}"
                 Grid.Row="1" Grid.Column="1">
             <!-- 图标控件 -->
             <windchart:Dotgram  DotSource="{Binding DotSource}" 
@@ -84,5 +88,8 @@
                                 >
             </windchart:Dotgram>
         </Border>
+
+
+
     </Grid>
 </Page>

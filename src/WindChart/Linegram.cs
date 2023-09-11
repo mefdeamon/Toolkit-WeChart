@@ -94,7 +94,7 @@ namespace WindChart
                 var wordWidth = (text.Width / textcontent.Length);
                 poi.X = poi.X + wordWidth / 2;
                 poi.Y = poi.Y + wordWidth / 2;
-                dc.DrawRectangle(Brushes.White, null, new Rect(poi, new Size(text.Width + wordWidth * 2, text.Height)));
+                dc.DrawRectangle(Background, null, new Rect(poi, new Size(text.Width + wordWidth * 2, text.Height)));
                 poi.X = poi.X + wordWidth;
                 dc.DrawText(text, poi);
             }
@@ -261,7 +261,7 @@ namespace WindChart
                     if (d is Linegram l)
                     {
                         l.linePen = new Pen((Brush)e.NewValue, l.LineThickness);
-                        l.linePen.Freeze();
+                       // l.linePen.Freeze();
                         l.Draw();
                     }
                 }));
@@ -521,7 +521,7 @@ namespace WindChart
 
                     if (NeedAiming)
                     {
-                        dc.DrawRectangle(Brushes.Black, null, new Rect(p0.X - 2, p0.Y - 2, 4, 4));
+                        dc.DrawRectangle(LineBrush, null, new Rect(p0.X - 2, p0.Y - 2, 4, 4));
                     }
 
                     if (IsGraph)
