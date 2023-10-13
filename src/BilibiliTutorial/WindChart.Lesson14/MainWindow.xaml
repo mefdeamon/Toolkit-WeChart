@@ -1,0 +1,26 @@
+﻿<Window x:Class="WindChart.Lesson14.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WindChart.Lesson14"
+        xmlns:windchart="clr-namespace:WindChart;assembly=WindChart"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid Grid.Row="1"  Background="WhiteSmoke">
+            <StackPanel Orientation="Horizontal" Margin="5" VerticalAlignment="Top">
+                <TextBlock Text="近2月睡眠时长分布（小时）"  FontWeight="Black"/>
+                <TextBlock Text="不足8小时" Margin="10 0 5 0"/>
+                <Rectangle HorizontalAlignment="Left" VerticalAlignment="Center" Fill="OrangeRed" Height="10" Width="30"/>
+                <TextBlock Text="睡眠充足" Margin="10 0 5 0"/>
+                <Rectangle HorizontalAlignment="Left" VerticalAlignment="Center" Fill="CornflowerBlue" Height="10" Width="30"/>
+            </StackPanel>
+
+            <Border Padding="24 36 24 24"
+                Grid.Row="1" >
+                <windchart:Bargram BarSource="{Binding Bars}" IsAutoInterval="False" ValueLabelLocation="None" x:Name="bar"/>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

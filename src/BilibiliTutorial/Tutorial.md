@@ -1612,6 +1612,277 @@ NuGet搜索**WindChart**
 
 
 
+## Lesson12 绘制条形图1
+
+**垂直条形图**
+
+0 Gram添加独立的轴信息绘制的DrawingVisual axisXVisual axisYVisual，并整理DrawAxis
+
+1 Gram基类添加X轴Y轴刻度数量
+
+2 Gram基类添加是否显示X轴刻度线和刻度文本
+
+```c#
+    public class Gram : FrameworkElement
+    {
+        protected VisualCollection _children;
+
+        public Gram()
+        {
+            _children = new VisualCollection(this);
+
+            axisXVisual = new DrawingVisual();
+            axisYVisual = new DrawingVisual();
+            _children.Add(axisXVisual);
+            _children.Add(axisYVisual);
+        }
+
+        private DrawingVisual axisXVisual;
+        private DrawingVisual axisYVisual;
+
+
+        public int XAxisScaleCount { get; set; } = 5;
+        public int YAxisScaleCount { get; set; } = 10;
+
+        public Boolean NeedXAxisLine { get; set; } = true;
+        public Boolean NeedXAxisText { get; set; } = true;
+
+        /// <summary>
+        /// 绘制原点
+        /// </summary>
+        protected void DrawAxis()
+        {
+            DrawAxisX();
+
+            DrawAxisY();
+        }
+
+
+        protected void DrawAxisX()
+        {
+            var drawingContext = axisXVisual.RenderOpen();
+
+            Point org = new Point(0, 0);
+            ConvertToPixcel(ref org);
+            drawingContext.DrawEllipse(Brushes.Black, new Pen(Brushes.OrangeRed, 1), org, 5, 5);
+
+            Pen pen = new Pen(Brushes.Black, 1);
+            // X轴
+            Point xStart = new Point(XMin, 0);
+            Point xEnd = new Point(XMax, 0);
+            ConvertToPixcel(ref xStart);
+            ConvertToPixcel(ref xEnd);
+            drawingContext.DrawLine(pen, xStart, xEnd);
+            int interval = (int)(XWidth / XAxisScaleCount);
+            for (double i = XMin; i <= XMax; i += interval)
+            {
+                Point xPstart = new Point(i, 0);
+                ConvertToPixcel(ref xPstart);
+
+                if (NeedXAxisLine)
+                {
+                    Point xPend = new Point(xPstart.X, xPstart.Y - 5);
+                    drawingContext.DrawLine(pen, xPstart, xPend);
+                }
+
+                if (NeedXAxisText)
+                {
+                    FormattedText text = new FormattedText(GetXAxisTextFormat.Invoke(i),
+                    System.Globalization.CultureInfo.CurrentCulture,
+                    FlowDirection.LeftToRight,
+                    new Typeface("Microsoft Yahei"),
+                    12,
+                    Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+
+                    Point loca = new Point(xPstart.X - text.Width / 2, xPstart.Y);
+                    drawingContext.DrawText(text, loca);
+                }
+            }
+            drawingContext.Close();
+        }
+
+        protected void DrawAxisY()
+        {
+            var drawingContext = axisYVisual.RenderOpen();
+
+            Pen pen = new Pen(Brushes.Black, 1);
+
+            // Y轴
+            Point yStart = new Point(XMin, YMin);
+            Point yEnd = new Point(XMin, YMax);
+            ConvertToPixcel(ref yStart);
+            ConvertToPixcel(ref yEnd);
+            drawingContext.DrawLine(pen, yStart, yEnd);
+            int interval = (int)(YHeight / YAxisScaleCount);
+            for (double i = YMin; i <= YMax; i += interval)
+            {
+                Point yPstart = new Point(XMin, i);
+                ConvertToPixcel(ref yPstart);
+                Point yPend = new Point(yPstart.X + 5, yPstart.Y);
+                drawingContext.DrawLine(pen, yPstart, yPend);
+
+                FormattedText text = new FormattedText(i.ToString(),
+                    System.Globalization.CultureInfo.CurrentCulture,
+                    FlowDirection.LeftToRight,
+                    new Typeface("Microsoft Yahei"),
+                    12,
+                    Brushes.Black, VisualTreeHelper.GetDpi(this).PixelsPerDip);
+
+                Point loca = new Point(yPstart.X - text.Width - 2, yPstart.Y - text.Height / 2);
+                drawingContext.DrawText(text, loca);
+            }
+
+            drawingContext.Close();
+        }
+    }
+```
+
+
+
+3.添加BarGram类，并在构造函数中添加条形图的DrawingVisual barVisual
+
+4.添加条形图每个项的类Bar(标签，值，颜色等)
+
+```c#
+    /// <summary>
+    /// 条形
+    /// </summary>
+    public class Bar
+    {
+        /// <summary>
+        /// 标签
+        /// </summary>
+        public string Label { get; set; }
+
+        private double _value;
+        /// <summary>
+        /// 值
+        /// </summary>
+        public double Value
+        {
+            get { return _value; }
+            set
+            {
+                _value = value;
+            }
+        }
+        /// <summary>
+        /// 填充颜色
+        /// </summary>
+        public Brush Fill { get; set; } = Brushes.CornflowerBlue;
+    }
+```
+
+
+
+5.完善Draw函数
+
+6.重写OnRenderSizeChanged函数
+
+```c#
+    public class BarGram : Gram
+    {
+        private readonly DrawingVisual barVisual;
+        public BarGram()
+        {
+            barVisual = new DrawingVisual();
+            _children.Add(barVisual);
+
+            NeedXAxisText= false;
+            YMin = 0;
+            YMax= 100;
+            XMin= 0;
+            XMax= 100;
+            DrawAxis();
+        }
+
+        public void Draw(List<Bar> bars)
+        {
+            Bars = new List<Bar>(bars);
+
+            XAxisScaleCount= bars.Count;
+            DrawAxis();
+
+            Draw();
+        }
+
+        List<Bar> Bars;
+        Typeface typeface = new Typeface("微软雅黑");
+        FormattedText text;
+        private void Draw()
+        {
+            var drawingContext = barVisual.RenderOpen();
+
+            if(Bars!=null&& Bars.Count>0)
+            {
+                var barWidth = (RenderSize.Width) / Bars.Count;
+                double barXLocation = 0;
+                foreach (var item in Bars)
+                {
+                    var barHeight = ConvertYToPixcel(item.Value);
+
+                    drawingContext.DrawRectangle(item.Fill, new Pen(item.Fill, 1), new Rect(barXLocation, barHeight, barWidth, RenderSize.Height - barHeight));
+
+                    // 值文本
+                    text = new FormattedText(item.Value.ToString(), CultureInfo.CurrentCulture,
+                                                          FlowDirection.LeftToRight, typeface, 12, Brushes.Red,
+                                                          VisualTreeHelper.GetDpi(this).PixelsPerDip);
+
+
+                    drawingContext.DrawText(text, new Point(barXLocation + barWidth / 2 - text.Width / 2, barHeight - text.Height));
+
+
+                    // 标签文本
+                    text = new FormattedText(item.Label.ToString(), CultureInfo.CurrentCulture,
+                                                        FlowDirection.LeftToRight, typeface, 12, Brushes.Black,
+                    VisualTreeHelper.GetDpi(this).PixelsPerDip);
+
+                    Point labelLocation = new Point(barXLocation + barWidth / 2 - text.Width / 2, RenderSize.Height);
+                    drawingContext.DrawText(text, labelLocation);
+
+                    barXLocation += barWidth;
+                }
+            }
+            drawingContext.Close();
+        }
+
+
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        {
+            base.OnRenderSizeChanged(sizeInfo);
+            Draw();
+        }
+    }
+```
+
+
+
+
+
+
+
+
+
+## Lesson13 绘制条形图2
+
+**水平条形图**
+
+1.实现间隔控制
+
+2.水平条形图实现
+
+BarDirection Horizontal/Vertical
+
+
+
+
+
+## Lesson14 条形图应用
+
+NuGet搜索**WindChart**
+
+- 后台使用
+- MVVM
 
 
 
@@ -1628,31 +1899,6 @@ NuGet搜索**WindChart**
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Lesson
 
 
 
