@@ -15,9 +15,11 @@ namespace WindChart.ApplyDemo.Pages.Linegrams
         {
             InitializeComponent();
 
+            DateTime dtLast = DateTime.Now.AddSeconds(60);
+
             // 设置X轴开始显示范围
             line.XMin = DateTime.Now.ToOADate();
-            line.XMax = DateTime.Now.AddSeconds(60).ToOADate();
+            line.XMax = dtLast.ToOADate();
             // 设置X轴刻度文本格式
             line.XAxisTextFormatString = "HH:mm:ss";
             // X轴刻度按照日期显示
@@ -51,6 +53,11 @@ namespace WindChart.ApplyDemo.Pages.Linegrams
                         line.Add(new Point(DateTime.Now.ToOADate(), y));
                     });
                     Thread.Sleep(30);
+
+                    if (DateTime.Now > dtLast)
+                    {
+                        break;
+                    }
                 }
             });
 
@@ -94,7 +101,7 @@ namespace WindChart.ApplyDemo.Pages.Linegrams
         }
     });";
 
-            xaml.Text= @"<Page x:Class=""WindChart.ApplyDemo.Pages.Linegrams.CodebehindDemo0Page""
+            xaml.Text = @"<Page x:Class=""WindChart.ApplyDemo.Pages.Linegrams.CodebehindDemo0Page""
       xmlns = ""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
       xmlns: x = ""http://schemas.microsoft.com/winfx/2006/xaml""
       xmlns: mc = ""http://schemas.openxmlformats.org/markup-compatibility/2006""

@@ -11,6 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="vhigh.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="WeDraft.Toolkit.FirstDraft" Version="1.0.3" />
   </ItemGroup>
 

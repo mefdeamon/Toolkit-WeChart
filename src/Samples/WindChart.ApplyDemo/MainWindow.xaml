@@ -290,6 +290,11 @@
                                         Icon="M938.666667 860.437333H85.333333v-597.333333l234.666667 64 192-106.666667 213.333333 21.333334 213.333334-64z"
                                         Tag="/Pages/Linegrams/CodebehindDemo1Page.xaml" Content="一次性更新" Margin="0 0 0 0" 
                                         Click="NaviClick"/>
+
+                        <fd:IconRadioButton Style="{StaticResource BottomNaviIconRaioButton}" 
+                                        Icon="M938.666667 860.437333H85.333333v-597.333333l234.666667 64 192-106.666667 213.333333 21.333334 213.333334-64z"
+                                        Tag="/Pages/Linegrams/CodebehindDemo2Page.xaml" Content="正弦图" Margin="0 0 0 0" 
+                                        Click="NaviClick"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0 0 0 0"  Visibility="{Binding ElementName=IconRadioButton_BargramPage,Path=IsChecked,Converter={StaticResource BooleanToVisibilityConverter}}">
